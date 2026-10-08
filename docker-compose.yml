@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  stockchoice:
+    build: .
+    container_name: stockchoice_scanner
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    environment:
+      - TZ=Asia/Taipei
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - NOTIFY_PLATFORM=${NOTIFY_PLATFORM:-discord}
+      - SCHEDULE_CRON_HOUR=${SCHEDULE_CRON_HOUR:-15}
+      - SCHEDULE_CRON_MINUTE=${SCHEDULE_CRON_MINUTE:-0}
+      - DB_PATH=/app/data/stock.db
