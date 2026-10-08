@@ -1,0 +1,1 @@
+"""StockChoice package root."""
