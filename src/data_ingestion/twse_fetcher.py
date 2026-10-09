@@ -175,3 +175,33 @@ class TWSEFetcher:
 
         logger.error("Failed to fetch TWSE all daily quotes: %s", last_err)
         return pd.DataFrame()
+
+    def fetch_fundamentals(self, ticker: str) -> dict:
+        """Fetch P/E ratio, Dividend Yield, and P/B ratio for a TWSE stock.
+
+        Returns:
+            dict with keys: 'pe_ratio', 'dividend_yield', 'pb_ratio'.
+        """
+        clean_ticker = ticker.replace(".TW", "").replace(".TWO", "").strip()
+        url = "https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d"
+        params = {
+            "response": "json",
+            "date": datetime.now().strftime("%Y%m%d"),
+            "stockNo": clean_ticker,
+        }
+        try:
+            resp = self.session.get(url, params=params, timeout=self.timeout)
+            resp.raise_for_status()
+            data = resp.json()
+            if data.get("stat") == "OK" and "data" in data and len(data["data"]) > 0:
+                latest = data["data"][-1]
+                # TWSE fields: [0] 日期, [1] 殖利率(%), [2] 股利年度, [3] 本益比, [4] 股價淨值比
+                return {
+                    "dividend_yield": self._clean_number(latest[1]),
+                    "pe_ratio": self._clean_number(latest[3]),
+                    "pb_ratio": self._clean_number(latest[4]),
+                }
+        except Exception as e:
+            logger.warning("Failed to fetch TWSE fundamentals for %s: %s", clean_ticker, e)
+
+        return {"dividend_yield": None, "pe_ratio": None, "pb_ratio": None}

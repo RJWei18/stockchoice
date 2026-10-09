@@ -71,6 +71,18 @@ class DatabaseManager:
                 )
                 """
             )
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS watchlist (
+                    ticker TEXT PRIMARY KEY,
+                    market TEXT NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'watching',
+                    cost_price REAL,
+                    notes TEXT,
+                    updated_at TEXT
+                )
+                """
+            )
             conn.commit()
 
     def save_daily_kline(self, df: pd.DataFrame, ticker: str, market: str) -> int:
@@ -195,3 +207,57 @@ class DatabaseManager:
                 ),
             )
             conn.commit()
+
+    def set_watchlist_item(
+        self,
+        ticker: str,
+        market: str,
+        status: str = "watching",
+        cost_price: Optional[float] = None,
+        notes: str = "",
+    ) -> None:
+        """Add or update an item in the watchlist (status: 'watching', 'holding', 'pinned')."""
+        t = ticker.strip().upper()
+        m = market.strip().upper()
+        now_str = datetime.now().isoformat()
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO watchlist (ticker, market, status, cost_price, notes, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON CONFLICT(ticker) DO UPDATE SET
+                    market=excluded.market,
+                    status=excluded.status,
+                    cost_price=excluded.cost_price,
+                    notes=excluded.notes,
+                    updated_at=excluded.updated_at
+                """,
+                (t, m, status, cost_price, notes, now_str),
+            )
+            conn.commit()
+
+    def get_watchlist(self, status: Optional[str] = None) -> List[Dict]:
+        """Retrieve items from watchlist, optionally filtered by status."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            if status:
+                cursor.execute(
+                    "SELECT ticker, market, status, cost_price, notes, updated_at FROM watchlist WHERE status = ? ORDER BY ticker",
+                    (status,),
+                )
+            else:
+                cursor.execute(
+                    "SELECT ticker, market, status, cost_price, notes, updated_at FROM watchlist ORDER BY status DESC, ticker ASC"
+                )
+            rows = cursor.fetchall()
+            return [dict(r) for r in rows]
+
+    def remove_watchlist_item(self, ticker: str) -> bool:
+        """Remove an item from watchlist."""
+        t = ticker.strip().upper()
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM watchlist WHERE ticker = ?", (t,))
+            conn.commit()
+            return cursor.rowcount > 0

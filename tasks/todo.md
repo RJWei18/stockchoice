@@ -33,6 +33,11 @@
 - [x] 撰寫 `README.md` (使用者部署手冊)
 - [x] 撰寫 `DEVELOPER.md` (開發者擴充指南)
 
+## Task 7: GitHub Pages 網頁儀表板與自動化發布
+- [x] 實作 `web/index.html` 響應式前端 (支援手機大字體、新手/專業模式切換、LocalStorage 存股試算與 TradingView 圖表)
+- [x] 實作 `generate_web_data.py` 盤後數據生成器 (產出 `web/data.json`)
+- [x] 撰寫 `.github/workflows/deploy.yml` GitHub Actions 自動化部署工作流 (平日 16:00 定時排程)
+
 ---
 
 ## 成果審查 (Review & Verification)

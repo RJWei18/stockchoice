@@ -157,3 +157,56 @@ class YFinanceFetcher:
 
         logger.error("Failed to fetch data for %s: %s", ticker, last_err)
         return pd.DataFrame(columns=["date", "open", "high", "low", "close", "volume"])
+
+    def fetch_fundamentals(self, ticker: str) -> dict:
+        """Fetch P/E ratio, Dividend Yield, and P/B ratio for a US/Global stock.
+
+        Returns:
+            dict with keys: 'pe_ratio', 'dividend_yield', 'pb_ratio'.
+        """
+        clean_ticker = ticker.strip().upper()
+
+        # Attempt 1: Try yfinance if installed
+        try:
+            import yfinance as yf
+            info = yf.Ticker(clean_ticker).info
+            if info:
+                pe = info.get("trailingPE") or info.get("forwardPE")
+                dy = info.get("dividendYield")
+                if dy is not None and dy < 1.0:
+                    dy = dy * 100.0  # Convert 0.025 -> 2.5%
+                pb = info.get("priceToBook")
+                return {
+                    "pe_ratio": round(float(pe), 2) if pe else None,
+                    "dividend_yield": round(float(dy), 2) if dy else None,
+                    "pb_ratio": round(float(pb), 2) if pb else None,
+                }
+        except Exception:
+            pass
+
+        # Attempt 2: REST fallback
+        url = f"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{clean_ticker}"
+        params = {"modules": "summaryDetail,defaultKeyStatistics"}
+        try:
+            resp = self.session.get(url, params=params, timeout=self.timeout)
+            resp.raise_for_status()
+            data = resp.json()
+            res = data.get("quoteSummary", {}).get("result", [{}])[0]
+            summary = res.get("summaryDetail", {})
+            stats = res.get("defaultKeyStatistics", {})
+
+            pe = summary.get("trailingPE", {}).get("raw") or summary.get("forwardPE", {}).get("raw")
+            dy = summary.get("dividendYield", {}).get("raw")
+            if dy is not None and dy < 1.0:
+                dy = dy * 100.0
+            pb = stats.get("priceToBook", {}).get("raw")
+
+            return {
+                "pe_ratio": round(float(pe), 2) if pe else None,
+                "dividend_yield": round(float(dy), 2) if dy else None,
+                "pb_ratio": round(float(pb), 2) if pb else None,
+            }
+        except Exception as e:
+            logger.warning("Failed to fetch US fundamentals for %s: %s", clean_ticker, e)
+
+        return {"dividend_yield": None, "pe_ratio": None, "pb_ratio": None}

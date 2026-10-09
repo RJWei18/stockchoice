@@ -140,6 +140,51 @@ class GoldenCrossQuarterMaStrategy(BaseStrategy):
         return None
 
 
+class BullishTrendStrategy(BaseStrategy):
+    """Signals strong upward trending equities/ETFs with bullish MA alignment."""
+
+    @property
+    def name(self) -> str:
+        return "多頭排列強勢趨勢策略"
+
+    @property
+    def description(self) -> str:
+        return "均線呈多頭排列 (Close > MA20 > MA60) 且股價逼近或創 20 日新高，屬於上升趨勢標的/ETF。"
+
+    def evaluate(self, df: pd.DataFrame, ticker: str) -> Optional[StrategySignal]:
+        if len(df) < 65:
+            return None
+
+        data = TechnicalIndicators.compute_all(df)
+        latest = data.iloc[-1]
+
+        close = latest["close"]
+        ma20 = latest["ma_20"]
+        ma60 = latest["ma_60"]
+        resistance20 = latest["resistance_20"]
+
+        if pd.notnull(ma20) and pd.notnull(ma60) and pd.notnull(resistance20):
+            # Bullish trend alignment: Close > MA20 > MA60, and close >= 98% of 20-day high
+            if close > ma20 > ma60 and close >= (resistance20 * 0.98):
+                return StrategySignal(
+                    ticker=ticker,
+                    strategy_name=self.name,
+                    date=str(latest["date"]),
+                    close_price=float(close),
+                    message=(
+                        f"[{ticker}] 觸發{self.name}！收盤價 {close:.2f} 呈均線多頭排列 "
+                        f"(現價 > MA20 {ma20:.2f} > MA60 {ma60:.2f})，逼近波段高點 {resistance20:.2f}。"
+                    ),
+                    details={
+                        "close": float(close),
+                        "ma20": float(ma20),
+                        "ma60": float(ma60),
+                        "resistance": float(resistance20),
+                    },
+                )
+        return None
+
+
 class Scanner:
     """Executes strategies on historical stock datasets."""
 
@@ -148,6 +193,7 @@ class Scanner:
             self.strategies = [
                 BreakoutResistanceStrategy(window=20, min_vol_ratio=1.5),
                 GoldenCrossQuarterMaStrategy(),
+                BullishTrendStrategy(),
             ]
         else:
             self.strategies = strategies
