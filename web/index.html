@@ -8,8 +8,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Vue 3 CDN -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <!-- Lightweight Charts CDN -->
-  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <!-- Lightweight Charts CDN (pinned v4.2.1 stable) -->
+  <script src="https://unpkg.com/lightweight-charts@4.2.1/dist/lightweight-charts.standalone.production.js"></script>
+
   <style>
     /* Mobile-first touch friendly optimizations */
     body {
@@ -158,7 +159,7 @@
               </div>
 
               <div class="mt-2 text-right">
-                <button @click="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
                   📈 查看互動K線與籌碼
                 </button>
               </div>
@@ -166,17 +167,29 @@
           </div>
         </div>
 
+        <!-- Empty state when no breakout stocks today -->
+        <div v-else class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-md flex items-center space-x-3.5">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-xl shrink-0">🛡️</div>
+          <div>
+            <h3 class="text-xs sm:text-sm font-bold text-slate-200">今日台股暫無強勢突破個股（盤勢回檔整理中）</h3>
+            <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 leading-relaxed">
+              權值股與高息 ETF 近期處於短線回檔或震盪防守期，未達「帶量突破20日新高」之條件。建議耐心觀望、緊盯下方防守價或分批定期定額扣款。
+            </p>
+          </div>
+        </div>
+
         <!-- All Stocks & ETFs List -->
         <div>
           <div class="flex items-center justify-between my-2 px-1">
             <h3 class="text-sm font-bold text-slate-200">📊 全部監控台股與熱門 ETF 清單</h3>
-            <span class="text-xs text-slate-400">點選卡片可展開完整數據</span>
+            <span class="text-xs text-indigo-400 font-semibold">點選任一卡片可展開完整技術數據</span>
           </div>
 
           <!-- Card View -->
           <div v-if="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div v-for="item in data.tw_stocks" :key="item.ticker"
-                 class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-3.5 shadow-md transition flex flex-col justify-between">
+                 @click="toggleExpand(item.ticker)"
+                 class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-3.5 shadow-md transition flex flex-col justify-between cursor-pointer active:scale-[0.99]">
               <div>
                 <div class="flex items-center justify-between">
                   <div>
@@ -202,29 +215,64 @@
                   </span>
                 </div>
 
+                <!-- Fundamental Quick Line -->
+                <div class="flex items-center space-x-2 mt-2 text-[11px] text-slate-400">
+                  <span>殖利率: <strong class="text-emerald-400 font-mono">{{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}</strong></span>
+                  <span class="text-slate-600">•</span>
+                  <span>本益比: <strong class="text-slate-300 font-mono">{{ item.pe_ratio ? item.pe_ratio.toFixed(1) + 'x' : '--' }}</strong></span>
+                  <span class="text-slate-600">•</span>
+                  <span>量比: <strong class="text-amber-400 font-mono">{{ item.vol_ratio }}x</strong></span>
+                </div>
+
                 <!-- Novice Tip (Always visible in Novice Mode) -->
                 <p v-if="!isProMode" class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80 mt-2.5 leading-relaxed">
                   💬 <strong>新手解讀:</strong> {{ item.beginner_tip }}
                 </p>
 
-                <!-- Pro Metrics (Visible in Pro Mode) -->
-                <div v-if="isProMode" class="grid grid-cols-2 gap-2 mt-2.5 text-xs bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-                  <div class="text-slate-400">本益比: <span class="font-mono text-slate-200">{{ item.pe_ratio ? item.pe_ratio.toFixed(1) + '倍' : '--' }}</span></div>
-                  <div class="text-slate-400">殖利率: <span class="font-mono text-emerald-400 font-bold">{{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}</span></div>
-                  <div class="text-slate-400">MA20 (月線): <span class="font-mono text-slate-200">{{ item.ma20 ? item.ma20.toFixed(1) : '--' }}</span></div>
-                  <div class="text-slate-400">量比: <span class="font-mono text-amber-400 font-bold">{{ item.vol_ratio }}x</span></div>
+                <!-- Expanded Full Details (when clicked) -->
+                <div v-if="expandedCards[item.ticker]" class="mt-3 pt-3 border-t border-slate-800 space-y-2.5">
+                  <div class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">均線與擺盪指標</div>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
+                    <div>MA5: <span class="font-mono text-slate-200">{{ item.ma5 || '--' }}</span></div>
+                    <div>MA10: <span class="font-mono text-slate-200">{{ item.ma10 || '--' }}</span></div>
+                    <div>MA20(月): <span class="font-mono text-slate-200 font-bold">{{ item.ma20 || '--' }}</span></div>
+                    <div>MA60(季): <span class="font-mono text-slate-200">{{ item.ma60 || '--' }}</span></div>
+                    <div>KD (K/D): <span class="font-mono text-sky-400">{{ item.kd_k }}/{{ item.kd_d }}</span></div>
+                    <div>RSI(14): <span class="font-mono text-purple-400">{{ item.rsi }}</span></div>
+                    <div>20日支撐: <span class="font-mono text-amber-400">{{ item.support_20 || '--' }}</span></div>
+                    <div>20日壓力: <span class="font-mono text-rose-400">{{ item.resistance_20 || '--' }}</span></div>
+                  </div>
+
+                  <div class="text-[11px] font-bold text-sky-400 uppercase tracking-wider">點位規劃</div>
+                  <div class="grid grid-cols-3 gap-1.5 text-center text-[11px] bg-slate-950/80 p-2 rounded-xl border border-slate-800/80">
+                    <div class="p-1 bg-slate-900/60 rounded">
+                      <div class="text-slate-400">回檔進場</div>
+                      <div class="font-mono font-bold text-sky-400 mt-0.5">{{ item.trade_levels.pullback_entry.toFixed(1) }}</div>
+                    </div>
+                    <div class="p-1 bg-slate-900/60 rounded">
+                      <div class="text-slate-400">防守停損</div>
+                      <div class="font-mono font-bold text-amber-400 mt-0.5">{{ item.trade_levels.stop_loss.toFixed(1) }}</div>
+                    </div>
+                    <div class="p-1 bg-slate-900/60 rounded">
+                      <div class="text-slate-400">目標停利</div>
+                      <div class="font-mono font-bold text-emerald-400 mt-0.5">{{ item.trade_levels.take_profit.toFixed(1) }} (+{{ item.trade_levels.upside_pct }}%)</div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <!-- Footer action -->
               <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                <span class="text-slate-400 text-[11px]">防守價: <strong class="font-mono text-slate-200">{{ item.trade_levels.stop_loss.toFixed(1) }}</strong></span>
-                <button @click="openChart(item)" class="text-indigo-400 hover:text-indigo-300 font-semibold active:scale-95">
+                <span class="text-slate-400 text-[11px]">
+                  點擊{{ expandedCards[item.ticker] ? '收合詳情 ▲' : '展開完整數據 ▼' }}
+                </span>
+                <button @click.stop="openChart(item)" class="text-indigo-400 hover:text-indigo-300 font-semibold active:scale-95 px-2 py-1 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
                   查看 K 線 ➔
                 </button>
               </div>
             </div>
           </div>
+
 
           <!-- Table View (Pro compact) -->
           <div v-if="viewMode === 'table'" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-md">
@@ -330,7 +378,7 @@
               </div>
 
               <div class="mt-2 text-right">
-                <button @click="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
                   📈 查看互動K線與籌碼
                 </button>
               </div>
@@ -338,16 +386,28 @@
           </div>
         </div>
 
+        <div v-else class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-md flex items-center space-x-3.5">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-xl shrink-0">🛡️</div>
+          <div>
+            <h3 class="text-xs sm:text-sm font-bold text-slate-200">今日美股暫無強勢突破個股（盤勢回檔整理中）</h3>
+            <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 leading-relaxed">
+              科技股與標竿 ETF 近期處於短線回檔或震盪防守期，未達突破標準。建議耐心觀望並留意下方防守停損價。
+            </p>
+          </div>
+        </div>
+
         <!-- All US Stocks -->
         <div>
           <div class="flex items-center justify-between my-2 px-1">
             <h3 class="text-sm font-bold text-slate-200">📊 全部監控美股與標竿 ETF 清單</h3>
-            <span class="text-xs text-slate-400">點選卡片可展開完整數據</span>
+            <span class="text-xs text-indigo-400 font-semibold">點選任一卡片可展開完整技術數據</span>
           </div>
 
+          <!-- Card View -->
           <div v-if="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div v-for="item in data.us_stocks" :key="item.ticker"
-                 class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-3.5 shadow-md transition flex flex-col justify-between">
+                 @click="toggleExpand(item.ticker)"
+                 class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-3.5 shadow-md transition flex flex-col justify-between cursor-pointer active:scale-[0.99]">
               <div>
                 <div class="flex items-center justify-between">
                   <div>
@@ -372,27 +432,109 @@
                   </span>
                 </div>
 
+                <!-- Fundamental Quick Line -->
+                <div class="flex items-center space-x-2 mt-2 text-[11px] text-slate-400">
+                  <span>殖利率: <strong class="text-emerald-400 font-mono">{{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}</strong></span>
+                  <span class="text-slate-600">•</span>
+                  <span>本益比: <strong class="text-slate-300 font-mono">{{ item.pe_ratio ? item.pe_ratio.toFixed(1) + 'x' : '--' }}</strong></span>
+                  <span class="text-slate-600">•</span>
+                  <span>量比: <strong class="text-amber-400 font-mono">{{ item.vol_ratio }}x</strong></span>
+                </div>
+
                 <p v-if="!isProMode" class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80 mt-2.5 leading-relaxed">
                   💬 <strong>新手解讀:</strong> {{ item.beginner_tip }}
                 </p>
 
-                <div v-if="isProMode" class="grid grid-cols-2 gap-2 mt-2.5 text-xs bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-                  <div class="text-slate-400">本益比: <span class="font-mono text-slate-200">{{ item.pe_ratio ? item.pe_ratio.toFixed(1) + '倍' : '--' }}</span></div>
-                  <div class="text-slate-400">殖利率: <span class="font-mono text-emerald-400 font-bold">{{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}</span></div>
-                  <div class="text-slate-400">MA20 (月線): <span class="font-mono text-slate-200">{{ item.ma20 ? item.ma20.toFixed(1) : '--' }}</span></div>
-                  <div class="text-slate-400">量比: <span class="font-mono text-amber-400 font-bold">{{ item.vol_ratio }}x</span></div>
+                <!-- Expanded Full Details (when clicked) -->
+                <div v-if="expandedCards[item.ticker]" class="mt-3 pt-3 border-t border-slate-800 space-y-2.5">
+                  <div class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">均線與擺盪指標</div>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
+                    <div>MA5: <span class="font-mono text-slate-200">{{ item.ma5 || '--' }}</span></div>
+                    <div>MA10: <span class="font-mono text-slate-200">{{ item.ma10 || '--' }}</span></div>
+                    <div>MA20(月): <span class="font-mono text-slate-200 font-bold">{{ item.ma20 || '--' }}</span></div>
+                    <div>MA60(季): <span class="font-mono text-slate-200">{{ item.ma60 || '--' }}</span></div>
+                    <div>KD (K/D): <span class="font-mono text-sky-400">{{ item.kd_k }}/{{ item.kd_d }}</span></div>
+                    <div>RSI(14): <span class="font-mono text-purple-400">{{ item.rsi }}</span></div>
+                    <div>20日支撐: <span class="font-mono text-amber-400">{{ item.support_20 || '--' }}</span></div>
+                    <div>20日壓力: <span class="font-mono text-rose-400">{{ item.resistance_20 || '--' }}</span></div>
+                  </div>
+
+                  <div class="text-[11px] font-bold text-sky-400 uppercase tracking-wider">點位規劃</div>
+                  <div class="grid grid-cols-3 gap-1.5 text-center text-[11px] bg-slate-950/80 p-2 rounded-xl border border-slate-800/80">
+                    <div class="p-1 bg-slate-900/60 rounded">
+                      <div class="text-slate-400">回檔進場</div>
+                      <div class="font-mono font-bold text-sky-400 mt-0.5">{{ item.trade_levels.pullback_entry.toFixed(1) }}</div>
+                    </div>
+                    <div class="p-1 bg-slate-900/60 rounded">
+                      <div class="text-slate-400">防守停損</div>
+                      <div class="font-mono font-bold text-amber-400 mt-0.5">{{ item.trade_levels.stop_loss.toFixed(1) }}</div>
+                    </div>
+                    <div class="p-1 bg-slate-900/60 rounded">
+                      <div class="text-slate-400">目標停利</div>
+                      <div class="font-mono font-bold text-emerald-400 mt-0.5">{{ item.trade_levels.take_profit.toFixed(1) }} (+{{ item.trade_levels.upside_pct }}%)</div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                <span class="text-slate-400 text-[11px]">防守價: <strong class="font-mono text-slate-200">{{ item.trade_levels.stop_loss.toFixed(1) }}</strong></span>
-                <button @click="openChart(item)" class="text-indigo-400 hover:text-indigo-300 font-semibold active:scale-95">
+                <span class="text-slate-400 text-[11px]">
+                  點擊{{ expandedCards[item.ticker] ? '收合詳情 ▲' : '展開完整數據 ▼' }}
+                </span>
+                <button @click.stop="openChart(item)" class="text-indigo-400 hover:text-indigo-300 font-semibold active:scale-95 px-2 py-1 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
                   查看 K 線 ➔
                 </button>
               </div>
             </div>
           </div>
+
+          <!-- Table View for US Stocks (Previously missing!) -->
+          <div v-if="viewMode === 'table'" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-md">
+            <table class="w-full text-left text-xs whitespace-nowrap">
+              <thead class="bg-slate-950/80 text-slate-400 border-b border-slate-800 font-bold">
+                <tr>
+                  <th class="p-3">標的</th>
+                  <th class="p-3 text-right">現價 ($)</th>
+                  <th class="p-3 text-right">漲跌幅</th>
+                  <th class="p-3 text-center">訊號條件</th>
+                  <th class="p-3 text-right">殖利率</th>
+                  <th class="p-3 text-right">防守停損</th>
+                  <th class="p-3 text-center">操作</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800">
+                <tr v-for="item in data.us_stocks" :key="item.ticker" class="hover:bg-slate-800/50 transition">
+                  <td class="p-3">
+                    <div class="font-bold text-white">{{ item.name }}</div>
+                    <div class="text-[11px] text-slate-400 font-mono">{{ item.ticker }}</div>
+                  </td>
+                  <td class="p-3 text-right font-mono font-bold" :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-500'">
+                    ${{ item.close.toFixed(2) }}
+                  </td>
+                  <td class="p-3 text-right font-mono font-bold" :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                    {{ item.change >= 0 ? '+' : '' }}{{ item.change_pct.toFixed(2) }}%
+                  </td>
+                  <td class="p-3 text-center">
+                    <span v-if="item.signals && item.signals.length" class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-[10px]">
+                      {{ item.signals[0] }}
+                    </span>
+                    <span v-else class="text-slate-500">--</span>
+                  </td>
+                  <td class="p-3 text-right font-mono text-emerald-400 font-bold">
+                    {{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}
+                  </td>
+                  <td class="p-3 text-right font-mono text-amber-400">
+                    ${{ item.trade_levels.stop_loss.toFixed(1) }}
+                  </td>
+                  <td class="p-3 text-center">
+                    <button @click="openChart(item)" class="text-indigo-400 font-bold hover:underline">K線</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
 
       </section>
 
@@ -714,35 +856,66 @@
           localStorage.setItem('sc_portfolio', JSON.stringify(portfolio.value));
         };
 
+        const expandedCards = ref({});
+        const toggleExpand = (ticker) => {
+          expandedCards.value[ticker] = !expandedCards.value[ticker];
+        };
+
         let chartInstance = null;
+        let resizeHandler = null;
+
         const openChart = (item) => {
           chartModal.value.item = item;
           chartModal.value.show = true;
 
           nextTick(() => {
-            const container = document.getElementById('chart-container');
-            if (!container) return;
-            container.innerHTML = '';
+            setTimeout(() => {
+              const container = document.getElementById('chart-container');
+              if (!container) return;
+              container.innerHTML = '';
 
-            chartInstance = LightweightCharts.createChart(container, {
-              layout: { background: { color: '#020617' }, textColor: '#94a3b8' },
-              grid: { vertLines: { color: '#1e293b' }, horzLines: { color: '#1e293b' } },
-              timeScale: { borderColor: '#334155' },
-              crosshair: { mode: LightweightCharts.CrosshairMode.Normal }
-            });
+              const width = container.clientWidth || 340;
+              const height = container.clientHeight || 280;
 
-            const candlestickSeries = chartInstance.addCandlestickSeries({
-              upColor: item.market === 'TW' ? '#f43f5e' : '#10b981',
-              downColor: item.market === 'TW' ? '#10b981' : '#f43f5e',
-              borderVisible: false,
-              wickUpColor: item.market === 'TW' ? '#f43f5e' : '#10b981',
-              wickDownColor: item.market === 'TW' ? '#10b981' : '#f43f5e',
-            });
+              if (chartInstance) {
+                try { chartInstance.remove(); } catch (e) {}
+                chartInstance = null;
+              }
 
-            if (item.history_kline && item.history_kline.length > 0) {
-              candlestickSeries.setData(item.history_kline);
-              chartInstance.timeScale().fitContent();
-            }
+              chartInstance = LightweightCharts.createChart(container, {
+                width: width,
+                height: height,
+                layout: { background: { color: '#020617' }, textColor: '#94a3b8' },
+                grid: { vertLines: { color: '#1e293b' }, horzLines: { color: '#1e293b' } },
+                timeScale: { borderColor: '#334155' },
+                crosshair: { mode: LightweightCharts.CrosshairMode.Normal }
+              });
+
+              const seriesOptions = {
+                upColor: item.market === 'TW' ? '#f43f5e' : '#10b981',
+                downColor: item.market === 'TW' ? '#10b981' : '#f43f5e',
+                borderVisible: false,
+                wickUpColor: item.market === 'TW' ? '#f43f5e' : '#10b981',
+                wickDownColor: item.market === 'TW' ? '#10b981' : '#f43f5e',
+              };
+
+              const candlestickSeries = chartInstance.addCandlestickSeries
+                ? chartInstance.addCandlestickSeries(seriesOptions)
+                : chartInstance.addSeries(LightweightCharts.CandlestickSeries, seriesOptions);
+
+              if (item.history_kline && item.history_kline.length > 0) {
+                candlestickSeries.setData(item.history_kline);
+                chartInstance.timeScale().fitContent();
+              }
+
+              if (resizeHandler) window.removeEventListener('resize', resizeHandler);
+              resizeHandler = () => {
+                if (chartInstance && container) {
+                  chartInstance.applyOptions({ width: container.clientWidth });
+                }
+              };
+              window.addEventListener('resize', resizeHandler);
+            }, 60);
           });
         };
 
@@ -785,8 +958,11 @@
           isRefreshing,
           toastMsg,
           refreshData,
-          showToast
+          showToast,
+          expandedCards,
+          toggleExpand
         };
+
 
       }
     }).mount('#app');
