@@ -193,6 +193,13 @@ class TWSEFetcher:
             "00929": 9.20,
             "00713": 6.80,
             "006208": 3.75,
+            "00940": 6.20,
+            "00939": 6.50,
+            "00915": 9.40,
+            "00881": 5.20,
+            "00757": 1.20,
+            "00679B": 4.35,
+            "00687B": 4.40,
         }
         if clean_ticker in etf_yields:
             return {"dividend_yield": etf_yields[clean_ticker], "pe_ratio": None, "pb_ratio": None}

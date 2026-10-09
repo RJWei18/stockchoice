@@ -27,27 +27,55 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("DataGenerator")
 
 # Target universe: Popular stocks & key ETFs
+# Target universe: Popular stocks & key ETFs (Expanded Universe)
 WATCHLIST_TW = [
+    # 科技權值龍頭
     {"ticker": "2330.TW", "name": "台積電", "type": "stock"},
     {"ticker": "2454.TW", "name": "聯發科", "type": "stock"},
     {"ticker": "2317.TW", "name": "鴻海", "type": "stock"},
     {"ticker": "2382.TW", "name": "廣達", "type": "stock"},
     {"ticker": "2308.TW", "name": "台達電", "type": "stock"},
+    {"ticker": "2303.TW", "name": "聯電", "type": "stock"},
+    {"ticker": "3231.TW", "name": "緯創", "type": "stock"},
+    {"ticker": "2376.TW", "name": "技嘉", "type": "stock"},
+    {"ticker": "6669.TW", "name": "緯穎", "type": "stock"},
+    {"ticker": "3034.TW", "name": "聯詠", "type": "stock"},
+    {"ticker": "3037.TW", "name": "欣興", "type": "stock"},
+    {"ticker": "3711.TW", "name": "日月光投控", "type": "stock"},
+    # 航運與傳產金融龍頭
     {"ticker": "2603.TW", "name": "長榮", "type": "stock"},
+    {"ticker": "2609.TW", "name": "陽明", "type": "stock"},
+    {"ticker": "2615.TW", "name": "萬海", "type": "stock"},
     {"ticker": "2881.TW", "name": "富邦金", "type": "stock"},
     {"ticker": "2882.TW", "name": "國泰金", "type": "stock"},
     {"ticker": "2891.TW", "name": "中信金", "type": "stock"},
-    {"ticker": "3231.TW", "name": "緯創", "type": "stock"},
+    {"ticker": "2886.TW", "name": "兆豐金", "type": "stock"},
+    {"ticker": "2884.TW", "name": "玉山金", "type": "stock"},
+    {"ticker": "2892.TW", "name": "第一金", "type": "stock"},
+    {"ticker": "2002.TW", "name": "中鋼", "type": "stock"},
+    {"ticker": "1101.TW", "name": "台泥", "type": "stock"},
+    {"ticker": "1216.TW", "name": "統一", "type": "stock"},
+    {"ticker": "2412.TW", "name": "中華電", "type": "stock"},
+    {"ticker": "8069.TWO", "name": "元太", "type": "stock"},
+    # 熱門旗艦 ETF
     {"ticker": "0050.TW", "name": "元大台灣50", "type": "etf"},
+    {"ticker": "006208.TW", "name": "富邦台50", "type": "etf"},
     {"ticker": "0056.TW", "name": "元大高股息", "type": "etf"},
     {"ticker": "00878.TW", "name": "國泰永續高股息", "type": "etf"},
     {"ticker": "00919.TW", "name": "群益台灣精選高息", "type": "etf"},
     {"ticker": "00929.TW", "name": "復華台灣科技優息", "type": "etf"},
     {"ticker": "00713.TW", "name": "元大台灣高息低波", "type": "etf"},
-    {"ticker": "006208.TW", "name": "富邦台50", "type": "etf"},
+    {"ticker": "00940.TW", "name": "元大台灣價值高息", "type": "etf"},
+    {"ticker": "00939.TW", "name": "統一台灣高息動能", "type": "etf"},
+    {"ticker": "00915.TW", "name": "凱基優選高股息30", "type": "etf"},
+    {"ticker": "00881.TW", "name": "國泰台灣5G+", "type": "etf"},
+    {"ticker": "00757.TW", "name": "統一FANG+", "type": "etf"},
+    {"ticker": "00679B.TW", "name": "元大美債20年", "type": "etf"},
+    {"ticker": "00687B.TW", "name": "國泰20年美債", "type": "etf"},
 ]
 
 WATCHLIST_US = [
+    # 科技巨頭美股
     {"ticker": "AAPL", "name": "蘋果 Apple", "type": "stock"},
     {"ticker": "NVDA", "name": "輝達 NVIDIA", "type": "stock"},
     {"ticker": "MSFT", "name": "微軟 Microsoft", "type": "stock"},
@@ -56,10 +84,22 @@ WATCHLIST_US = [
     {"ticker": "TSLA", "name": "特斯拉 Tesla", "type": "stock"},
     {"ticker": "GOOGL", "name": "谷歌 Google", "type": "stock"},
     {"ticker": "AMD", "name": "超微 AMD", "type": "stock"},
+    {"ticker": "TSM", "name": "台積電 ADR", "type": "stock"},
+    {"ticker": "AVGO", "name": "博通 Broadcom", "type": "stock"},
+    {"ticker": "ARM", "name": "安謀 ARM", "type": "stock"},
+    {"ticker": "PLTR", "name": "Palantir", "type": "stock"},
+    {"ticker": "INTC", "name": "英特爾 Intel", "type": "stock"},
+    {"ticker": "NFLX", "name": "網飛 Netflix", "type": "stock"},
+    {"ticker": "COST", "name": "好市多 Costco", "type": "stock"},
+    {"ticker": "BRK.B", "name": "波克夏 Berkshire", "type": "stock"},
+    # 美股經典 ETF
     {"ticker": "QQQ", "name": "Invesco 納斯達克100 ETF", "type": "etf"},
-    {"ticker": "SPY", "name": "S&P 500 ETF", "type": "etf"},
+    {"ticker": "SPY", "name": "SPDR S&P 500 ETF", "type": "etf"},
+    {"ticker": "VOO", "name": "Vanguard S&P 500 ETF", "type": "etf"},
     {"ticker": "SOXX", "name": "iShares 半導體 ETF", "type": "etf"},
     {"ticker": "SMH", "name": "VanEck 半導體 ETF", "type": "etf"},
+    {"ticker": "SCHD", "name": "Schwab 美國高股息 ETF", "type": "etf"},
+    {"ticker": "TLT", "name": "iShares 20年期美債 ETF", "type": "etf"},
     {"ticker": "VT", "name": "Vanguard 全球股票 ETF", "type": "etf"},
 ]
 
@@ -82,6 +122,60 @@ def process_ticker(item, db, twse, yf, scanner):
             else:
                 df = df_twse
             fundamentals = twse.fetch_fundamentals(ticker)
+            clean_tw = ticker.replace(".TW", "").replace(".TWO", "").strip()
+            tw_benchmarks = {
+                "2330": {"pe_ratio": 28.5, "dividend_yield": 1.45, "pb_ratio": 6.5},
+                "2454": {"pe_ratio": 24.2, "dividend_yield": 4.30, "pb_ratio": 4.8},
+                "2317": {"pe_ratio": 14.8, "dividend_yield": 3.20, "pb_ratio": 1.6},
+                "2382": {"pe_ratio": 18.5, "dividend_yield": 3.50, "pb_ratio": 4.2},
+                "2308": {"pe_ratio": 26.0, "dividend_yield": 2.50, "pb_ratio": 5.1},
+                "2603": {"pe_ratio": 4.8, "dividend_yield": 8.50, "pb_ratio": 1.2},
+                "2609": {"pe_ratio": 6.2, "dividend_yield": 7.20, "pb_ratio": 0.95},
+                "2615": {"pe_ratio": 5.5, "dividend_yield": 7.80, "pb_ratio": 1.1},
+                "2881": {"pe_ratio": 11.2, "dividend_yield": 4.80, "pb_ratio": 1.35},
+                "2882": {"pe_ratio": 12.0, "dividend_yield": 4.50, "pb_ratio": 1.25},
+                "2891": {"pe_ratio": 10.5, "dividend_yield": 5.20, "pb_ratio": 1.15},
+                "2886": {"pe_ratio": 13.5, "dividend_yield": 4.10, "pb_ratio": 1.40},
+                "2884": {"pe_ratio": 12.8, "dividend_yield": 4.60, "pb_ratio": 1.20},
+                "2892": {"pe_ratio": 12.2, "dividend_yield": 4.70, "pb_ratio": 1.18},
+                "3231": {"pe_ratio": 16.5, "dividend_yield": 3.80, "pb_ratio": 2.8},
+                "2303": {"pe_ratio": 12.0, "dividend_yield": 5.50, "pb_ratio": 1.3},
+                "2376": {"pe_ratio": 19.0, "dividend_yield": 3.10, "pb_ratio": 3.5},
+                "6669": {"pe_ratio": 38.0, "dividend_yield": 1.80, "pb_ratio": 8.5},
+                "2356": {"pe_ratio": 15.2, "dividend_yield": 4.20, "pb_ratio": 2.1},
+                "2357": {"pe_ratio": 14.5, "dividend_yield": 4.50, "pb_ratio": 1.8},
+                "2409": {"pe_ratio": 18.0, "dividend_yield": 3.00, "pb_ratio": 0.75},
+                "3481": {"pe_ratio": 16.5, "dividend_yield": 3.20, "pb_ratio": 0.68},
+                "3034": {"pe_ratio": 18.2, "dividend_yield": 4.60, "pb_ratio": 4.5},
+                "3037": {"pe_ratio": 22.0, "dividend_yield": 2.80, "pb_ratio": 3.2},
+                "3711": {"pe_ratio": 19.5, "dividend_yield": 3.60, "pb_ratio": 2.6},
+                "2002": {"pe_ratio": 24.0, "dividend_yield": 3.50, "pb_ratio": 1.05},
+                "1101": {"pe_ratio": 22.5, "dividend_yield": 4.00, "pb_ratio": 0.92},
+                "1216": {"pe_ratio": 21.0, "dividend_yield": 3.80, "pb_ratio": 2.4},
+                "2412": {"pe_ratio": 26.5, "dividend_yield": 4.10, "pb_ratio": 3.2},
+                "8069": {"pe_ratio": 25.0, "dividend_yield": 3.20, "pb_ratio": 4.8},
+                "0050": {"dividend_yield": 3.85, "pe_ratio": None, "pb_ratio": None},
+                "0056": {"dividend_yield": 7.45, "pe_ratio": None, "pb_ratio": None},
+                "00878": {"dividend_yield": 8.80, "pe_ratio": None, "pb_ratio": None},
+                "00919": {"dividend_yield": 10.95, "pe_ratio": None, "pb_ratio": None},
+                "00929": {"dividend_yield": 9.20, "pe_ratio": None, "pb_ratio": None},
+                "00713": {"dividend_yield": 6.80, "pe_ratio": None, "pb_ratio": None},
+                "006208": {"dividend_yield": 3.75, "pe_ratio": None, "pb_ratio": None},
+                "00940": {"dividend_yield": 6.20, "pe_ratio": None, "pb_ratio": None},
+                "00939": {"dividend_yield": 6.50, "pe_ratio": None, "pb_ratio": None},
+                "00915": {"dividend_yield": 9.40, "pe_ratio": None, "pb_ratio": None},
+                "00881": {"dividend_yield": 5.20, "pe_ratio": None, "pb_ratio": None},
+                "00757": {"dividend_yield": 1.20, "pe_ratio": None, "pb_ratio": None},
+                "00679B": {"dividend_yield": 4.35, "pe_ratio": None, "pb_ratio": None},
+                "00687B": {"dividend_yield": 4.40, "pe_ratio": None, "pb_ratio": None},
+            }
+            if clean_tw in tw_benchmarks:
+                bm = tw_benchmarks[clean_tw]
+                fundamentals = {
+                    "pe_ratio": fundamentals.get("pe_ratio") or bm.get("pe_ratio"),
+                    "dividend_yield": fundamentals.get("dividend_yield") or bm.get("dividend_yield"),
+                    "pb_ratio": fundamentals.get("pb_ratio") or bm.get("pb_ratio"),
+                }
         else:
             df = yf.fetch_history(ticker, period="3mo")
             fundamentals = yf.fetch_fundamentals(ticker)
@@ -94,10 +188,21 @@ def process_ticker(item, db, twse, yf, scanner):
                 "TSLA": {"pe_ratio": 68.5, "dividend_yield": None, "pb_ratio": 11.5},
                 "GOOGL": {"pe_ratio": 24.3, "dividend_yield": 0.45, "pb_ratio": 6.8},
                 "AMD": {"pe_ratio": 48.2, "dividend_yield": None, "pb_ratio": 4.1},
+                "TSM": {"pe_ratio": 27.5, "dividend_yield": 1.25, "pb_ratio": 6.8},
+                "AVGO": {"pe_ratio": 38.5, "dividend_yield": 1.35, "pb_ratio": 11.2},
+                "ARM": {"pe_ratio": 82.0, "dividend_yield": None, "pb_ratio": 18.5},
+                "PLTR": {"pe_ratio": 95.0, "dividend_yield": None, "pb_ratio": 24.0},
+                "INTC": {"pe_ratio": 22.0, "dividend_yield": 2.10, "pb_ratio": 1.1},
+                "NFLX": {"pe_ratio": 42.0, "dividend_yield": None, "pb_ratio": 14.5},
+                "COST": {"pe_ratio": 54.0, "dividend_yield": 0.52, "pb_ratio": 16.0},
+                "BRK.B": {"pe_ratio": 21.0, "dividend_yield": None, "pb_ratio": 1.6},
                 "QQQ": {"pe_ratio": 31.8, "dividend_yield": 0.58, "pb_ratio": 7.5},
                 "SPY": {"pe_ratio": 26.5, "dividend_yield": 1.25, "pb_ratio": 4.9},
+                "VOO": {"pe_ratio": 26.5, "dividend_yield": 1.28, "pb_ratio": 4.9},
                 "SOXX": {"pe_ratio": 38.2, "dividend_yield": 0.65, "pb_ratio": 6.2},
                 "SMH": {"pe_ratio": 39.5, "dividend_yield": 0.45, "pb_ratio": 6.5},
+                "SCHD": {"pe_ratio": 16.8, "dividend_yield": 3.45, "pb_ratio": 3.2},
+                "TLT": {"pe_ratio": None, "dividend_yield": 4.15, "pb_ratio": None},
                 "VT": {"pe_ratio": 21.2, "dividend_yield": 1.95, "pb_ratio": 2.8},
             }
             if ticker in us_benchmarks:
@@ -116,16 +221,36 @@ def process_ticker(item, db, twse, yf, scanner):
 
         if df is None or df.empty or len(df) < 20:
             # Generate realistic baseline data for offline/initial deployment preview
-            base_p = 720.0 if "2330" in ticker else (155.0 if "0050" in ticker else (22.5 if "00878" in ticker else 185.0))
-            dates = pd.date_range("2024-01-01", periods=80, freq="D").strftime("%Y-%m-%d").tolist()
-            closes = [base_p * (1.0 + (i * 0.002)) for i in range(79)] + [base_p * 1.18]
-            highs = [c * 1.01 for c in closes]
-            lows = [c * 0.99 for c in closes]
+            clean_sym = ticker.replace(".TW", "").replace(".TWO", "").strip()
+            tw_base_prices = {
+                "2330": 2550.0, "2454": 1280.0, "2317": 195.0, "2382": 268.0, "2308": 385.0,
+                "2603": 192.0, "2609": 68.5, "2615": 88.5, "2881": 89.0, "2882": 66.5,
+                "2891": 36.8, "2886": 39.5, "2884": 28.2, "2892": 27.6, "3231": 105.0,
+                "2303": 52.8, "2376": 275.0, "6669": 1980.0, "2356": 45.2, "2357": 590.0,
+                "2409": 16.8, "3481": 15.6, "3034": 510.0, "3037": 142.0, "3711": 158.0,
+                "2002": 22.8, "1101": 32.5, "1216": 84.5, "2412": 125.0, "8069": 290.0,
+                "0050": 115.0, "0056": 38.5, "00878": 22.8, "00919": 24.2, "00929": 19.5,
+                "00713": 57.0, "006208": 112.0, "00940": 9.65, "00939": 14.85, "00915": 26.5,
+                "00881": 24.8, "00757": 95.5, "00679B": 29.8, "00687B": 31.2
+            }
+            us_base_prices = {
+                "AAPL": 340.0, "NVDA": 138.0, "MSFT": 420.0, "AMZN": 185.0,
+                "META": 585.0, "TSLA": 240.0, "GOOGL": 165.0, "AMD": 155.0,
+                "TSM": 185.0, "AVGO": 175.0, "ARM": 140.0, "PLTR": 42.0,
+                "INTC": 22.5, "NFLX": 710.0, "COST": 890.0, "BRK.B": 450.0,
+                "QQQ": 490.0, "SPY": 575.0, "VOO": 528.0, "SOXX": 225.0,
+                "SMH": 245.0, "VT": 115.0, "SCHD": 82.5, "TLT": 95.0
+            }
+            base_p = tw_base_prices.get(clean_sym) or us_base_prices.get(clean_sym) or 150.0
+            dates = pd.date_range("2026-07-15", periods=60, freq="B").strftime("%Y-%m-%d").tolist()
+            closes = [base_p * (1.0 + (i * 0.0015)) for i in range(59)] + [base_p * 1.01]
+            highs = [c * 1.012 for c in closes]
+            lows = [c * 0.988 for c in closes]
             opens = [c * 0.995 for c in closes]
-            volumes = [20000.0] * 79 + [65000.0]
+            volumes = [2500000.0] * 59 + [6800000.0]
             df = pd.DataFrame({"date": dates, "open": opens, "high": highs, "low": lows, "close": closes, "volume": volumes})
-            if not fundamentals.get("pe_ratio"):
-                fundamentals = {"pe_ratio": 22.5, "dividend_yield": 3.8, "pb_ratio": 4.5}
+            if not fundamentals.get("pe_ratio") and not is_tw:
+                fundamentals = {"pe_ratio": 24.5, "dividend_yield": 1.8, "pb_ratio": 3.8}
 
         # Save latest to local SQLite
         db.save_daily_kline(df, ticker, market)
@@ -190,6 +315,9 @@ def process_ticker(item, db, twse, yf, scanner):
             us_ownership = {
                 "AAPL": 60.5, "NVDA": 67.2, "MSFT": 72.4, "AMZN": 61.8,
                 "META": 68.3, "TSLA": 44.5, "GOOGL": 62.1, "AMD": 69.8,
+                "TSM": 38.5, "AVGO": 79.2, "ARM": 52.0, "PLTR": 46.5,
+                "INTC": 64.0, "NFLX": 81.5, "COST": 71.0, "BRK.B": 70.5,
+                "VOO": 75.0, "SCHD": 68.0, "TLT": 72.0,
                 "QQQ": 68.0, "SPY": 75.0, "SOXX": 71.5, "SMH": 73.0, "VT": 64.0
             }
             ownership = us_ownership.get(ticker, 65.0)

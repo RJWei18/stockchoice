@@ -98,6 +98,46 @@
         <span v-if="tab.badge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20 text-white font-bold">{{ tab.badge }}</span>
       </button>
     </nav>
+ 
+    <!-- Search & Quick Filters Bar (When viewing TW or US tabs) -->
+    <div v-if="activeTab === 'tw' || activeTab === 'us'" class="px-3 sm:px-4 mt-2.5 space-y-2">
+      <!-- Search Input -->
+      <div class="relative flex items-center">
+        <span class="absolute left-3.5 text-slate-400 text-sm">🔍</span>
+        <input v-model="searchQuery" 
+               type="text" 
+               :placeholder="activeTab === 'tw' ? '搜尋台股代碼或名稱 (如 2330, 0050, 鴻海, 高股息)...' : '搜尋美股代碼或名稱 (如 AAPL, NVDA, QQQ, 輝達)...'"
+               class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-2xl pl-10 pr-10 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition shadow-inner">
+        <button v-if="searchQuery" 
+                @click="searchQuery = ''" 
+                class="absolute right-3.5 text-slate-400 hover:text-white text-xs bg-slate-800 rounded-full w-5 h-5 flex items-center justify-center">✕</button>
+      </div>
+
+      <!-- Category & Favorites Filter Pills -->
+      <div class="flex items-center space-x-1.5 overflow-x-auto scrollbar-none pb-0.5 text-xs">
+        <button @click="currentFilter = 'all'"
+                :class="currentFilter === 'all' ? 'bg-indigo-600 text-white font-bold shadow' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'"
+                class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95">
+          全部 ({{ currentMarketTotal }})
+        </button>
+        <button @click="currentFilter = 'favorites'"
+                :class="currentFilter === 'favorites' ? 'bg-rose-600 text-white font-bold shadow-rose-600/30 shadow' : 'bg-slate-900 text-rose-300 border border-slate-800'"
+                class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95 flex items-center space-x-1">
+          <span>❤️</span>
+          <span>我的自選 ({{ favoriteCount }})</span>
+        </button>
+        <button @click="currentFilter = 'etf'"
+                :class="currentFilter === 'etf' ? 'bg-indigo-600 text-white font-bold shadow' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'"
+                class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95">
+          📊 ETF 專區
+        </button>
+        <button @click="currentFilter = 'stock'"
+                :class="currentFilter === 'stock' ? 'bg-indigo-600 text-white font-bold shadow' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'"
+                class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95">
+          🏢 個股專區
+        </button>
+      </div>
+    </div>
 
     <!-- Main Content Area -->
     <main class="flex-1 px-3 sm:px-4 mt-3">
@@ -105,8 +145,8 @@
       <!-- ================= TAB 1: 台灣股市 & ETF ================= -->
       <section v-if="activeTab === 'tw'" class="space-y-4">
         
-        <!-- Recommended Buy Picks (Top Section) -->
-        <div v-if="data.tw_recommended && data.tw_recommended.length > 0" class="bg-gradient-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl">
+        <!-- Recommended Buy Picks (Top Section, only shown when no search/filter) -->
+        <div v-if="currentFilter === 'all' && !searchQuery && data.tw_recommended && data.tw_recommended.length > 0" class="bg-gradient-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-sm font-bold text-indigo-300 flex items-center space-x-1.5">
               <span>🏆</span>
@@ -120,6 +160,9 @@
                  class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 hover:border-indigo-500/50 transition">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
+                  <button @click.stop="toggleFavorite(item.ticker)" class="text-base hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+                    {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
+                  </button>
                   <span class="font-extrabold text-sm sm:text-base text-white">{{ item.name }}</span>
                   <span class="text-xs text-slate-400 font-mono">{{ item.ticker }}</span>
                   <span class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
@@ -158,7 +201,10 @@
                 </div>
               </div>
 
-              <div class="mt-2 text-right">
+              <div class="mt-2 flex items-center justify-between text-xs">
+                <button @click.stop="quickAddToPortfolio(item)" class="text-xs text-slate-300 hover:text-white py-1 px-2.5 rounded bg-slate-800 border border-slate-700 active:scale-95 transition">
+                  💼 記帳至庫存
+                </button>
                 <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
                   📈 查看互動K線與籌碼
                 </button>
@@ -167,8 +213,8 @@
           </div>
         </div>
 
-        <!-- Empty state when no breakout stocks today -->
-        <div v-else class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-md flex items-center space-x-3.5">
+        <!-- Empty state when no breakout stocks today and in all mode without search -->
+        <div v-else-if="currentFilter === 'all' && !searchQuery" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-md flex items-center space-x-3.5">
           <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-xl shrink-0">🛡️</div>
           <div>
             <h3 class="text-xs sm:text-sm font-bold text-slate-200">今日台股暫無強勢突破個股（盤勢回檔整理中）</h3>
@@ -181,21 +227,46 @@
         <!-- All Stocks & ETFs List -->
         <div>
           <div class="flex items-center justify-between my-2 px-1">
-            <h3 class="text-sm font-bold text-slate-200">📊 全部監控台股與熱門 ETF 清單</h3>
+            <h3 class="text-sm font-bold text-slate-200 flex items-center space-x-1.5">
+              <span>{{ currentFilter === 'favorites' ? '❤️ 我的自選標的清單' : (currentFilter === 'etf' ? '📊 台股熱門 ETF 清單' : (currentFilter === 'stock' ? '🏢 台股個股清單' : '📊 全部監控台股與熱門 ETF')) }}</span>
+              <span class="text-xs text-indigo-400 font-mono font-bold">({{ filteredTWStocks.length }} 檔)</span>
+            </h3>
             <span class="text-xs text-indigo-400 font-semibold">點選任一卡片可展開完整技術數據</span>
+          </div>
+
+          <!-- Empty search or favorites result -->
+          <div v-if="filteredTWStocks.length === 0" class="text-center py-12 bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl p-4 my-2">
+            <span class="text-3xl">{{ currentFilter === 'favorites' ? '🤍' : '🔍' }}</span>
+            <p v-if="currentFilter === 'favorites'" class="text-slate-300 text-sm font-bold mt-2">
+              尚未加入自選標的
+            </p>
+            <p v-if="currentFilter === 'favorites'" class="text-slate-400 text-xs mt-1">
+              點擊任一股票卡片右上角的 🤍 愛心，即可將心動標的加入自選清單。
+            </p>
+            <p v-else class="text-slate-300 text-sm font-bold mt-2">
+              找不到符合「{{ searchQuery }}」的台股標的
+            </p>
+            <p v-if="currentFilter !== 'favorites'" class="text-slate-400 text-xs mt-1">
+              請確認股票代碼或名稱是否正確。
+            </p>
           </div>
 
           <!-- Card View -->
           <div v-if="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div v-for="item in data.tw_stocks" :key="item.ticker"
+            <div v-for="item in filteredTWStocks" :key="item.ticker"
                  @click="toggleExpand(item.ticker)"
                  class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-3.5 shadow-md transition flex flex-col justify-between cursor-pointer active:scale-[0.99]">
               <div>
                 <div class="flex items-center justify-between">
-                  <div>
-                    <span class="font-bold text-base text-white">{{ item.name }}</span>
-                    <span class="text-xs text-slate-400 ml-1 font-mono">{{ item.ticker }}</span>
-                    <span v-if="item.type === 'etf'" class="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
+                  <div class="flex items-center space-x-1.5">
+                    <button @click.stop="toggleFavorite(item.ticker)" class="text-base hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+                      {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
+                    </button>
+                    <div>
+                      <span class="font-bold text-base text-white">{{ item.name }}</span>
+                      <span class="text-xs text-slate-400 ml-1 font-mono">{{ item.ticker }}</span>
+                      <span v-if="item.type === 'etf'" class="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
+                    </div>
                   </div>
                   <!-- TW Color -->
                   <div class="text-right font-mono">
@@ -296,9 +367,16 @@
                 <span class="text-slate-400 text-[11px]">
                   點擊{{ expandedCards[item.ticker] ? '收合詳情 ▲' : '展開完整數據 ▼' }}
                 </span>
-                <button @click.stop="openChart(item)" class="text-indigo-400 hover:text-indigo-300 font-semibold active:scale-95 px-2 py-1 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
-                  查看 K 線 ➔
-                </button>
+                <div class="flex items-center space-x-1.5">
+                  <button @click.stop="quickAddToPortfolio(item)" 
+                          class="text-xs font-semibold text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition"
+                          title="將此標的記帳至定期定額真實庫存">
+                    💼 記帳庫存
+                  </button>
+                  <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                    查看 K 線 ➔
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -319,10 +397,17 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800">
-                <tr v-for="item in data.tw_stocks" :key="item.ticker" class="hover:bg-slate-800/50 transition">
+                <tr v-for="item in filteredTWStocks" :key="item.ticker" class="hover:bg-slate-800/50 transition">
                   <td class="p-3">
-                    <div class="font-bold text-white">{{ item.name }}</div>
-                    <div class="text-[11px] text-slate-400 font-mono">{{ item.ticker }}</div>
+                    <div class="flex items-center space-x-1.5">
+                      <button @click.stop="toggleFavorite(item.ticker)" class="text-xs hover:scale-125 transition" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+                        {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
+                      </button>
+                      <div>
+                        <div class="font-bold text-white">{{ item.name }}</div>
+                        <div class="text-[11px] text-slate-400 font-mono">{{ item.ticker }}</div>
+                      </div>
+                    </div>
                   </td>
                   <td class="p-3 text-right font-mono font-bold" :class="item.change >= 0 ? 'text-rose-500' : 'text-emerald-400'">
                     {{ item.close.toFixed(2) }}
@@ -342,8 +427,9 @@
                   <td class="p-3 text-right font-mono text-amber-400">
                     {{ item.trade_levels.stop_loss.toFixed(1) }}
                   </td>
-                  <td class="p-3 text-center">
-                    <button @click="openChart(item)" class="text-indigo-400 font-bold">K線</button>
+                  <td class="p-3 text-center space-x-1">
+                    <button @click="openChart(item)" class="text-indigo-400 font-bold hover:underline">K線</button>
+                    <button @click="quickAddToPortfolio(item)" class="text-slate-400 font-bold hover:text-white text-[11px]">記帳</button>
                   </td>
                 </tr>
               </tbody>
@@ -357,7 +443,7 @@
       <section v-if="activeTab === 'us'" class="space-y-4">
         
         <!-- Recommended Buy Picks (US) -->
-        <div v-if="data.us_recommended && data.us_recommended.length > 0" class="bg-gradient-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl">
+        <div v-if="currentFilter === 'all' && !searchQuery && data.us_recommended && data.us_recommended.length > 0" class="bg-gradient-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-sm font-bold text-indigo-300 flex items-center space-x-1.5">
               <span>🏆</span>
@@ -371,6 +457,9 @@
                  class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 hover:border-indigo-500/50 transition">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
+                  <button @click.stop="toggleFavorite(item.ticker)" class="text-base hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+                    {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
+                  </button>
                   <span class="font-extrabold text-sm sm:text-base text-white">{{ item.name }}</span>
                   <span class="text-xs text-slate-400 font-mono">{{ item.ticker }}</span>
                   <span class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
@@ -407,7 +496,10 @@
                 </div>
               </div>
 
-              <div class="mt-2 text-right">
+              <div class="mt-2 flex items-center justify-between text-xs">
+                <button @click.stop="quickAddToPortfolio(item)" class="text-xs text-slate-300 hover:text-white py-1 px-2.5 rounded bg-slate-800 border border-slate-700 active:scale-95 transition">
+                  💼 記帳至庫存
+                </button>
                 <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
                   📈 查看互動K線與籌碼
                 </button>
@@ -416,7 +508,7 @@
           </div>
         </div>
 
-        <div v-else class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-md flex items-center space-x-3.5">
+        <div v-else-if="currentFilter === 'all' && !searchQuery" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-md flex items-center space-x-3.5">
           <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-xl shrink-0">🛡️</div>
           <div>
             <h3 class="text-xs sm:text-sm font-bold text-slate-200">今日美股暫無強勢突破個股（盤勢回檔整理中）</h3>
@@ -429,21 +521,46 @@
         <!-- All US Stocks -->
         <div>
           <div class="flex items-center justify-between my-2 px-1">
-            <h3 class="text-sm font-bold text-slate-200">📊 全部監控美股與標竿 ETF 清單</h3>
+            <h3 class="text-sm font-bold text-slate-200 flex items-center space-x-1.5">
+              <span>{{ currentFilter === 'favorites' ? '❤️ 我的美股自選標的' : (currentFilter === 'etf' ? '📊 美股標竿 ETF 清單' : (currentFilter === 'stock' ? '🏢 美股個股清單' : '📊 全部監控美股與標竿 ETF')) }}</span>
+              <span class="text-xs text-indigo-400 font-mono font-bold">({{ filteredUSStocks.length }} 檔)</span>
+            </h3>
             <span class="text-xs text-indigo-400 font-semibold">點選任一卡片可展開完整技術數據</span>
+          </div>
+
+          <!-- Empty search or favorites result -->
+          <div v-if="filteredUSStocks.length === 0" class="text-center py-12 bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl p-4 my-2">
+            <span class="text-3xl">{{ currentFilter === 'favorites' ? '🤍' : '🔍' }}</span>
+            <p v-if="currentFilter === 'favorites'" class="text-slate-300 text-sm font-bold mt-2">
+              尚未加入美股自選標的
+            </p>
+            <p v-if="currentFilter === 'favorites'" class="text-slate-400 text-xs mt-1">
+              點擊任一美股卡片右上角的 🤍 愛心，即可將心動標的加入自選清單。
+            </p>
+            <p v-else class="text-slate-300 text-sm font-bold mt-2">
+              找不到符合「{{ searchQuery }}」的美股標的
+            </p>
+            <p v-if="currentFilter !== 'favorites'" class="text-slate-400 text-xs mt-1">
+              請確認股票代碼或名稱是否正確。
+            </p>
           </div>
 
           <!-- Card View -->
           <div v-if="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div v-for="item in data.us_stocks" :key="item.ticker"
+            <div v-for="item in filteredUSStocks" :key="item.ticker"
                  @click="toggleExpand(item.ticker)"
                  class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-3.5 shadow-md transition flex flex-col justify-between cursor-pointer active:scale-[0.99]">
               <div>
                 <div class="flex items-center justify-between">
-                  <div>
-                    <span class="font-bold text-base text-white">{{ item.name }}</span>
-                    <span class="text-xs text-slate-400 ml-1 font-mono">{{ item.ticker }}</span>
-                    <span v-if="item.type === 'etf'" class="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
+                  <div class="flex items-center space-x-1.5">
+                    <button @click.stop="toggleFavorite(item.ticker)" class="text-base hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+                      {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
+                    </button>
+                    <div>
+                      <span class="font-bold text-base text-white">{{ item.name }}</span>
+                      <span class="text-xs text-slate-400 ml-1 font-mono">{{ item.ticker }}</span>
+                      <span v-if="item.type === 'etf'" class="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
+                    </div>
                   </div>
                   <!-- US Color: Green Up, Red Down -->
                   <div class="text-right font-mono">
@@ -539,9 +656,16 @@
                 <span class="text-slate-400 text-[11px]">
                   點擊{{ expandedCards[item.ticker] ? '收合詳情 ▲' : '展開完整數據 ▼' }}
                 </span>
-                <button @click.stop="openChart(item)" class="text-indigo-400 hover:text-indigo-300 font-semibold active:scale-95 px-2 py-1 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
-                  查看 K 線 ➔
-                </button>
+                <div class="flex items-center space-x-1.5">
+                  <button @click.stop="quickAddToPortfolio(item)" 
+                          class="text-xs font-semibold text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition"
+                          title="將此標的記帳至定期定額真實庫存">
+                    💼 記帳庫存
+                  </button>
+                  <button @click.stop="openChart(item)" class="text-indigo-400 hover:text-indigo-300 font-semibold active:scale-95 px-2 py-1 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
+                    查看 K 線 ➔
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -561,10 +685,17 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800">
-                <tr v-for="item in data.us_stocks" :key="item.ticker" class="hover:bg-slate-800/50 transition">
+                <tr v-for="item in filteredUSStocks" :key="item.ticker" class="hover:bg-slate-800/50 transition">
                   <td class="p-3">
-                    <div class="font-bold text-white">{{ item.name }}</div>
-                    <div class="text-[11px] text-slate-400 font-mono">{{ item.ticker }}</div>
+                    <div class="flex items-center space-x-1.5">
+                      <button @click.stop="toggleFavorite(item.ticker)" class="text-xs hover:scale-125 transition" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+                        {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
+                      </button>
+                      <div>
+                        <div class="font-bold text-white">{{ item.name }}</div>
+                        <div class="text-[11px] text-slate-400 font-mono">{{ item.ticker }}</div>
+                      </div>
+                    </div>
                   </td>
                   <td class="p-3 text-right font-mono font-bold" :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-500'">
                     ${{ item.close.toFixed(2) }}
@@ -584,15 +715,15 @@
                   <td class="p-3 text-right font-mono text-amber-400">
                     ${{ item.trade_levels.stop_loss.toFixed(1) }}
                   </td>
-                  <td class="p-3 text-center">
+                  <td class="p-3 text-center space-x-1">
                     <button @click="openChart(item)" class="text-indigo-400 font-bold hover:underline">K線</button>
+                    <button @click="quickAddToPortfolio(item)" class="text-slate-400 font-bold hover:text-white text-[11px]">記帳</button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-
 
       </section>
 
@@ -602,12 +733,15 @@
         <!-- Summary Stats Card -->
         <div class="bg-gradient-to-br from-indigo-950/70 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between">
-            <h2 class="text-sm font-bold text-indigo-300 flex items-center space-x-1">
-              <span>💰</span>
-              <span>我的存股資產與年化領息總覽</span>
+            <h2 class="text-sm font-bold text-indigo-300 flex items-center space-x-1.5">
+              <span>💼</span>
+              <span>我的真實持股庫存與定期扣款追蹤</span>
             </h2>
-            <span class="text-[11px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded-full border border-slate-800">本機安全儲存</span>
+            <span class="text-[11px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded-full border border-slate-800">實際買進庫存</span>
           </div>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+            本分頁專門記錄與追蹤您實際已買進的庫存股數、平均買進成本與每月扣款扣存。若僅想加入心動觀察清單，請在股票卡片點擊 ❤️ 愛心。
+          </p>
 
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3.5">
             <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
@@ -935,6 +1069,11 @@
         const showGuide = ref(localStorage.getItem('sc_hide_guide') !== 'true');
         const showAddModal = ref(false);
 
+        // Search & Favorites
+        const searchQuery = ref('');
+        const currentFilter = ref('all'); // 'all' | 'favorites' | 'etf' | 'stock'
+        const favorites = ref(JSON.parse(localStorage.getItem('sc_favorites') || '[]'));
+
         const meta = ref({});
         const data = ref({
           tw_stocks: [],
@@ -942,6 +1081,75 @@
           tw_recommended: [],
           us_recommended: []
         });
+
+        const isFavorite = (ticker) => {
+          return favorites.value.includes(ticker);
+        };
+
+        const toggleFavorite = (ticker) => {
+          const idx = favorites.value.indexOf(ticker);
+          if (idx >= 0) {
+            favorites.value.splice(idx, 1);
+            showToast(`已從自選移除 ${ticker}`);
+          } else {
+            favorites.value.push(ticker);
+            showToast(`已加入我的自選 ❤️ ${ticker}`);
+          }
+          localStorage.setItem('sc_favorites', JSON.stringify(favorites.value));
+        };
+
+        const currentMarketList = computed(() => {
+          return activeTab.value === 'tw' ? (data.value.tw_stocks || []) : (data.value.us_stocks || []);
+        });
+
+        const currentMarketTotal = computed(() => currentMarketList.value.length);
+
+        const favoriteCount = computed(() => {
+          return currentMarketList.value.filter(s => favorites.value.includes(s.ticker)).length;
+        });
+
+        const filteredTWStocks = computed(() => {
+          let list = data.value.tw_stocks || [];
+          if (searchQuery.value && searchQuery.value.trim()) {
+            const q = searchQuery.value.trim().toUpperCase();
+            list = list.filter(s => s.ticker.toUpperCase().includes(q) || s.name.toUpperCase().includes(q));
+          }
+          if (currentFilter.value === 'favorites') {
+            list = list.filter(s => favorites.value.includes(s.ticker));
+          } else if (currentFilter.value === 'etf') {
+            list = list.filter(s => s.type === 'etf');
+          } else if (currentFilter.value === 'stock') {
+            list = list.filter(s => s.type === 'stock');
+          }
+          return list;
+        });
+
+        const filteredUSStocks = computed(() => {
+          let list = data.value.us_stocks || [];
+          if (searchQuery.value && searchQuery.value.trim()) {
+            const q = searchQuery.value.trim().toUpperCase();
+            list = list.filter(s => s.ticker.toUpperCase().includes(q) || s.name.toUpperCase().includes(q));
+          }
+          if (currentFilter.value === 'favorites') {
+            list = list.filter(s => favorites.value.includes(s.ticker));
+          } else if (currentFilter.value === 'etf') {
+            list = list.filter(s => s.type === 'etf');
+          } else if (currentFilter.value === 'stock') {
+            list = list.filter(s => s.type === 'stock');
+          }
+          return list;
+        });
+
+        const quickAddToPortfolio = (item) => {
+          newItem.value = {
+            ticker: item.ticker,
+            name: item.name,
+            monthlyBudget: 5000,
+            shares: item.type === 'etf' ? 1000 : 100,
+            avgCost: item.close
+          };
+          showAddModal.value = true;
+        };
 
         const chartModal = ref({
           show: false,
@@ -1264,7 +1472,17 @@
           refreshData,
           showToast,
           expandedCards,
-          toggleExpand
+          toggleExpand,
+          searchQuery,
+          currentFilter,
+          favorites,
+          isFavorite,
+          toggleFavorite,
+          favoriteCount,
+          currentMarketTotal,
+          filteredTWStocks,
+          filteredUSStocks,
+          quickAddToPortfolio
         };
 
 
