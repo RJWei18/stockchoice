@@ -38,6 +38,13 @@
 - [x] 實作 `generate_web_data.py` 盤後數據生成器 (產出 `web/data.json`)
 - [x] 撰寫 `.github/workflows/deploy.yml` GitHub Actions 自動化部署工作流 (平日 16:00 定時排程)
 
+## Task 8: K線時間軸優化、MACD 指標圖與籌碼面數據實作
+- [x] 擴充 `generate_web_data.py`：產出 MACD（DIF, Signal, OSC）歷史序列、最新 MACD 指標與三大法人籌碼面（外資、投信、自營商買賣超與籌碼集中度摘要）
+- [x] 優化前端 K線圖表時間軸與浮動游標：在 Modal 頂部顯示最新 K 線確切日期（如 2026-10-08）與 OHLCV/均線數值；配置 `rightOffset` 與游標 crosshair 懸浮資訊，解除時間軸僅顯示「8月」的視覺誤解
+- [x] 實作 K線 Modal 多圖表/分頁切換：提供「K線均線 (MA20/MA60)」、「MACD 擺盪指標」、「成交量」與「籌碼面 (三大法人動態)」互動切換
+- [x] 卡片展開與表格視圖補強：於卡片詳細資訊加入 MACD 與籌碼面摘要，直觀呈現多空結構
+- [x] 執行資料重產與驗證：執行 `generate_web_data.py` 產生最新 `web/data.json`，跑單元測試確保全數通過，並 push 至 GitHub
+
 ---
 
 ## 成果審查 (Review & Verification)

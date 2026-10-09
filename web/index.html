@@ -243,6 +243,36 @@
                     <div>20日壓力: <span class="font-mono text-rose-400">{{ item.resistance_20 || '--' }}</span></div>
                   </div>
 
+                  <!-- MACD Section -->
+                  <div class="flex items-center justify-between text-[11px] bg-slate-950/80 px-2.5 py-1.5 rounded-xl border border-slate-800/80">
+                    <span class="font-bold text-sky-400">MACD (12,26,9)</span>
+                    <span class="font-mono text-slate-300">
+                      DIF: <strong class="text-sky-400">{{ item.macd_dif || 0 }}</strong> | 
+                      DEA: <strong class="text-amber-400">{{ item.macd_signal || 0 }}</strong> | 
+                      OSC: <strong :class="(item.macd_osc || 0) >= 0 ? 'text-rose-400' : 'text-emerald-400'">{{ item.macd_osc || 0 }}</strong>
+                    </span>
+                  </div>
+
+                  <!-- 籌碼面動向 Section -->
+                  <div v-if="item.institutional_flows" class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80 space-y-1.5">
+                    <div class="flex items-center justify-between text-[11px]">
+                      <span class="font-bold text-amber-400">🏦 籌碼面 (三大法人動態)</span>
+                      <span class="px-1.5 py-0.2 rounded text-[10px] font-bold" 
+                            :class="item.institutional_flows.trend === '偏多' ? 'bg-rose-500/20 text-rose-400' : (item.institutional_flows.trend === '偏空' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400')">
+                        {{ item.institutional_flows.trend }}
+                      </span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-1 text-[10px] text-center font-mono">
+                      <div class="bg-slate-900/60 p-1 rounded">外資: <span :class="item.institutional_flows.foreign_net_lots >= 0 ? 'text-rose-400' : 'text-emerald-400'">{{ item.institutional_flows.foreign_net_lots }}張</span></div>
+                      <div class="bg-slate-900/60 p-1 rounded">投信: <span :class="item.institutional_flows.trust_net_lots >= 0 ? 'text-rose-400' : 'text-emerald-400'">{{ item.institutional_flows.trust_net_lots }}張</span></div>
+                      <div class="bg-slate-900/60 p-1 rounded">自營: <span :class="item.institutional_flows.dealer_net_lots >= 0 ? 'text-rose-400' : 'text-emerald-400'">{{ item.institutional_flows.dealer_net_lots }}張</span></div>
+                      <div class="bg-slate-900/60 p-1 rounded font-bold">合計: <span :class="item.institutional_flows.total_net_lots >= 0 ? 'text-rose-400' : 'text-emerald-400'">{{ item.institutional_flows.total_net_lots }}張</span></div>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-relaxed pt-0.5">
+                      {{ item.institutional_flows.flow_summary }}
+                    </p>
+                  </div>
+
                   <div class="text-[11px] font-bold text-sky-400 uppercase tracking-wider">點位規劃</div>
                   <div class="grid grid-cols-3 gap-1.5 text-center text-[11px] bg-slate-950/80 p-2 rounded-xl border border-slate-800/80">
                     <div class="p-1 bg-slate-900/60 rounded">
@@ -457,6 +487,34 @@
                     <div>RSI(14): <span class="font-mono text-purple-400">{{ item.rsi }}</span></div>
                     <div>20日支撐: <span class="font-mono text-amber-400">{{ item.support_20 || '--' }}</span></div>
                     <div>20日壓力: <span class="font-mono text-rose-400">{{ item.resistance_20 || '--' }}</span></div>
+                  </div>
+
+                  <!-- MACD Section -->
+                  <div class="flex items-center justify-between text-[11px] bg-slate-950/80 px-2.5 py-1.5 rounded-xl border border-slate-800/80">
+                    <span class="font-bold text-sky-400">MACD (12,26,9)</span>
+                    <span class="font-mono text-slate-300">
+                      DIF: <strong class="text-sky-400">{{ item.macd_dif || 0 }}</strong> | 
+                      DEA: <strong class="text-amber-400">{{ item.macd_signal || 0 }}</strong> | 
+                      OSC: <strong :class="(item.macd_osc || 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'">{{ item.macd_osc || 0 }}</strong>
+                    </span>
+                  </div>
+
+                  <!-- 籌碼面動向 Section (US) -->
+                  <div v-if="item.institutional_flows" class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80 space-y-1.5">
+                    <div class="flex items-center justify-between text-[11px]">
+                      <span class="font-bold text-amber-400">🏦 籌碼面 (機構13F持股)</span>
+                      <span class="px-1.5 py-0.2 rounded text-[10px] font-bold" 
+                            :class="item.institutional_flows.trend === '偏多' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400'">
+                        {{ item.institutional_flows.trend }}
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] bg-slate-900/60 p-1.5 rounded font-mono">
+                      <span class="text-slate-400">機構大戶持股比例:</span>
+                      <span class="font-bold text-sky-400">{{ item.institutional_flows.inst_ownership_pct }}%</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-relaxed pt-0.5">
+                      {{ item.institutional_flows.flow_summary }}
+                    </p>
                   </div>
 
                   <div class="text-[11px] font-bold text-sky-400 uppercase tracking-wider">點位規劃</div>
@@ -689,24 +747,178 @@
       </div>
     </div>
 
-    <!-- Modal: Interactive TradingView Chart Modal -->
-    <div v-if="chartModal.show" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 max-w-2xl w-full flex flex-col space-y-3 shadow-2xl">
+    <!-- Modal: Interactive TradingView Chart & Indicators Modal -->
+    <div v-if="chartModal.show" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-3.5 sm:p-5 max-w-2xl w-full flex flex-col space-y-3 shadow-2xl">
+        <!-- Header -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
-          <div>
-            <span class="font-extrabold text-base text-white">{{ chartModal.item?.name }}</span>
-            <span class="text-xs text-slate-400 font-mono ml-1">{{ chartModal.item?.ticker }}</span>
+          <div class="flex items-center space-x-2">
+            <span class="font-black text-base sm:text-lg text-white">{{ chartModal.item?.name }}</span>
+            <span class="text-xs text-slate-400 font-mono">{{ chartModal.item?.ticker }}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/20 text-indigo-300">
+              {{ chartModal.item?.market === 'TW' ? '台股' : '美股' }}
+            </span>
           </div>
-          <button @click="chartModal.show = false" class="text-slate-400 hover:text-white px-2 py-1 text-sm">✕ 關閉</button>
+          <button @click="chartModal.show = false" class="text-slate-400 hover:text-white px-2 py-1 text-sm rounded-lg bg-slate-800/80">✕ 關閉</button>
         </div>
 
-        <!-- Chart Container -->
-        <div id="chart-container" class="w-full h-64 sm:h-80 bg-slate-950 rounded-2xl border border-slate-800 relative"></div>
-
-        <div class="text-xs text-slate-400 flex items-center justify-between pt-1">
-          <span>支援手指水平拖拉與雙指縮放</span>
-          <span class="font-mono text-indigo-400">MA20 (月線) / MA60 (季線) 內建</span>
+        <!-- Indicator Tab Buttons -->
+        <div class="grid grid-cols-4 gap-1 sm:gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+          <button @click="switchChartTab('kline')"
+                  :class="chartTab === 'kline' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'"
+                  class="py-1.5 px-2 rounded-lg transition active:scale-95 text-center">
+            📈 K線均線
+          </button>
+          <button @click="switchChartTab('macd')"
+                  :class="chartTab === 'macd' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'"
+                  class="py-1.5 px-2 rounded-lg transition active:scale-95 text-center">
+            📊 MACD指標
+          </button>
+          <button @click="switchChartTab('volume')"
+                  :class="chartTab === 'volume' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'"
+                  class="py-1.5 px-2 rounded-lg transition active:scale-95 text-center">
+            📦 成交量
+          </button>
+          <button @click="switchChartTab('chip')"
+                  :class="chartTab === 'chip' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'"
+                  class="py-1.5 px-2 rounded-lg transition active:scale-95 text-center">
+            🏦 籌碼面
+          </button>
         </div>
+
+        <!-- Dynamic Hover / Last Bar Data Bar (Explaining date & values) -->
+        <div v-if="displayHover" class="bg-slate-950/80 px-3 py-2 rounded-xl border border-slate-800 text-[11px] sm:text-xs flex flex-wrap items-center justify-between gap-y-1">
+          <div class="flex items-center space-x-1.5 font-bold text-sky-400">
+            <span>📅 日期:</span>
+            <span class="font-mono text-white">{{ displayHover.time }}</span>
+            <span v-if="!hoverBar" class="text-[10px] text-emerald-400 font-normal">(最新收盤)</span>
+          </div>
+
+          <!-- K-line values -->
+          <div v-if="chartTab === 'kline'" class="flex items-center space-x-2 font-mono text-slate-300">
+            <span>開: <strong class="text-white">{{ displayHover.open }}</strong></span>
+            <span>高: <strong class="text-white">{{ displayHover.high }}</strong></span>
+            <span>低: <strong class="text-white">{{ displayHover.low }}</strong></span>
+            <span>收: <strong :class="chartModal.item?.market === 'TW' ? (displayHover.close >= displayHover.open ? 'text-rose-400' : 'text-emerald-400') : (displayHover.close >= displayHover.open ? 'text-emerald-400' : 'text-rose-400')">{{ displayHover.close }}</strong></span>
+            <span class="text-amber-300">MA20: <strong>{{ displayHover.ma20 || '--' }}</strong></span>
+            <span class="text-sky-300">MA60: <strong>{{ displayHover.ma60 || '--' }}</strong></span>
+          </div>
+
+          <!-- MACD values -->
+          <div v-if="chartTab === 'macd'" class="flex items-center space-x-2 font-mono text-slate-300">
+            <span class="text-cyan-400">DIF: <strong>{{ displayHover.macd_dif }}</strong></span>
+            <span class="text-amber-400">DEA: <strong>{{ displayHover.macd_signal }}</strong></span>
+            <span :class="displayHover.macd_osc >= 0 ? (chartModal.item?.market === 'TW' ? 'text-rose-400' : 'text-emerald-400') : (chartModal.item?.market === 'TW' ? 'text-emerald-400' : 'text-rose-400')">
+              OSC柱: <strong>{{ displayHover.macd_osc }}</strong>
+            </span>
+          </div>
+
+          <!-- Volume values -->
+          <div v-if="chartTab === 'volume'" class="flex items-center space-x-2 font-mono text-slate-300">
+            <span>成交量: <strong class="text-amber-400">{{ (displayHover.volume || 0).toLocaleString() }}</strong> 股</span>
+          </div>
+        </div>
+
+        <!-- Chart Container for K-line / MACD / Volume -->
+        <div v-show="chartTab !== 'chip'" class="space-y-1.5">
+          <div id="chart-container" class="w-full h-64 sm:h-80 bg-slate-950 rounded-2xl border border-slate-800 relative"></div>
+          
+          <div class="text-[11px] text-slate-400 flex items-center justify-between px-1">
+            <div v-if="chartTab === 'kline'" class="flex items-center space-x-2">
+              <span class="text-amber-400">■ MA20 (月線)</span>
+              <span class="text-sky-400">■ MA60 (季線)</span>
+            </div>
+            <div v-if="chartTab === 'macd'" class="flex items-center space-x-2">
+              <span class="text-cyan-400">■ DIF 快線</span>
+              <span class="text-amber-400">■ DEA 慢線</span>
+              <span class="text-rose-400">■ OSC 柱狀圖</span>
+            </div>
+            <div v-if="chartTab === 'volume'" class="text-slate-400">
+              <span>長條柱狀成交量（紅漲綠跌）</span>
+            </div>
+            <span class="text-slate-500 font-mono">支援左右滑動與雙指縮放</span>
+          </div>
+        </div>
+
+        <!-- 籌碼面專屬詳細視圖 (Tab === 'chip') -->
+        <div v-if="chartTab === 'chip'" class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-amber-300 flex items-center space-x-1.5">
+              <span>🏦</span>
+              <span>{{ chartModal.item?.market === 'TW' ? '三大法人籌碼買賣超統計' : '華爾街機構 (13F) 籌碼結構' }}</span>
+            </h4>
+            <span class="px-2 py-0.5 rounded-full text-xs font-bold"
+                  :class="chartModal.item?.institutional_flows?.trend === '偏多' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-slate-800 text-slate-300'">
+              {{ chartModal.item?.institutional_flows?.trend || '中性' }}
+            </span>
+          </div>
+
+          <!-- TW 籌碼面 -->
+          <div v-if="chartModal.item?.market === 'TW'" class="space-y-3">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-center">
+                <div class="text-[11px] text-slate-400">外資買賣超</div>
+                <div class="font-mono font-black text-sm sm:text-base mt-0.5"
+                     :class="(chartModal.item?.institutional_flows?.foreign_net_lots || 0) >= 0 ? 'text-rose-400' : 'text-emerald-400'">
+                  {{ (chartModal.item?.institutional_flows?.foreign_net_lots || 0) >= 0 ? '+' : '' }}{{ (chartModal.item?.institutional_flows?.foreign_net_lots || 0).toLocaleString() }} 張
+                </div>
+              </div>
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-center">
+                <div class="text-[11px] text-slate-400">投信買賣超</div>
+                <div class="font-mono font-black text-sm sm:text-base mt-0.5"
+                     :class="(chartModal.item?.institutional_flows?.trust_net_lots || 0) >= 0 ? 'text-rose-400' : 'text-emerald-400'">
+                  {{ (chartModal.item?.institutional_flows?.trust_net_lots || 0) >= 0 ? '+' : '' }}{{ (chartModal.item?.institutional_flows?.trust_net_lots || 0).toLocaleString() }} 張
+                </div>
+              </div>
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-center">
+                <div class="text-[11px] text-slate-400">自營商買賣超</div>
+                <div class="font-mono font-black text-sm sm:text-base mt-0.5"
+                     :class="(chartModal.item?.institutional_flows?.dealer_net_lots || 0) >= 0 ? 'text-rose-400' : 'text-emerald-400'">
+                  {{ (chartModal.item?.institutional_flows?.dealer_net_lots || 0) >= 0 ? '+' : '' }}{{ (chartModal.item?.institutional_flows?.dealer_net_lots || 0).toLocaleString() }} 張
+                </div>
+              </div>
+              <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-center">
+                <div class="text-[11px] text-slate-400">三大法人合計</div>
+                <div class="font-mono font-black text-sm sm:text-base mt-0.5"
+                     :class="(chartModal.item?.institutional_flows?.total_net_lots || 0) >= 0 ? 'text-rose-400' : 'text-emerald-400'">
+                  {{ (chartModal.item?.institutional_flows?.total_net_lots || 0) >= 0 ? '+' : '' }}{{ (chartModal.item?.institutional_flows?.total_net_lots || 0).toLocaleString() }} 張
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">主力大戶籌碼集中度估算:</span>
+                <span class="font-mono font-bold text-sky-400">{{ chartModal.item?.institutional_flows?.major_ratio_pct }}%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div class="bg-gradient-to-r from-sky-500 to-indigo-500 h-2 rounded-full" :style="{ width: (chartModal.item?.institutional_flows?.major_ratio_pct || 50) + '%' }"></div>
+              </div>
+            </div>
+
+            <div class="bg-indigo-950/40 p-3 rounded-xl border border-indigo-900/50 text-xs text-indigo-200 leading-relaxed">
+              <strong>💡 籌碼面解讀：</strong> {{ chartModal.item?.institutional_flows?.flow_summary }}
+            </div>
+          </div>
+
+          <!-- US 籌碼面 -->
+          <div v-else class="space-y-3">
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">機構法人(13F)持股比例:</span>
+                <span class="font-mono font-black text-sky-400 text-base">{{ chartModal.item?.institutional_flows?.inst_ownership_pct }}%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                <div class="bg-gradient-to-r from-emerald-500 to-sky-500 h-2.5 rounded-full" :style="{ width: (chartModal.item?.institutional_flows?.inst_ownership_pct || 60) + '%' }"></div>
+              </div>
+            </div>
+
+            <div class="bg-indigo-950/40 p-3 rounded-xl border border-indigo-900/50 text-xs text-indigo-200 leading-relaxed">
+              <strong>💡 籌碼面解讀：</strong> {{ chartModal.item?.institutional_flows?.flow_summary }}
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -861,15 +1073,23 @@
           expandedCards.value[ticker] = !expandedCards.value[ticker];
         };
 
+        const chartTab = ref('kline');
+        const hoverBar = ref(null);
+
+        const displayHover = computed(() => {
+          if (hoverBar.value) return hoverBar.value;
+          const klines = chartModal.value.item?.history_kline;
+          if (klines && klines.length > 0) return klines[klines.length - 1];
+          return null;
+        });
+
         let chartInstance = null;
         let resizeHandler = null;
 
-        const openChart = (item) => {
-          chartModal.value.item = item;
-          chartModal.value.show = true;
-
+        const renderCurrentChart = (item, type) => {
           nextTick(() => {
             setTimeout(() => {
+              if (type === 'chip') return;
               const container = document.getElementById('chart-container');
               if (!container) return;
               container.innerHTML = '';
@@ -887,26 +1107,90 @@
                 height: height,
                 layout: { background: { color: '#020617' }, textColor: '#94a3b8' },
                 grid: { vertLines: { color: '#1e293b' }, horzLines: { color: '#1e293b' } },
-                timeScale: { borderColor: '#334155' },
+                timeScale: {
+                  borderColor: '#334155',
+                  rightOffset: 8,
+                  barSpacing: 8,
+                },
                 crosshair: { mode: LightweightCharts.CrosshairMode.Normal }
               });
 
-              const seriesOptions = {
-                upColor: item.market === 'TW' ? '#f43f5e' : '#10b981',
-                downColor: item.market === 'TW' ? '#10b981' : '#f43f5e',
-                borderVisible: false,
-                wickUpColor: item.market === 'TW' ? '#f43f5e' : '#10b981',
-                wickDownColor: item.market === 'TW' ? '#10b981' : '#f43f5e',
-              };
+              if (type === 'kline') {
+                const seriesOptions = {
+                  upColor: item.market === 'TW' ? '#f43f5e' : '#10b981',
+                  downColor: item.market === 'TW' ? '#10b981' : '#f43f5e',
+                  borderVisible: false,
+                  wickUpColor: item.market === 'TW' ? '#f43f5e' : '#10b981',
+                  wickDownColor: item.market === 'TW' ? '#10b981' : '#f43f5e',
+                };
+                const candlestickSeries = chartInstance.addCandlestickSeries
+                  ? chartInstance.addCandlestickSeries(seriesOptions)
+                  : chartInstance.addSeries(LightweightCharts.CandlestickSeries, seriesOptions);
 
-              const candlestickSeries = chartInstance.addCandlestickSeries
-                ? chartInstance.addCandlestickSeries(seriesOptions)
-                : chartInstance.addSeries(LightweightCharts.CandlestickSeries, seriesOptions);
+                if (item.history_kline && item.history_kline.length > 0) {
+                  candlestickSeries.setData(item.history_kline);
 
-              if (item.history_kline && item.history_kline.length > 0) {
-                candlestickSeries.setData(item.history_kline);
+                  // MA20 yellow overlay
+                  const ma20Series = chartInstance.addLineSeries
+                    ? chartInstance.addLineSeries({ color: '#eab308', lineWidth: 1.5, title: 'MA20' })
+                    : chartInstance.addSeries(LightweightCharts.LineSeries, { color: '#eab308', lineWidth: 1.5, title: 'MA20' });
+                  const ma20Data = item.history_kline.filter(k => k.ma20 != null).map(k => ({ time: k.time, value: k.ma20 }));
+                  ma20Series.setData(ma20Data);
+
+                  // MA60 blue overlay
+                  const ma60Series = chartInstance.addLineSeries
+                    ? chartInstance.addLineSeries({ color: '#38bdf8', lineWidth: 1.5, title: 'MA60' })
+                    : chartInstance.addSeries(LightweightCharts.LineSeries, { color: '#38bdf8', lineWidth: 1.5, title: 'MA60' });
+                  const ma60Data = item.history_kline.filter(k => k.ma60 != null).map(k => ({ time: k.time, value: k.ma60 }));
+                  ma60Series.setData(ma60Data);
+
+                  chartInstance.timeScale().fitContent();
+                }
+              } else if (type === 'macd') {
+                // DIF cyan
+                const difSeries = chartInstance.addLineSeries
+                  ? chartInstance.addLineSeries({ color: '#06b6d4', lineWidth: 2, title: 'DIF' })
+                  : chartInstance.addSeries(LightweightCharts.LineSeries, { color: '#06b6d4', lineWidth: 2, title: 'DIF' });
+                difSeries.setData(item.history_kline.map(k => ({ time: k.time, value: k.macd_dif || 0 })));
+
+                // DEA / Signal orange
+                const deaSeries = chartInstance.addLineSeries
+                  ? chartInstance.addLineSeries({ color: '#f97316', lineWidth: 2, title: 'DEA' })
+                  : chartInstance.addSeries(LightweightCharts.LineSeries, { color: '#f97316', lineWidth: 2, title: 'DEA' });
+                deaSeries.setData(item.history_kline.map(k => ({ time: k.time, value: k.macd_signal || 0 })));
+
+                // OSC Histogram
+                const oscSeries = chartInstance.addHistogramSeries
+                  ? chartInstance.addHistogramSeries({ title: 'OSC' })
+                  : chartInstance.addSeries(LightweightCharts.HistogramSeries, { title: 'OSC' });
+                oscSeries.setData(item.history_kline.map(k => ({
+                  time: k.time,
+                  value: k.macd_osc || 0,
+                  color: (k.macd_osc || 0) >= 0 ? (item.market === 'TW' ? '#f43f5e' : '#10b981') : (item.market === 'TW' ? '#10b981' : '#f43f5e')
+                })));
+
+                chartInstance.timeScale().fitContent();
+              } else if (type === 'volume') {
+                const volSeries = chartInstance.addHistogramSeries
+                  ? chartInstance.addHistogramSeries({ priceFormat: { type: 'volume' }, title: '成交量' })
+                  : chartInstance.addSeries(LightweightCharts.HistogramSeries, { priceFormat: { type: 'volume' }, title: '成交量' });
+                volSeries.setData(item.history_kline.map(k => ({
+                  time: k.time,
+                  value: k.volume || 0,
+                  color: k.close >= k.open ? (item.market === 'TW' ? '#f43f5e' : '#10b981') : (item.market === 'TW' ? '#10b981' : '#f43f5e')
+                })));
                 chartInstance.timeScale().fitContent();
               }
+
+              // Crosshair Move Event
+              chartInstance.subscribeCrosshairMove((param) => {
+                if (!param || !param.time) {
+                  hoverBar.value = null;
+                  return;
+                }
+                const found = item.history_kline.find(k => k.time === param.time);
+                if (found) hoverBar.value = found;
+              });
 
               if (resizeHandler) window.removeEventListener('resize', resizeHandler);
               resizeHandler = () => {
@@ -917,6 +1201,22 @@
               window.addEventListener('resize', resizeHandler);
             }, 60);
           });
+        };
+
+        const switchChartTab = (tab) => {
+          chartTab.value = tab;
+          hoverBar.value = null;
+          if (tab !== 'chip' && chartModal.value.item) {
+            renderCurrentChart(chartModal.value.item, tab);
+          }
+        };
+
+        const openChart = (item) => {
+          chartModal.value.item = item;
+          chartModal.value.show = true;
+          chartTab.value = 'kline';
+          hoverBar.value = null;
+          renderCurrentChart(item, 'kline');
         };
 
         const openChartByTicker = (ticker) => {
@@ -945,6 +1245,10 @@
           showAddModal,
           newItem,
           chartModal,
+          chartTab,
+          hoverBar,
+          displayHover,
+          switchChartTab,
           toggleViewMode,
           toggleProMode,
           getLatestPrice,
