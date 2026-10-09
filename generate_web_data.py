@@ -280,4 +280,8 @@ def generate_all_data():
 
 
 if __name__ == "__main__":
-    generate_all_data()
+    try:
+        generate_all_data()
+    except Exception as exc:
+        logger.exception("Data generation encountered an unhandled exception: %s", exc)
+
