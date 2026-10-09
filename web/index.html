@@ -31,24 +31,46 @@
           <span class="text-xl font-black bg-gradient-to-r from-indigo-400 via-sky-400 to-emerald-400 bg-clip-text text-transparent">StockChoice</span>
           <span class="text-[11px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">智能盤後</span>
         </div>
-        <p class="text-[12px] text-slate-400 mt-0.5">更新時間: {{ meta.generated_at || '載入中...' }}</p>
+        <div class="flex items-center space-x-2 mt-0.5">
+          <p class="text-[11px] sm:text-[12px] text-slate-400">更新: {{ meta.generated_at || '載入中...' }}</p>
+          <a href="https://github.com/RJWei18/stockchoice/actions/workflows/deploy.yml" target="_blank" class="text-[10px] text-indigo-400 hover:text-indigo-300 underline inline-flex items-center space-x-0.5" title="前往 GitHub Actions 手動重跑盤後抓取">
+            <span>(雲端更新)</span>
+          </a>
+        </div>
       </div>
 
       <!-- Quick Settings Toolbar -->
-      <div class="flex items-center space-x-2">
+      <div class="flex items-center space-x-1.5 sm:space-x-2">
+        <!-- Manual Refresh Button -->
+        <button @click="refreshData" 
+                :disabled="isRefreshing"
+                title="重新整理行情資料"
+                class="px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-sky-400 border border-slate-700 shadow-sm transition active:scale-95 flex items-center space-x-1 hover:bg-slate-750 disabled:opacity-60">
+          <span :class="{'animate-spin inline-block': isRefreshing}">🔄</span>
+          <span class="text-[11px] sm:text-xs">更新</span>
+        </button>
         <!-- Beginner / Pro Toggle Button -->
         <button @click="toggleProMode" 
                 :class="isProMode ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-300'"
-                class="px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 flex items-center space-x-1 shadow-sm transition active:scale-95">
-          <span>{{ isProMode ? '⚡ 專業模式' : '🌱 新手模式' }}</span>
+                class="px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 flex items-center space-x-1 shadow-sm transition active:scale-95">
+          <span class="text-[11px] sm:text-xs">{{ isProMode ? '⚡ 專業' : '🌱 新手' }}</span>
         </button>
         <!-- Card / Table Toggle -->
         <button @click="toggleViewMode" 
-                class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700 shadow-sm transition active:scale-95">
-          <span>{{ viewMode === 'card' ? '📋 表格' : '🃏 卡片' }}</span>
+                class="px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700 shadow-sm transition active:scale-95">
+          <span class="text-[11px] sm:text-xs">{{ viewMode === 'card' ? '📋 表格' : '🃏 卡片' }}</span>
         </button>
       </div>
     </header>
+
+    <!-- Toast Notification -->
+    <transition enter-active-class="transition duration-200 ease-out" enter-from-class="transform -translate-y-2 opacity-0" enter-to-class="transform translate-y-0 opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="transform translate-y-0 opacity-100" leave-to-class="transform -translate-y-2 opacity-0">
+      <div v-if="toastMsg" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-indigo-600/95 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-2xl border border-indigo-400/30 flex items-center space-x-2 backdrop-blur-md">
+        <span>✨</span>
+        <span>{{ toastMsg }}</span>
+      </div>
+    </transition>
+
 
     <!-- Beginner Quick Guide (Collapsible) -->
     <section v-if="showGuide" class="mx-4 mt-3 p-3.5 bg-indigo-950/40 border border-indigo-500/30 rounded-2xl relative shadow-lg">
@@ -591,18 +613,36 @@
           localStorage.setItem('sc_pro_mode', isProMode.value);
         };
 
-        const loadData = async () => {
+        const isRefreshing = ref(false);
+        const toastMsg = ref('');
+        const showToast = (msg) => {
+          toastMsg.value = msg;
+          setTimeout(() => { toastMsg.value = ''; }, 3000);
+        };
+
+        const loadData = async (silent = true) => {
           try {
             const resp = await fetch('data.json?t=' + Date.now());
             if (resp.ok) {
               const res = await resp.json();
               meta.value = res.metadata || {};
               data.value = res;
+              if (!silent) showToast('已成功更新為最新盤後行情');
+            } else if (!silent) {
+              showToast('伺服器資料取得失敗');
             }
           } catch (e) {
             console.error('Failed to load data.json', e);
+            if (!silent) showToast('網路連線逾時');
           }
         };
+
+        const refreshData = async () => {
+          isRefreshing.value = true;
+          await loadData(false);
+          setTimeout(() => { isRefreshing.value = false; }, 400);
+        };
+
 
         const getLatestPrice = (ticker) => {
           const all = [...data.value.tw_stocks, ...data.value.us_stocks];
@@ -741,8 +781,13 @@
           removePortfolioItem,
           addSamplePortfolio,
           openChart,
-          openChartByTicker
+          openChartByTicker,
+          isRefreshing,
+          toastMsg,
+          refreshData,
+          showToast
         };
+
       }
     }).mount('#app');
   </script>

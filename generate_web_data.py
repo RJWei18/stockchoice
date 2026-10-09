@@ -58,11 +58,22 @@ def process_ticker(item, db, twse, yf, scanner):
 
     try:
         if is_tw:
-            df = twse.fetch_stock_monthly(ticker)
+            # Combine TWSE latest month and Yahoo Finance 3mo history for complete indicator depth
+            df_twse = twse.fetch_stock_monthly(ticker)
+            df_yf = yf.fetch_history(ticker, period="3mo")
+            if df_twse is not None and not df_twse.empty and df_yf is not None and not df_yf.empty:
+                df = pd.concat([df_yf, df_twse]).drop_duplicates(subset=["date"], keep="last").sort_values("date").reset_index(drop=True)
+            elif df_yf is not None and not df_yf.empty:
+                df = df_yf
+            else:
+                df = df_twse
             fundamentals = twse.fetch_fundamentals(ticker)
+            if not fundamentals.get("pe_ratio"):
+                fundamentals = yf.fetch_fundamentals(ticker)
         else:
             df = yf.fetch_history(ticker, period="3mo")
             fundamentals = yf.fetch_fundamentals(ticker)
+
 
         # Fallback to local DB if network fails or offline
         if df is None or df.empty:
