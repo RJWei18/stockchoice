@@ -52,10 +52,18 @@
 - [x] 重新定位定期定額與存股頁籤：明確界定為「真實持股與扣款追蹤」，僅呈現使用者實際已買進的庫存股數、平均買進成本、現值損益與預估年領股利
 - [x] 驗證並發布：重跑資料生成器、執行單元測試並部署至 GitHub Pages
 
+## Task 10: 策略回測系統（核心引擎、方式 A 網頁實驗室、方式 B Telegram 對話）
+- [x] 實作核心回測引擎 (`src/backtest/engine.py` & `metrics.py`)：支援自訂跌幅買進、漲幅停利、停損閥值、交易成本扣除與 MDD / 勝率 / CAGR 指標運算
+- [x] 撰寫單元測試 (`tests/test_backtest.py`)：驗證撮合邏輯、資產淨值曲線計算與交易次數統計
+- [x] 整合方式 B (Telegram Albedo 機器人)：於 `Albedo/stock_service.py` 與 `bot.py` 實作回測查詢介面與 `/backtest` 格式化輸出
+- [x] 實作方式 A (網頁版策略回測實驗室)：於 `web/index.html` 新增回測專用分頁，提供參數自訂滑桿、績效指標卡與 Canvas 淨值走勢曲線（對比 Buy & Hold）
+- [x] 同步架構手冊與進度：更新 `Albedo/design_spec.md`、`Albedo/progress.md` 與 `session_logs/`，並執行全模組驗證
+
 ---
 
 ## 成果審查 (Review & Verification)
-- [x] **單元測試全數通過**：執行 `python3 -m unittest discover -s tests -p "test_*.py"`，10 個測試案例 (指標計算、極值通道、TWSE 轉換、Mock 解析、資料庫 CRUD) 全部通過。
+- [x] **單元測試全數通過**：執行 `python3 -m unittest discover -s tests -p "test_*.py"`，13 個測試案例 (指標計算、極值通道、TWSE 轉換、Mock 解析、資料庫 CRUD、回測引擎撮合與停損停利) 全部通過。
+- [x] **Albedo 整合驗證通過**：執行 `verify_stock_service.py` 與 `run_backtest` 獨立測試，全數通過。
 - [x] **CLI 功能驗證**：驗證 `main.py --help` 正確解析 `--dry-run`、`--once` 與 `--tickers` 參數。
 - [x] **容器化與 NAS 準備**：已配置 Dockerfile 及 docker-compose.yml，包含 `./data:/app/data` 持久化磁碟映射與 `TZ=Asia/Taipei`。
-- [x] **文件齊備**：已產出完整的使用手冊 `README.md` 與開發者擴充指南 `DEVELOPER.md`。
+- [x] **文件齊備**：已產出完整的使用手冊 `README.md`、開發者擴充指南 `DEVELOPER.md` 與整合文件 `albedo_integration.md`。
