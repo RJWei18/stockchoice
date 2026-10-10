@@ -2028,10 +2028,13 @@
           loadingStockCode.value = sym.c;
           showToast(`正在連線分析「${sym.n} (${sym.c})」全套指標...`);
           try {
+            const d = new Date();
+            d.setDate(d.getDate() - 90);
+            const startDateStr = d.toISOString().split('T')[0];
             const baseUrl = 'https://api.finmindtrade.com/api/v4/data';
             const [pResp, perResp] = await Promise.all([
-              fetch(`${baseUrl}?dataset=TaiwanStockPrice&data_id=${sym.c}&start_date=2026-08-01`),
-              fetch(`${baseUrl}?dataset=TaiwanStockPER&data_id=${sym.c}&start_date=2026-09-01`)
+              fetch(`${baseUrl}?dataset=TaiwanStockPrice&data_id=${sym.c}&start_date=${startDateStr}`),
+              fetch(`${baseUrl}?dataset=TaiwanStockPER&data_id=${sym.c}&start_date=${startDateStr}`)
             ]);
 
             const pData = pResp.ok ? (await pResp.json()).data || [] : [];
