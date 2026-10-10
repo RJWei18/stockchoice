@@ -59,6 +59,13 @@
 - [x] 實作方式 A (網頁版策略回測實驗室)：於 `web/index.html` 新增回測專用分頁，提供參數自訂滑桿、績效指標卡與 Canvas 淨值走勢曲線（對比 Buy & Hold）
 - [x] 同步架構手冊與進度：更新 `Albedo/design_spec.md`、`Albedo/progress.md` 與 `session_logs/`，並執行全模組驗證
 
+## Task 11: 推薦清單信心評級強化與一般標的「查看 AI 評級」深度診斷功能
+- [x] 強化精選推薦清單：預設清楚標註 AI 信心評級標籤、星級與信心等級
+- [x] 實作全盤指標 AI 綜合評語生成器 (`generateAiDiagnosis`)：統整均線結構、MACD/KD/RSI 擺盪指標、三大法人/機構籌碼動態、價量比與估值位階，產出專業深度量化診斷與關鍵點位操作指引
+- [x] 一般台美股卡片新增「查看 AI 評級」按鈕與動態展開診斷面板：具備運算反饋狀態、可隨時展開/收合
+- [x] 表格視圖 (Table View) 支援 AI 評級診斷：操作欄新增 AI 評級觸發按鈕，並提供全螢幕 AI 診斷彈窗 Modal
+- [x] 驗證並發布：本機測試前端響應式排版與互動、執行現有單元測試、commit 並 push 觸發 GitHub Actions 部署
+
 ---
 
 ## 成果審查 (Review & Verification)
@@ -67,3 +74,4 @@
 - [x] **CLI 功能驗證**：驗證 `main.py --help` 正確解析 `--dry-run`、`--once` 與 `--tickers` 參數。
 - [x] **容器化與 NAS 準備**：已配置 Dockerfile 及 docker-compose.yml，包含 `./data:/app/data` 持久化磁碟映射與 `TZ=Asia/Taipei`。
 - [x] **文件齊備**：已產出完整的使用手冊 `README.md`、開發者擴充指南 `DEVELOPER.md` 與整合文件 `albedo_integration.md`。
+

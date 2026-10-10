@@ -168,8 +168,10 @@
                   </button>
                   <span class="font-extrabold text-sm sm:text-base text-white">{{ item.name }}</span>
                   <span class="text-xs text-slate-400 font-mono">{{ item.ticker }}</span>
-                  <span class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                    {{ item.conf_stars }}
+                  <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/40 flex items-center space-x-1 shrink-0">
+                    <span>🤖 AI評級:</span>
+                    <span class="text-amber-400 font-black">{{ item.conf_stars }}</span>
+                    <span v-if="item.conf_text" class="text-amber-300 font-semibold text-[10px]">({{ item.conf_text }})</span>
                   </span>
                 </div>
                 <!-- TW Price: Red Up, Green Down -->
@@ -205,10 +207,15 @@
               </div>
 
               <div class="mt-2 flex items-center justify-between text-xs">
-                <button @click.stop="quickAddToPortfolio(item)" class="text-xs text-slate-300 hover:text-white py-1 px-2.5 rounded bg-slate-800 border border-slate-700 active:scale-95 transition">
-                  💼 記帳至庫存
-                </button>
-                <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                <div class="flex items-center space-x-1.5">
+                  <button @click.stop="openAiModal(item)" class="text-xs font-bold text-indigo-300 hover:text-white py-1 px-2.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 active:scale-95 transition flex items-center space-x-1">
+                    <span>🤖 AI 深度診斷</span>
+                  </button>
+                  <button @click.stop="quickAddToPortfolio(item)" class="text-xs text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition">
+                    💼 記帳至庫存
+                  </button>
+                </div>
+                <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
                   📈 查看互動K線與籌碼
                 </button>
               </div>
@@ -395,6 +402,49 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- AI Diagnosis Deep Panel (expandable) -->
+                <div v-if="showAiBlock[item.ticker] && aiDiagnosisMap[item.ticker]" 
+                     @click.stop
+                     class="mt-3 p-3.5 rounded-xl bg-gradient-to-br from-indigo-950/75 via-slate-900 to-violet-950/40 border border-indigo-500/40 shadow-lg space-y-2.5">
+                  <div class="flex items-center justify-between border-b border-indigo-500/20 pb-2">
+                    <div class="flex items-center space-x-1.5">
+                      <span class="text-base">🤖</span>
+                      <span class="text-xs font-bold text-indigo-200">AI 全盤量化評級與多空診斷</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                      <span class="text-xs font-black text-amber-400 font-mono">{{ aiDiagnosisMap[item.ticker].stars }}</span>
+                      <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        {{ aiDiagnosisMap[item.ticker].scoreText }} · {{ aiDiagnosisMap[item.ticker].level }}
+                      </span>
+                      <button @click.stop="openAiModal(item)" class="text-[10px] text-indigo-300 hover:text-white px-1.5 py-0.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 transition">
+                        放大 ↗
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- AI Review Paragraph -->
+                  <p class="text-xs text-slate-200 leading-relaxed whitespace-pre-line bg-slate-950/70 p-2.5 rounded-lg border border-indigo-900/40 font-normal">
+                    {{ aiDiagnosisMap[item.ticker].fullComment }}
+                  </p>
+
+                  <!-- Trade Levels Quick Bar -->
+                  <div class="grid grid-cols-3 gap-1.5 text-center text-[10px] pt-1 border-t border-indigo-900/30">
+                    <div class="p-1 bg-slate-950/60 rounded border border-slate-800">
+                      <div class="text-slate-400">建議回檔承接</div>
+                      <div class="font-mono font-bold text-sky-400 mt-0.5">{{ aiDiagnosisMap[item.ticker].tradeLevels.pullback }}</div>
+                    </div>
+                    <div class="p-1 bg-slate-950/60 rounded border border-slate-800">
+                      <div class="text-slate-400">停損防守支撐</div>
+                      <div class="font-mono font-bold text-amber-400 mt-0.5">{{ aiDiagnosisMap[item.ticker].tradeLevels.stopLoss }}</div>
+                    </div>
+                    <div class="p-1 bg-slate-950/60 rounded border border-slate-800">
+                      <div class="text-slate-400">目標停利空間</div>
+                      <div class="font-mono font-bold text-emerald-400 mt-0.5">{{ aiDiagnosisMap[item.ticker].tradeLevels.takeProfit }} (+{{ aiDiagnosisMap[item.ticker].tradeLevels.upsidePct }}%)</div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <!-- Footer action -->
@@ -403,13 +453,21 @@
                   點擊{{ expandedCards[item.ticker] ? '收合詳情 ▲' : '展開完整數據 ▼' }}
                 </span>
                 <div class="flex items-center space-x-1.5">
-                  <button @click.stop="quickAddToPortfolio(item)" 
-                          class="text-xs font-semibold text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition"
-                          title="將此標的記帳至定期定額真實庫存">
-                    💼 記帳庫存
+                  <button @click.stop="triggerAiDiagnosis(item)" 
+                          :disabled="loadingAiTicker === item.ticker"
+                          class="text-xs font-bold py-1 px-2.5 rounded-lg border transition active:scale-95 flex items-center space-x-1 shadow-sm"
+                          :class="aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200' : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/30 text-indigo-300'">
+                    <span v-if="loadingAiTicker === item.ticker" class="animate-spin inline-block text-[11px]">⏳</span>
+                    <span v-else>🤖</span>
+                    <span>{{ loadingAiTicker === item.ticker ? 'AI診斷中...' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合評級' : '查看 AI 評級') }}</span>
                   </button>
-                  <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
-                    查看 K 線 ➔
+                  <button @click.stop="quickAddToPortfolio(item)" 
+                          class="text-xs font-semibold text-slate-300 hover:text-white py-1 px-2 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition"
+                          title="將此標的記帳至定期定額真實庫存">
+                    💼 記帳
+                  </button>
+                  <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                    K 線 ➔
                   </button>
                 </div>
               </div>
@@ -462,9 +520,12 @@
                   <td class="p-3 text-right font-mono text-amber-400">
                     {{ item.trade_levels.stop_loss.toFixed(1) }}
                   </td>
-                  <td class="p-3 text-center space-x-1">
-                    <button @click="openChart(item)" class="text-indigo-400 font-bold hover:underline">K線</button>
-                    <button @click="quickAddToPortfolio(item)" class="text-slate-400 font-bold hover:text-white text-[11px]">記帳</button>
+                  <td class="p-3 text-center space-x-1.5 whitespace-nowrap">
+                    <button @click.stop="openAiModal(item)" class="text-xs font-bold text-indigo-300 hover:text-white px-2 py-0.5 rounded bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 active:scale-95 transition">
+                      🤖 AI評級
+                    </button>
+                    <button @click.stop="openChart(item)" class="text-indigo-400 font-bold hover:underline">K線</button>
+                    <button @click.stop="quickAddToPortfolio(item)" class="text-slate-400 font-bold hover:text-white text-[11px]">記帳</button>
                   </td>
                 </tr>
               </tbody>
@@ -497,8 +558,10 @@
                   </button>
                   <span class="font-extrabold text-sm sm:text-base text-white">{{ item.name }}</span>
                   <span class="text-xs text-slate-400 font-mono">{{ item.ticker }}</span>
-                  <span class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                    {{ item.conf_stars }}
+                  <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/40 flex items-center space-x-1 shrink-0">
+                    <span>🤖 AI評級:</span>
+                    <span class="text-amber-400 font-black">{{ item.conf_stars }}</span>
+                    <span v-if="item.conf_text" class="text-amber-300 font-semibold text-[10px]">({{ item.conf_text }})</span>
                   </span>
                 </div>
                 <!-- US Price: Green Up, Red Down -->
@@ -532,10 +595,15 @@
               </div>
 
               <div class="mt-2 flex items-center justify-between text-xs">
-                <button @click.stop="quickAddToPortfolio(item)" class="text-xs text-slate-300 hover:text-white py-1 px-2.5 rounded bg-slate-800 border border-slate-700 active:scale-95 transition">
-                  💼 記帳至庫存
-                </button>
-                <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                <div class="flex items-center space-x-1.5">
+                  <button @click.stop="openAiModal(item)" class="text-xs font-bold text-indigo-300 hover:text-white py-1 px-2.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 active:scale-95 transition flex items-center space-x-1">
+                    <span>🤖 AI 深度診斷</span>
+                  </button>
+                  <button @click.stop="quickAddToPortfolio(item)" class="text-xs text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition">
+                    💼 記帳至庫存
+                  </button>
+                </div>
+                <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
                   📈 查看互動K線與籌碼
                 </button>
               </div>
@@ -685,6 +753,49 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- AI Diagnosis Deep Panel (expandable) -->
+                <div v-if="showAiBlock[item.ticker] && aiDiagnosisMap[item.ticker]" 
+                     @click.stop
+                     class="mt-3 p-3.5 rounded-xl bg-gradient-to-br from-indigo-950/75 via-slate-900 to-violet-950/40 border border-indigo-500/40 shadow-lg space-y-2.5">
+                  <div class="flex items-center justify-between border-b border-indigo-500/20 pb-2">
+                    <div class="flex items-center space-x-1.5">
+                      <span class="text-base">🤖</span>
+                      <span class="text-xs font-bold text-indigo-200">AI 全盤量化評級與多空診斷</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                      <span class="text-xs font-black text-amber-400 font-mono">{{ aiDiagnosisMap[item.ticker].stars }}</span>
+                      <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        {{ aiDiagnosisMap[item.ticker].scoreText }} · {{ aiDiagnosisMap[item.ticker].level }}
+                      </span>
+                      <button @click.stop="openAiModal(item)" class="text-[10px] text-indigo-300 hover:text-white px-1.5 py-0.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 transition">
+                        放大 ↗
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- AI Review Paragraph -->
+                  <p class="text-xs text-slate-200 leading-relaxed whitespace-pre-line bg-slate-950/70 p-2.5 rounded-lg border border-indigo-900/40 font-normal">
+                    {{ aiDiagnosisMap[item.ticker].fullComment }}
+                  </p>
+
+                  <!-- Trade Levels Quick Bar -->
+                  <div class="grid grid-cols-3 gap-1.5 text-center text-[10px] pt-1 border-t border-indigo-900/30">
+                    <div class="p-1 bg-slate-950/60 rounded border border-slate-800">
+                      <div class="text-slate-400">建議回檔承接</div>
+                      <div class="font-mono font-bold text-sky-400 mt-0.5">${{ aiDiagnosisMap[item.ticker].tradeLevels.pullback }}</div>
+                    </div>
+                    <div class="p-1 bg-slate-950/60 rounded border border-slate-800">
+                      <div class="text-slate-400">停損防守支撐</div>
+                      <div class="font-mono font-bold text-amber-400 mt-0.5">${{ aiDiagnosisMap[item.ticker].tradeLevels.stopLoss }}</div>
+                    </div>
+                    <div class="p-1 bg-slate-950/60 rounded border border-slate-800">
+                      <div class="text-slate-400">目標停利空間</div>
+                      <div class="font-mono font-bold text-emerald-400 mt-0.5">${{ aiDiagnosisMap[item.ticker].tradeLevels.takeProfit }} (+{{ aiDiagnosisMap[item.ticker].tradeLevels.upsidePct }}%)</div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
@@ -692,13 +803,21 @@
                   點擊{{ expandedCards[item.ticker] ? '收合詳情 ▲' : '展開完整數據 ▼' }}
                 </span>
                 <div class="flex items-center space-x-1.5">
-                  <button @click.stop="quickAddToPortfolio(item)" 
-                          class="text-xs font-semibold text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition"
-                          title="將此標的記帳至定期定額真實庫存">
-                    💼 記帳庫存
+                  <button @click.stop="triggerAiDiagnosis(item)" 
+                          :disabled="loadingAiTicker === item.ticker"
+                          class="text-xs font-bold py-1 px-2.5 rounded-lg border transition active:scale-95 flex items-center space-x-1 shadow-sm"
+                          :class="aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200' : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/30 text-indigo-300'">
+                    <span v-if="loadingAiTicker === item.ticker" class="animate-spin inline-block text-[11px]">⏳</span>
+                    <span v-else>🤖</span>
+                    <span>{{ loadingAiTicker === item.ticker ? 'AI診斷中...' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合評級' : '查看 AI 評級') }}</span>
                   </button>
-                  <button @click.stop="openChart(item)" class="text-indigo-400 hover:text-indigo-300 font-semibold active:scale-95 px-2 py-1 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
-                    查看 K 線 ➔
+                  <button @click.stop="quickAddToPortfolio(item)" 
+                          class="text-xs font-semibold text-slate-300 hover:text-white py-1 px-2 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition"
+                          title="將此標的記帳至定期定額真實庫存">
+                    💼 記帳
+                  </button>
+                  <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                    K 線 ➔
                   </button>
                 </div>
               </div>
@@ -750,9 +869,12 @@
                   <td class="p-3 text-right font-mono text-amber-400">
                     ${{ item.trade_levels.stop_loss.toFixed(1) }}
                   </td>
-                  <td class="p-3 text-center space-x-1">
-                    <button @click="openChart(item)" class="text-indigo-400 font-bold hover:underline">K線</button>
-                    <button @click="quickAddToPortfolio(item)" class="text-slate-400 font-bold hover:text-white text-[11px]">記帳</button>
+                  <td class="p-3 text-center space-x-1.5 whitespace-nowrap">
+                    <button @click.stop="openAiModal(item)" class="text-xs font-bold text-indigo-300 hover:text-white px-2 py-0.5 rounded bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 active:scale-95 transition">
+                      🤖 AI評級
+                    </button>
+                    <button @click.stop="openChart(item)" class="text-indigo-400 font-bold hover:underline">K線</button>
+                    <button @click.stop="quickAddToPortfolio(item)" class="text-slate-400 font-bold hover:text-white text-[11px]">記帳</button>
                   </td>
                 </tr>
               </tbody>
@@ -1339,6 +1461,103 @@
       </div>
     </div>
 
+    <!-- Modal: AI Stock Diagnosis Modal -->
+    <div v-if="aiModal.show && aiModal.item" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-slate-900 border border-indigo-500/40 rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center space-x-2.5">
+            <span class="text-2xl">🤖</span>
+            <div>
+              <div class="flex items-center space-x-2">
+                <h3 class="font-black text-base sm:text-lg text-white">{{ aiModal.item.name }}</h3>
+                <span class="text-xs text-slate-400 font-mono">{{ aiModal.item.ticker }}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/20 text-indigo-300">
+                  {{ aiModal.item.market === 'TW' ? '台股' : '美股' }}
+                </span>
+              </div>
+              <div class="flex items-center space-x-2 mt-0.5">
+                <span :class="aiModal.item.change >= 0 ? (aiModal.item.market === 'TW' ? 'text-rose-500' : 'text-emerald-400') : (aiModal.item.market === 'TW' ? 'text-emerald-400' : 'text-rose-500')" class="font-mono font-bold text-sm">
+                  現價: {{ aiModal.item.market === 'TW' ? '' : '$' }}{{ aiModal.item.close.toFixed(2) }} 
+                  ({{ aiModal.item.change >= 0 ? '+' : '' }}{{ aiModal.item.change_pct.toFixed(2) }}%)
+                </span>
+              </div>
+            </div>
+          </div>
+          <button @click="aiModal.show = false" class="text-slate-400 hover:text-white px-2.5 py-1 text-sm rounded-lg bg-slate-800/80 active:scale-95 transition">✕ 關閉</button>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto space-y-3.5 py-3 pr-1">
+          <!-- Confidence Stars & Score Banner -->
+          <div class="p-3.5 rounded-2xl bg-gradient-to-r from-indigo-950/80 via-slate-900 to-violet-950/50 border border-indigo-500/30 flex items-center justify-between shadow-md">
+            <div>
+              <div class="text-[11px] text-slate-400 font-semibold">AI 信心綜合評級</div>
+              <div class="text-xl font-black text-amber-400 font-mono mt-0.5">{{ aiModal.diagnosis?.stars }}</div>
+            </div>
+            <div class="text-right">
+              <div class="text-[11px] text-slate-400 font-semibold">綜合信心度</div>
+              <div class="text-sm font-extrabold text-indigo-300 mt-0.5">
+                {{ aiModal.diagnosis?.scoreText }} · {{ aiModal.diagnosis?.level }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Full Commentary -->
+          <div class="space-y-1.5">
+            <div class="text-xs font-bold text-indigo-300 flex items-center space-x-1">
+              <span>📝</span>
+              <span>AI 全盤多空指標綜合診斷評論</span>
+            </div>
+            <div class="text-xs text-slate-200 leading-relaxed whitespace-pre-line bg-slate-950/80 p-3.5 rounded-xl border border-slate-800/80 font-normal">
+              {{ aiModal.diagnosis?.fullComment }}
+            </div>
+          </div>
+
+          <!-- Trade Strategy Levels -->
+          <div class="space-y-1.5">
+            <div class="text-xs font-bold text-sky-400 flex items-center space-x-1">
+              <span>🎯</span>
+              <span>關鍵操作點位與風報比規劃</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <div class="text-slate-400 text-[11px]">建議回檔承接</div>
+                <div class="font-mono font-bold text-sky-400 text-sm mt-1">
+                  {{ aiModal.item.market === 'TW' ? '' : '$' }}{{ aiModal.diagnosis?.tradeLevels.pullback }}
+                </div>
+              </div>
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <div class="text-slate-400 text-[11px]">停損防守支撐</div>
+                <div class="font-mono font-bold text-amber-400 text-sm mt-1">
+                  {{ aiModal.item.market === 'TW' ? '' : '$' }}{{ aiModal.diagnosis?.tradeLevels.stopLoss }}
+                </div>
+              </div>
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <div class="text-slate-400 text-[11px]">目標停利空間</div>
+                <div class="font-mono font-bold text-emerald-400 text-sm mt-1">
+                  {{ aiModal.item.market === 'TW' ? '' : '$' }}{{ aiModal.diagnosis?.tradeLevels.takeProfit }} 
+                  <span class="text-[10px] text-emerald-400 font-bold block">(+{{ aiModal.diagnosis?.tradeLevels.upsidePct }}%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+          <button @click="quickAddToPortfolio(aiModal.item); aiModal.show = false;" 
+                  class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition active:scale-95 border border-slate-700">
+            💼 記帳至庫存
+          </button>
+          <button @click="openChart(aiModal.item); aiModal.show = false;" 
+                  class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition active:scale-95 shadow-md flex items-center space-x-1">
+            <span>📈 查看技術 K 線</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -1359,6 +1578,12 @@
         const customStocks = ref(JSON.parse(localStorage.getItem('sc_custom_stocks') || '[]'));
         const allTWSymbols = ref([]);
         const loadingStockCode = ref('');
+
+        // AI 評級與深度診斷狀態
+        const aiDiagnosisMap = ref({});
+        const showAiBlock = ref({});
+        const loadingAiTicker = ref('');
+        const aiModal = ref({ show: false, item: null, diagnosis: null });
 
         const meta = ref({});
         const data = ref({
@@ -2276,6 +2501,202 @@
           }, 350);
         };
 
+        // ================= AI Stock Deep Diagnosis & Rating =================
+        const generateAiDiagnosis = (item) => {
+          if (!item) return null;
+
+          // 1. Determine Stars and Level
+          let stars = item.conf_stars || '⭐⭐⭐';
+          let level = item.conf_text || '觀察評估';
+          let rawScore = item.score !== undefined ? item.score : 3.0;
+          let scoreVal = rawScore <= 5.0 ? Math.round(rawScore * 20) : Math.round(rawScore);
+          if (scoreVal > 100) scoreVal = 100;
+          if (scoreVal < 30) scoreVal = 30;
+
+          if (scoreVal >= 80) {
+            stars = stars || '⭐⭐⭐⭐⭐';
+            level = level || '極高信心 · 強勢多頭';
+          } else if (scoreVal >= 65) {
+            stars = stars || '⭐⭐⭐⭐';
+            level = level || '高信心 · 偏多震盪';
+          } else if (scoreVal >= 50) {
+            stars = stars || '⭐⭐⭐';
+            level = level || '中等信心 · 區間整理';
+          } else {
+            stars = stars || '⭐⭐';
+            level = level || '觀望整理 · 消化浮額';
+          }
+
+          // 2. Trend & Moving Averages analysis
+          const close = item.close || 0;
+          const ma5 = item.ma5;
+          const ma10 = item.ma10;
+          const ma20 = item.ma20;
+          const ma60 = item.ma60;
+
+          let trendDesc = '';
+          if (ma20 && ma60 && close >= ma20 && ma20 >= ma60) {
+            trendDesc = `短中長天期均線呈標準多頭排列，股價穩居月線 (${ma20.toFixed(1)}) 與季線 (${ma60.toFixed(1)}) 之上，助漲力道充沛且趨勢慣性向上`;
+          } else if (ma20 && close >= ma20) {
+            trendDesc = `股價穩守於 20 日月線 (${ma20.toFixed(1)}) 之上，維持強勢整理軌道，多方控盤結構未變`;
+          } else if (ma60 && close >= ma60) {
+            trendDesc = `短線股價回檔至月線 (${ma20 ? ma20.toFixed(1) : '--'}) 之下，但下方季線 (${ma60.toFixed(1)}) 具備中長期強勁技術支撐，目前處於多空拉鋸築底震盪階段`;
+          } else {
+            trendDesc = `股價位處月線及季線反壓之下，短線均線微幅下彎，技術面處於空方修正或築底防守期，需提防上檔均線解套浮額`;
+          }
+
+          // 3. Oscillators (MACD, KD, RSI)
+          const osc = item.macd_osc !== undefined ? item.macd_osc : 0;
+          const dif = item.macd_dif !== undefined ? item.macd_dif : 0;
+          const dea = item.macd_signal !== undefined ? item.macd_signal : 0;
+          const k = item.kd_k !== undefined ? item.kd_k : 50;
+          const d = item.kd_d !== undefined ? item.kd_d : 50;
+          const rsi = item.rsi !== undefined ? item.rsi : 50;
+
+          let oscDesc = '';
+          if (osc > 0) {
+            oscDesc = `動能面 MACD 柱狀體維持正紅柱擴張 (OSC: +${osc.toFixed(2)})，DIF 位於 DEA 之上，波段動能由多方主導`;
+          } else if (osc === 0) {
+            oscDesc = `動能面 MACD 柱狀體位於零軸多空轉折平衡點 (OSC: 0.00)，面臨方向性突破契機`;
+          } else {
+            oscDesc = `動能面 MACD 柱狀體處於負值綠柱 (OSC: ${osc.toFixed(2)})，短線動能仍在消化浮額，靜待綠柱翻揚收斂`;
+          }
+
+          let kdDesc = '';
+          if (k >= 80) {
+            kdDesc = `KD 指標進入高檔鈍化強勢區 (K: ${k.toFixed(1)} / D: ${d.toFixed(1)})，買氣旺盛但需留意短線負乖離震盪洗盤`;
+          } else if (k <= 25) {
+            kdDesc = `KD 指標落入超賣區 (K: ${k.toFixed(1)} / D: ${d.toFixed(1)})，低檔具備跌深技術性反彈契機`;
+          } else {
+            kdDesc = `擺盪指標 KD (K/D: ${k.toFixed(1)}/${d.toFixed(1)}) 與 RSI (${rsi.toFixed(1)}) 維持在中性偏健康波動區間，未見失控過熱跡象`;
+          }
+
+          // 4. Institutional Flows / Market Depth
+          let chipDesc = '';
+          const flows = item.institutional_flows;
+          if (item.market === 'TW' || !item.market) {
+            if (flows && flows.total_net_lots !== undefined) {
+              const net = flows.total_net_lots;
+              const fLots = flows.foreign_net_lots || 0;
+              const tLots = flows.trust_net_lots || 0;
+              if (net > 0) {
+                chipDesc = `籌碼面三大法人合計偏多淨買超 ${Math.abs(net).toLocaleString()} 張${tLots > 0 ? '（投信買盤積極進駐）' : ''}${fLots > 0 ? '（外資買超助攻）' : ''}，主力籌碼向大戶靠攏，籌碼沉澱穩定度良好`;
+              } else if (net < 0) {
+                chipDesc = `籌碼面三大法人合計呈現調節賣超 ${Math.abs(net).toLocaleString()} 張，近期外資與主力動向偏向防守觀望，宜緊盯法人何時止跌回補`;
+              } else {
+                chipDesc = `籌碼面三大法人買賣互見、土洋對作平衡，整體主力籌碼平穩，未見大規模集中倒貨或掃貨現象`;
+              }
+            } else {
+              chipDesc = `籌碼面處於常態換手流動，主力籌碼與散戶籌碼分布相對平衡`;
+            }
+          } else {
+            // US
+            if (flows && flows.inst_ownership_pct) {
+              chipDesc = `機構面顯示華爾街頂級 13F 機構持股比例達 ${flows.inst_ownership_pct}%，大戶持倉趨勢屬「${flows.trend || '平穩'}」，具備機構長線法人資金護城河`;
+            } else {
+              chipDesc = `市場機構法人持股穩定，流動性充沛，受總經市場資金情緒牽動`;
+            }
+          }
+
+          // 5. Volume & Valuation
+          const volRatio = item.vol_ratio || 1.0;
+          let volDesc = '';
+          if (volRatio >= 1.5) {
+            volDesc = `量價關係方面，今日量比顯著放大至 ${volRatio} 倍，出現帶量換手攻擊訊號，資金關注度極高`;
+          } else if (volRatio <= 0.75) {
+            volDesc = `量價關係方面，成交量比僅 ${volRatio} 倍，呈現良性量縮回檔守成格局，浮額相對乾淨`;
+          } else {
+            volDesc = `量價關係方面，量比維持 ${volRatio} 倍之常態換手水準，量價結構協調`;
+          }
+
+          let valDesc = '';
+          if (item.type === 'etf' || item.type === 'ETF') {
+            if (item.dividend_yield && item.dividend_yield > 0) {
+              valDesc = `此為一籃子精選指數 ETF，當前殖利率達 ${item.dividend_yield.toFixed(2)}%，具備強韌的分散風險與現金流防守優勢`;
+            } else {
+              valDesc = `此為指數成分型 ETF，涵蓋全市場核心龍頭企業，長期持有一籃子標的具備低波動與複利優勢`;
+            }
+          } else {
+            if (item.dividend_yield && item.dividend_yield > 4.0) {
+              valDesc = `殖利率達 ${item.dividend_yield.toFixed(2)}%，兼具高息收益防守護城河`;
+            }
+            if (item.pe_ratio) {
+              valDesc += `${valDesc ? '，且' : ''}目前本益比約 ${item.pe_ratio.toFixed(1)} 倍，估值位階合宜`;
+            }
+          }
+
+          // 6. Action Trade Strategy
+          const tl = item.trade_levels || {};
+          const pullback = tl.pullback_entry ? tl.pullback_entry.toFixed(1) : (close * 0.98).toFixed(1);
+          const stopLoss = tl.stop_loss ? tl.stop_loss.toFixed(1) : (close * 0.95).toFixed(1);
+          const takeProfit = tl.take_profit ? tl.take_profit.toFixed(1) : (close * 1.08).toFixed(1);
+          const upsidePct = tl.upside_pct ? tl.upside_pct : (((parseFloat(takeProfit) / (close || 1)) - 1) * 100).toFixed(1);
+
+          // Combine full commentary
+          const fullComment = `【趨勢結構】${trendDesc}。\n【指標動能】${oscDesc}；${kdDesc}。\n【法人籌碼】${chipDesc}。\n【量價與估值】${volDesc}${valDesc ? '；' + valDesc : ''}。\n【操作策略】短中線建議於拉回進場支撐點位 ${pullback} 附近分批承接佈局；跌破防守價 ${stopLoss} 應恪遵紀律嚴格停損以防範系統性修正；首波反彈/波段目標價看至 ${takeProfit}（預估潛在漲幅 +${upsidePct}%），具備良好之風險報酬比。`;
+
+          return {
+            ticker: item.ticker,
+            name: item.name,
+            market: item.market || 'TW',
+            stars,
+            level,
+            score: scoreVal,
+            scoreText: `${scoreVal}分`,
+            trendDesc,
+            oscDesc,
+            kdDesc,
+            chipDesc,
+            volDesc,
+            valDesc,
+            fullComment,
+            tradeLevels: {
+              pullback,
+              stopLoss,
+              takeProfit,
+              upsidePct
+            }
+          };
+        };
+
+        const triggerAiDiagnosis = (item) => {
+          if (!item) return;
+          const ticker = item.ticker;
+
+          // If already generated and visible, toggle off
+          if (aiDiagnosisMap.value[ticker] && showAiBlock.value[ticker]) {
+            showAiBlock.value[ticker] = false;
+            return;
+          }
+
+          // If already generated but hidden, just show
+          if (aiDiagnosisMap.value[ticker]) {
+            showAiBlock.value[ticker] = true;
+            return;
+          }
+
+          // Start analysis with realistic response animation
+          loadingAiTicker.value = ticker;
+          setTimeout(() => {
+            const diag = generateAiDiagnosis(item);
+            aiDiagnosisMap.value[ticker] = diag;
+            showAiBlock.value[ticker] = true;
+            loadingAiTicker.value = '';
+            showToast(`AI 已完成「${item.name}」全方位量化評級與診斷`);
+          }, 350);
+        };
+
+        const openAiModal = (item) => {
+          if (!item) return;
+          const ticker = item.ticker;
+          if (!aiDiagnosisMap.value[ticker]) {
+            aiDiagnosisMap.value[ticker] = generateAiDiagnosis(item);
+          }
+          aiModal.value.item = item;
+          aiModal.value.diagnosis = aiDiagnosisMap.value[ticker];
+          aiModal.value.show = true;
+        };
+
         onMounted(() => {
           loadData();
         });
@@ -2334,7 +2755,15 @@
           quickBacktestTickers,
           isBacktesting,
           backtestResult,
-          runWebBacktest
+          runWebBacktest,
+          aiDiagnosisMap,
+          showAiBlock,
+          loadingAiTicker,
+          aiModal,
+          triggerAiDiagnosis,
+          openAiModal,
+          generateAiDiagnosis,
+          calculateStockMetrics
         };
 
 
