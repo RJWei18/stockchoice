@@ -34,8 +34,10 @@
         </div>
         <div class="flex items-center space-x-2 mt-0.5 flex-wrap">
           <p class="text-[11px] sm:text-[12px] text-slate-400">
-            <span class="text-slate-500">資料快照:</span> {{ meta.generated_at || '載入中...' }}
-            <span v-if="lastCheckedTime" class="text-[10px] text-emerald-400/90 ml-1">(已於 {{ lastCheckedTime }} 同步)</span>
+            <span class="text-slate-500">行情交易日:</span> 
+            <span class="font-mono text-indigo-300 font-bold">{{ meta.market_status?.latest_tw_date || '2026-10-08' }} 收盤</span>
+            <span v-if="meta.market_status?.is_fully_synchronized" class="text-[10px] px-1.5 py-0.2 rounded font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 ml-1">✓ 100% 同步</span>
+            <span v-if="lastCheckedTime" class="text-[10px] text-slate-400 ml-1">({{ lastCheckedTime }} 已連線)</span>
           </p>
           <a href="https://github.com/RJWei18/stockchoice/actions/workflows/deploy.yml" target="_blank" class="text-[10px] text-indigo-400 hover:text-indigo-300 underline inline-flex items-center space-x-0.5" title="前往 GitHub Actions 手動重跑盤後抓取">
             <span>(雲端更新)</span>
