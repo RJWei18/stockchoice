@@ -161,28 +161,37 @@
           <div class="space-y-3">
             <div v-for="(item, idx) in data.tw_recommended" :key="item.ticker"
                  class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 hover:border-indigo-500/50 transition">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                  <button @click.stop="toggleFavorite(item.ticker)" class="text-base hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center space-x-1.5 min-w-0">
+                  <button @click.stop="toggleFavorite(item.ticker)" class="text-base shrink-0 hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
                     {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
                   </button>
-                  <span class="font-extrabold text-sm sm:text-base text-white">{{ item.name }}</span>
-                  <span class="text-xs text-slate-400 font-mono">{{ item.ticker }}</span>
-                  <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/40 flex items-center space-x-1 shrink-0">
-                    <span>🤖 AI評級:</span>
-                    <span class="text-amber-400 font-black">{{ item.conf_stars }}</span>
-                    <span v-if="item.conf_text" class="text-amber-300 font-semibold text-[10px]">({{ item.conf_text }})</span>
-                  </span>
+                  <span class="font-extrabold text-sm sm:text-base text-white whitespace-nowrap">{{ item.name }}</span>
+                  <span class="text-xs text-slate-400 font-mono shrink-0">{{ item.ticker }}</span>
                 </div>
                 <!-- TW Price: Red Up, Green Down -->
-                <div class="text-right">
-                  <span :class="item.change >= 0 ? 'text-rose-500' : 'text-emerald-400'" class="font-mono font-black text-sm sm:text-base">
+                <div class="text-right shrink-0 font-mono">
+                  <span :class="item.change >= 0 ? 'text-rose-500' : 'text-emerald-400'" class="font-black text-sm sm:text-base">
                     {{ item.change >= 0 ? '🔴' : '🟢' }} {{ item.close.toFixed(2) }}
                   </span>
-                  <span :class="item.change >= 0 ? 'text-rose-400' : 'text-emerald-400'" class="text-xs font-mono ml-1 font-semibold">
+                  <span :class="item.change >= 0 ? 'text-rose-400' : 'text-emerald-400'" class="text-xs ml-1 font-semibold">
                     ({{ item.change >= 0 ? '+' : '' }}{{ item.change_pct.toFixed(2) }}%)
                   </span>
                 </div>
+              </div>
+
+              <!-- AI Rating Sub-Row -->
+              <div class="flex items-center justify-between mt-1.5 text-xs">
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-xs font-black text-amber-400 font-mono">{{ item.conf_stars }}</span>
+                  <span v-if="item.conf_text" class="text-[10px] px-1.5 py-0.5 rounded font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                    AI信心: {{ item.conf_text }}
+                  </span>
+                </div>
+                <button @click.stop="openAiModal(item)" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 active:scale-95 transition flex items-center space-x-0.5">
+                  <span>🤖 AI深度診斷</span>
+                  <span>➔</span>
+                </button>
               </div>
 
               <!-- Recommendation Reason & Novice Tip -->
@@ -206,16 +215,11 @@
                 </div>
               </div>
 
-              <div class="mt-2 flex items-center justify-between text-xs">
-                <div class="flex items-center space-x-1.5">
-                  <button @click.stop="openAiModal(item)" class="text-xs font-bold text-indigo-300 hover:text-white py-1 px-2.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 active:scale-95 transition flex items-center space-x-1">
-                    <span>🤖 AI 深度診斷</span>
-                  </button>
-                  <button @click.stop="quickAddToPortfolio(item)" class="text-xs text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition">
-                    💼 記帳至庫存
-                  </button>
-                </div>
-                <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+              <div class="mt-2.5 flex items-center justify-between text-xs">
+                <button @click.stop="quickAddToPortfolio(item)" class="text-[11px] text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition">
+                  💼 記帳庫存
+                </button>
+                <button @click.stop="openChart(item)" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
                   📈 查看互動K線與籌碼
                 </button>
               </div>
@@ -305,7 +309,7 @@
                       {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
                     </button>
                     <div>
-                      <span class="font-bold text-base text-white">{{ item.name }}</span>
+                      <span class="font-bold text-base text-white whitespace-nowrap">{{ item.name }}</span>
                       <span class="text-xs text-slate-400 ml-1 font-mono">{{ item.ticker }}</span>
                       <span v-if="item.type === 'etf'" class="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
                     </div>
@@ -449,25 +453,25 @@
 
               <!-- Footer action -->
               <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                <span class="text-slate-400 text-[11px]">
-                  點擊{{ expandedCards[item.ticker] ? '收合詳情 ▲' : '展開完整數據 ▼' }}
+                <span class="text-slate-400 text-[10px] sm:text-[11px] shrink-0">
+                  點擊{{ expandedCards[item.ticker] ? '收合 ▲' : '展開數據 ▼' }}
                 </span>
-                <div class="flex items-center space-x-1.5">
+                <div class="flex items-center space-x-1 shrink-0">
                   <button @click.stop="triggerAiDiagnosis(item)" 
                           :disabled="loadingAiTicker === item.ticker"
-                          class="text-xs font-bold py-1 px-2.5 rounded-lg border transition active:scale-95 flex items-center space-x-1 shadow-sm"
+                          class="text-[11px] font-bold py-1 px-2 rounded-md border transition active:scale-95 flex items-center space-x-1 shadow-sm"
                           :class="aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200' : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/30 text-indigo-300'">
-                    <span v-if="loadingAiTicker === item.ticker" class="animate-spin inline-block text-[11px]">⏳</span>
-                    <span v-else>🤖</span>
-                    <span>{{ loadingAiTicker === item.ticker ? 'AI診斷中...' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合評級' : '查看 AI 評級') }}</span>
+                    <span v-if="loadingAiTicker === item.ticker" class="animate-spin inline-block text-[10px]">⏳</span>
+                    <span v-else class="text-[10px]">🤖</span>
+                    <span>{{ loadingAiTicker === item.ticker ? '診斷中' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合' : 'AI評級') }}</span>
                   </button>
                   <button @click.stop="quickAddToPortfolio(item)" 
-                          class="text-xs font-semibold text-slate-300 hover:text-white py-1 px-2 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition"
+                          class="text-[11px] font-semibold text-slate-300 hover:text-white py-1 px-2 rounded-md bg-slate-800 border border-slate-700 active:scale-95 transition"
                           title="將此標的記帳至定期定額真實庫存">
                     💼 記帳
                   </button>
-                  <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
-                    K 線 ➔
+                  <button @click.stop="openChart(item)" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2 rounded-md bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                    K線 ➔
                   </button>
                 </div>
               </div>
@@ -551,28 +555,37 @@
           <div class="space-y-3">
             <div v-for="(item, idx) in data.us_recommended" :key="item.ticker"
                  class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 hover:border-indigo-500/50 transition">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                  <button @click.stop="toggleFavorite(item.ticker)" class="text-base hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center space-x-1.5 min-w-0">
+                  <button @click.stop="toggleFavorite(item.ticker)" class="text-base shrink-0 hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
                     {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
                   </button>
-                  <span class="font-extrabold text-sm sm:text-base text-white">{{ item.name }}</span>
-                  <span class="text-xs text-slate-400 font-mono">{{ item.ticker }}</span>
-                  <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/40 flex items-center space-x-1 shrink-0">
-                    <span>🤖 AI評級:</span>
-                    <span class="text-amber-400 font-black">{{ item.conf_stars }}</span>
-                    <span v-if="item.conf_text" class="text-amber-300 font-semibold text-[10px]">({{ item.conf_text }})</span>
-                  </span>
+                  <span class="font-extrabold text-sm sm:text-base text-white whitespace-nowrap">{{ item.name }}</span>
+                  <span class="text-xs text-slate-400 font-mono shrink-0">{{ item.ticker }}</span>
                 </div>
                 <!-- US Price: Green Up, Red Down -->
-                <div class="text-right">
-                  <span :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-mono font-black text-sm sm:text-base">
+                <div class="text-right shrink-0 font-mono">
+                  <span :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-black text-sm sm:text-base">
                     {{ item.change >= 0 ? '🟢' : '🔴' }} {{ item.close.toFixed(2) }}
                   </span>
-                  <span :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-400'" class="text-xs font-mono ml-1 font-semibold">
+                  <span :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-400'" class="text-xs ml-1 font-semibold">
                     ({{ item.change >= 0 ? '+' : '' }}{{ item.change_pct.toFixed(2) }}%)
                   </span>
                 </div>
+              </div>
+
+              <!-- AI Rating Sub-Row -->
+              <div class="flex items-center justify-between mt-1.5 text-xs">
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-xs font-black text-amber-400 font-mono">{{ item.conf_stars }}</span>
+                  <span v-if="item.conf_text" class="text-[10px] px-1.5 py-0.5 rounded font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                    AI信心: {{ item.conf_text }}
+                  </span>
+                </div>
+                <button @click.stop="openAiModal(item)" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 active:scale-95 transition flex items-center space-x-0.5">
+                  <span>🤖 AI深度診斷</span>
+                  <span>➔</span>
+                </button>
               </div>
 
               <p class="text-xs text-indigo-200/90 mt-2 bg-indigo-950/40 p-2 rounded-lg border border-indigo-900/50">
@@ -594,16 +607,11 @@
                 </div>
               </div>
 
-              <div class="mt-2 flex items-center justify-between text-xs">
-                <div class="flex items-center space-x-1.5">
-                  <button @click.stop="openAiModal(item)" class="text-xs font-bold text-indigo-300 hover:text-white py-1 px-2.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 active:scale-95 transition flex items-center space-x-1">
-                    <span>🤖 AI 深度診斷</span>
-                  </button>
-                  <button @click.stop="quickAddToPortfolio(item)" class="text-xs text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition">
-                    💼 記帳至庫存
-                  </button>
-                </div>
-                <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+              <div class="mt-2.5 flex items-center justify-between text-xs">
+                <button @click.stop="quickAddToPortfolio(item)" class="text-[11px] text-slate-300 hover:text-white py-1 px-2.5 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition">
+                  💼 記帳庫存
+                </button>
+                <button @click.stop="openChart(item)" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
                   📈 查看互動K線與籌碼
                 </button>
               </div>
@@ -660,7 +668,7 @@
                       {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
                     </button>
                     <div>
-                      <span class="font-bold text-base text-white">{{ item.name }}</span>
+                      <span class="font-bold text-base text-white whitespace-nowrap">{{ item.name }}</span>
                       <span class="text-xs text-slate-400 ml-1 font-mono">{{ item.ticker }}</span>
                       <span v-if="item.type === 'etf'" class="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
                     </div>
@@ -799,25 +807,25 @@
               </div>
 
               <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                <span class="text-slate-400 text-[11px]">
-                  點擊{{ expandedCards[item.ticker] ? '收合詳情 ▲' : '展開完整數據 ▼' }}
+                <span class="text-slate-400 text-[10px] sm:text-[11px] shrink-0">
+                  點擊{{ expandedCards[item.ticker] ? '收合 ▲' : '展開數據 ▼' }}
                 </span>
-                <div class="flex items-center space-x-1.5">
+                <div class="flex items-center space-x-1 shrink-0">
                   <button @click.stop="triggerAiDiagnosis(item)" 
                           :disabled="loadingAiTicker === item.ticker"
-                          class="text-xs font-bold py-1 px-2.5 rounded-lg border transition active:scale-95 flex items-center space-x-1 shadow-sm"
+                          class="text-[11px] font-bold py-1 px-2 rounded-md border transition active:scale-95 flex items-center space-x-1 shadow-sm"
                           :class="aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200' : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/30 text-indigo-300'">
-                    <span v-if="loadingAiTicker === item.ticker" class="animate-spin inline-block text-[11px]">⏳</span>
-                    <span v-else>🤖</span>
-                    <span>{{ loadingAiTicker === item.ticker ? 'AI診斷中...' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合評級' : '查看 AI 評級') }}</span>
+                    <span v-if="loadingAiTicker === item.ticker" class="animate-spin inline-block text-[10px]">⏳</span>
+                    <span v-else class="text-[10px]">🤖</span>
+                    <span>{{ loadingAiTicker === item.ticker ? '診斷中' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合' : 'AI評級') }}</span>
                   </button>
                   <button @click.stop="quickAddToPortfolio(item)" 
-                          class="text-xs font-semibold text-slate-300 hover:text-white py-1 px-2 rounded-lg bg-slate-800 border border-slate-700 active:scale-95 transition"
+                          class="text-[11px] font-semibold text-slate-300 hover:text-white py-1 px-2 rounded-md bg-slate-800 border border-slate-700 active:scale-95 transition"
                           title="將此標的記帳至定期定額真實庫存">
                     💼 記帳
                   </button>
-                  <button @click.stop="openChart(item)" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
-                    K 線 ➔
+                  <button @click.stop="openChart(item)" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 py-1 px-2 rounded-md bg-indigo-500/10 border border-indigo-500/20 active:scale-95 transition">
+                    K線 ➔
                   </button>
                 </div>
               </div>
