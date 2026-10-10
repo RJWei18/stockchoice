@@ -32,8 +32,11 @@
           <span class="text-xl font-black bg-gradient-to-r from-indigo-400 via-sky-400 to-emerald-400 bg-clip-text text-transparent">StockChoice</span>
           <span class="text-[11px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">智能盤後</span>
         </div>
-        <div class="flex items-center space-x-2 mt-0.5">
-          <p class="text-[11px] sm:text-[12px] text-slate-400">更新: {{ meta.generated_at || '載入中...' }}</p>
+        <div class="flex items-center space-x-2 mt-0.5 flex-wrap">
+          <p class="text-[11px] sm:text-[12px] text-slate-400">
+            <span class="text-slate-500">資料快照:</span> {{ meta.generated_at || '載入中...' }}
+            <span v-if="lastCheckedTime" class="text-[10px] text-emerald-400/90 ml-1">(已於 {{ lastCheckedTime }} 同步)</span>
+          </p>
           <a href="https://github.com/RJWei18/stockchoice/actions/workflows/deploy.yml" target="_blank" class="text-[10px] text-indigo-400 hover:text-indigo-300 underline inline-flex items-center space-x-0.5" title="前往 GitHub Actions 手動重跑盤後抓取">
             <span>(雲端更新)</span>
           </a>
@@ -1426,6 +1429,7 @@
 
         const isRefreshing = ref(false);
         const toastMsg = ref('');
+        const lastCheckedTime = ref('');
         const showToast = (msg) => {
           toastMsg.value = msg;
           setTimeout(() => { toastMsg.value = ''; }, 3000);
@@ -1438,7 +1442,12 @@
               const res = await resp.json();
               meta.value = res.metadata || {};
               data.value = res;
-              if (!silent) showToast('已成功更新為最新盤後行情');
+              const now = new Date();
+              const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+              lastCheckedTime.value = timeStr;
+              if (!silent) {
+                showToast(`已完成伺服器連線確認 (${timeStr})：目前已是最新盤後資料 (週末休市中)`);
+              }
             } else if (!silent) {
               showToast('伺服器資料取得失敗');
             }
@@ -2050,6 +2059,7 @@
           openChartByTicker,
           isRefreshing,
           toastMsg,
+          lastCheckedTime,
           refreshData,
           showToast,
           expandedCards,
