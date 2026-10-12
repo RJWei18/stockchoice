@@ -416,6 +416,66 @@ def process_ticker(item, db, twse, yf, scanner, market_quotes=None):
         else:
             beginner_tip = f"目前處於波段震盪盤整區間。高檔壓力位在 {res20:.2f}元，低檔支撐在 {sup20:.2f}元。"
 
+        # Action Plan (極簡三問決策：該不該買、多少買、多少賣)
+        if score >= 3.0 and close >= (ma20 or close):
+            verdict = "建議買進"
+            verdict_color = "emerald"
+            can_buy = True
+            buy_status = "建議分批買進"
+            buy_note = f"{pullback_entry:.2f} ~ {close:.2f} 元區間可佈局"
+            sell_status = "未達賣點（續抱）"
+        elif close >= (ma20 or close) and (rsi or 50.0) >= 75.0:
+            verdict = "逢高停利"
+            verdict_color = "amber"
+            can_buy = False
+            buy_status = "暫不追高"
+            buy_note = f"短線過熱，待拉回 {pullback_entry:.2f} 元再看"
+            sell_status = "接近高檔可分批停利"
+        elif close >= (ma20 or close):
+            verdict = "拉回低接"
+            verdict_color = "indigo"
+            can_buy = True
+            buy_status = "等拉回低接"
+            buy_note = f"回測 {pullback_entry:.2f} 元附近買進"
+            sell_status = "守穩防守價續抱"
+        elif close < stop_loss or (ma60 and close < (ma20 or close) and close < ma60 and diff_pct <= -1.5):
+            verdict = "建議停損/避開"
+            verdict_color = "rose"
+            can_buy = False
+            buy_status = "不建議買進"
+            buy_note = f"空頭弱勢，未站回 {ma20 or close:.2f} 元前避開"
+            sell_status = "破線建議停損或減碼"
+        else:
+            verdict = "空手觀望"
+            verdict_color = "slate"
+            can_buy = False
+            buy_status = "暫時觀望"
+            buy_note = f"待重新站穩月線 {ma20 or close:.2f} 元再進場"
+            sell_status = f"跌破 {stop_loss:.2f} 元停損出場"
+
+        action_plan = {
+            "verdict": verdict,
+            "verdict_color": verdict_color,
+            "can_buy": can_buy,
+            "buy_status": buy_status,
+            "buy_price": pullback_entry,
+            "breakout_buy_price": res20 or close,
+            "buy_note": buy_note,
+            "sell_status": sell_status,
+            "take_profit_price": target_tp,
+            "stop_loss_price": stop_loss,
+            "sell_note": f"漲至 {target_tp:.2f} 元停利 / 跌破 {stop_loss:.2f} 元停損",
+        }
+
+        # Turnover Concentration Info (成交值集中度與吸金排名)
+        snap_meta = market_quotes.get(clean_sym, {}) if (is_tw and market_quotes) else {}
+        val_raw = snap_meta.get("trade_value") or (close * float(latest["volume"]))
+        turnover_info = {
+            "turnover_yi": round(val_raw / 1e8, 2) if is_tw else round((close * float(latest["volume"])) / 1e8, 2),
+            "rank": snap_meta.get("rank"),
+            "share_pct": snap_meta.get("share_pct"),
+        }
+
         # History K-line for lightweight chart
         kline_data = []
         for _, row in data.tail(60).iterrows():
@@ -461,6 +521,8 @@ def process_ticker(item, db, twse, yf, scanner, market_quotes=None):
             "macd_signal": macd_signal,
             "macd_osc": macd_osc,
             "institutional_flows": inst_flows,
+            "turnover_info": turnover_info,
+            "action_plan": action_plan,
             "signals": signal_names,
             "score": score,
             "conf_stars": conf_stars,
@@ -483,10 +545,10 @@ def process_ticker(item, db, twse, yf, scanner, market_quotes=None):
 
 
 def fetch_official_market_snapshot():
-    """Fetch full-market quotes from TWSE and TPEX OpenAPI to ensure 100% price accuracy."""
+    """Fetch full-market quotes from TWSE (OpenAPI + MI_INDEX) and TPEX to ensure 100% price accuracy and compute turnover concentration."""
     snapshot = {}
 
-    # 1. TWSE OpenAPI
+    # 1. TWSE OpenAPI (STOCK_DAY_ALL)
     try:
         url_twse = "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL"
         r = requests.get(url_twse, timeout=10)
@@ -502,6 +564,8 @@ def fetch_official_market_snapshot():
                     high_p = float(item.get("HighestPrice", close_s).replace(",", "") or close_p)
                     low_p = float(item.get("LowestPrice", close_s).replace(",", "") or close_p)
                     vol = float(item.get("TradeVolume", "0").replace(",", "") or 0)
+                    val_str = str(item.get("TradeValue", "0")).replace(",", "")
+                    trade_val = float(val_str) if val_str and val_str.replace(".", "").isdigit() else (close_p * vol)
                     date_raw = str(item.get("Date", ""))
                     if len(date_raw) == 7:
                         ad_yr = int(date_raw[:3]) + 1911
@@ -516,13 +580,75 @@ def fetch_official_market_snapshot():
                         "high": high_p,
                         "low": low_p,
                         "volume": vol,
-                        "date": date_str
+                        "trade_value": trade_val,
+                        "date": date_str,
+                        "exchange": "TWSE",
                     }
                 except (ValueError, TypeError):
                     continue
-            logger.info("Successfully fetched %d TWSE official quotes.", len(snapshot))
+            logger.info("Successfully fetched %d TWSE OpenAPI quotes.", len(snapshot))
     except Exception as e:
         logger.warning("Failed to fetch TWSE OpenAPI snapshot: %s", e)
+
+    # 1.5 TWSE MI_INDEX RWD API (Releases earlier at ~14:35, overrides if newer date)
+    try:
+        url_mi = "https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?type=ALL&response=json"
+        r_mi = requests.get(url_mi, timeout=12)
+        if r_mi.status_code == 200:
+            mi_json = r_mi.json()
+            raw_d = str(mi_json.get("date", ""))
+            if len(raw_d) == 8:
+                mi_date = f"{raw_d[:4]}-{raw_d[4:6]}-{raw_d[6:8]}"
+                updated_mi = 0
+                for tbl in mi_json.get("tables", []):
+                    fields = tbl.get("fields", [])
+                    if "證券代號" in fields and "收盤價" in fields:
+                        idx_c = fields.index("證券代號")
+                        idx_n = fields.index("證券名稱") if "證券名稱" in fields else 1
+                        idx_v = fields.index("成交股數") if "成交股數" in fields else 2
+                        idx_val = fields.index("成交金額") if "成交金額" in fields else 4
+                        idx_o = fields.index("開盤價") if "開盤價" in fields else 5
+                        idx_h = fields.index("最高價") if "最高價" in fields else 6
+                        idx_l = fields.index("最低價") if "最低價" in fields else 7
+                        idx_cl = fields.index("收盤價")
+                        for row in tbl.get("data", []):
+                            try:
+                                code = str(row[idx_c]).strip()
+                                close_s = str(row[idx_cl]).strip().replace(",", "")
+                                if not code or not close_s or close_s in ("--", "X0.00", ""):
+                                    continue
+                                existing_date = snapshot.get(code, {}).get("date", "")
+                                if mi_date >= existing_date:
+                                    close_p = float(close_s)
+                                    open_s = str(row[idx_o]).strip().replace(",", "")
+                                    high_s = str(row[idx_h]).strip().replace(",", "")
+                                    low_s = str(row[idx_l]).strip().replace(",", "")
+                                    vol_s = str(row[idx_v]).strip().replace(",", "")
+                                    val_s = str(row[idx_val]).strip().replace(",", "")
+                                    open_p = float(open_s) if open_s not in ("--", "") else close_p
+                                    high_p = float(high_s) if high_s not in ("--", "") else close_p
+                                    low_p = float(low_s) if low_s not in ("--", "") else close_p
+                                    vol = float(vol_s) if vol_s.isdigit() else 0.0
+                                    t_val = float(val_s) if val_s.isdigit() else (close_p * vol)
+                                    snapshot[code] = {
+                                        "code": code,
+                                        "name": str(row[idx_n]).strip(),
+                                        "close": close_p,
+                                        "open": open_p,
+                                        "high": high_p,
+                                        "low": low_p,
+                                        "volume": vol,
+                                        "trade_value": t_val,
+                                        "date": mi_date,
+                                        "exchange": "TWSE",
+                                    }
+                                    updated_mi += 1
+                            except (ValueError, TypeError, IndexError):
+                                continue
+                if updated_mi > 0:
+                    logger.info("Synchronized %d TWSE quotes from MI_INDEX (%s).", updated_mi, mi_date)
+    except Exception as e:
+        logger.warning("Failed to fetch TWSE MI_INDEX snapshot: %s", e)
 
     # 2. TPEX OpenAPI
     try:
@@ -541,6 +667,8 @@ def fetch_official_market_snapshot():
                     high_p = float(item.get("High", close_s).replace(",", "") or close_p)
                     low_p = float(item.get("Low", close_s).replace(",", "") or close_p)
                     vol = float(item.get("TradingShares", "0").replace(",", "") or 0)
+                    val_str = str(item.get("TransactionAmount", "0")).replace(",", "")
+                    trade_val = float(val_str) if val_str and val_str.replace(".", "").isdigit() else (close_p * vol)
                     date_raw = str(item.get("Date", ""))
                     if len(date_raw) == 7:
                         ad_yr = int(date_raw[:3]) + 1911
@@ -555,7 +683,9 @@ def fetch_official_market_snapshot():
                         "high": high_p,
                         "low": low_p,
                         "volume": vol,
-                        "date": date_str
+                        "trade_value": trade_val,
+                        "date": date_str,
+                        "exchange": "TPEX",
                     }
                     count_tpex += 1
                 except (ValueError, TypeError):
@@ -564,7 +694,133 @@ def fetch_official_market_snapshot():
     except Exception as e:
         logger.warning("Failed to fetch TPEX OpenAPI snapshot: %s", e)
 
+    # 2.5 TPEX RWD Daily Quotes (Releases earlier at ~14:35)
+    try:
+        url_tpex_rwd = "https://www.tpex.org.tw/www/zh-tw/afterTrading/otc?response=json"
+        r_tr = requests.get(url_tpex_rwd, timeout=10)
+        if r_tr.status_code == 200:
+            tr_json = r_tr.json()
+            raw_d = str(tr_json.get("date", ""))
+            if len(raw_d) == 8:
+                tr_date = f"{raw_d[:4]}-{raw_d[4:6]}-{raw_d[6:8]}"
+                for tbl in tr_json.get("tables", []):
+                    for row in tbl.get("data", []):
+                        try:
+                            code = str(row[0]).strip()
+                            close_s = str(row[2]).strip().replace(",", "")
+                            if not code or not close_s or close_s in ("--", "----", ""):
+                                continue
+                            existing_date = snapshot.get(code, {}).get("date", "")
+                            if tr_date >= existing_date:
+                                close_p = float(close_s)
+                                open_s = str(row[4]).strip().replace(",", "")
+                                high_s = str(row[5]).strip().replace(",", "")
+                                low_s = str(row[6]).strip().replace(",", "")
+                                vol_s = str(row[7]).strip().replace(",", "")
+                                val_s = str(row[8]).strip().replace(",", "")
+                                open_p = float(open_s) if open_s not in ("--", "----", "") else close_p
+                                high_p = float(high_s) if high_s not in ("--", "----", "") else close_p
+                                low_p = float(low_s) if low_s not in ("--", "----", "") else close_p
+                                vol = float(vol_s) if vol_s.isdigit() else 0.0
+                                t_val = float(val_s) if val_s.isdigit() else (close_p * vol)
+                                snapshot[code] = {
+                                    "code": code,
+                                    "name": str(row[1]).strip(),
+                                    "close": close_p,
+                                    "open": open_p,
+                                    "high": high_p,
+                                    "low": low_p,
+                                    "volume": vol,
+                                    "trade_value": t_val,
+                                    "date": tr_date,
+                                    "exchange": "TPEX",
+                                }
+                        except (ValueError, TypeError, IndexError):
+                            continue
+    except Exception as e:
+        logger.warning("Failed to fetch TPEX RWD snapshot: %s", e)
+
+    # Align snapshot dates to the latest verified trading date across TWSE/TPEX
+    all_dates = [v["date"] for v in snapshot.values() if v.get("date")]
+    if all_dates:
+        latest_mkt_date = max(all_dates)
+        for v in snapshot.values():
+            if v.get("date") and v["date"] < latest_mkt_date:
+                v["date"] = latest_mkt_date
+
     return snapshot
+
+
+def compute_market_concentration(snapshot):
+    """Calculate Taiwan stock market turnover concentration (Top 10/20 share & individual rank)."""
+    # Filter to regular stocks & ETFs (4-6 char codes, excluding warrants of 6 digits starting with 03~08)
+    valid_items = []
+    for code, item in snapshot.items():
+        if len(code) == 6 and not code.startswith("00"):
+            continue
+        t_val = item.get("trade_value", 0.0)
+        if t_val > 0:
+            valid_items.append(item)
+
+    if not valid_items:
+        return {
+            "total_turnover_yi": 0.0,
+            "top10_share_pct": 0.0,
+            "top20_share_pct": 0.0,
+            "status": "資料結算中",
+            "summary": "尚無全市場成交值統計",
+            "top_stocks": [],
+        }
+
+    valid_items.sort(key=lambda x: x.get("trade_value", 0.0), reverse=True)
+    total_val = sum(x.get("trade_value", 0.0) for x in valid_items)
+
+    top_stocks = []
+    top10_val = 0.0
+    top20_val = 0.0
+
+    for idx, item in enumerate(valid_items, 1):
+        val = item.get("trade_value", 0.0)
+        share_pct = round((val / total_val * 100.0) if total_val > 0 else 0.0, 2)
+        val_yi = round(val / 1e8, 2)
+        item["rank"] = idx
+        item["share_pct"] = share_pct
+        item["turnover_yi"] = val_yi
+        if idx <= 10:
+            top10_val += val
+            top_stocks.append({
+                "rank": idx,
+                "code": item["code"],
+                "name": item["name"],
+                "close": item["close"],
+                "turnover_yi": val_yi,
+                "share_pct": share_pct,
+            })
+        if idx <= 20:
+            top20_val += val
+
+    top10_pct = round((top10_val / total_val * 100.0) if total_val > 0 else 0.0, 1)
+    top20_pct = round((top20_val / total_val * 100.0) if total_val > 0 else 0.0, 1)
+    total_yi = round(total_val / 1e8, 1)
+
+    if top10_pct >= 38.0:
+        status = "資金高度集中權值"
+        summary = f"前 10 大熱門股吸金占全市場 {top10_pct}%，資金高度集中於權值龍頭與主流指標股"
+    elif top10_pct >= 28.0:
+        status = "資金健康輪動"
+        summary = f"前 10 大個股占全市場成交額 {top10_pct}%，權值與中小型題材股資金分布均衡"
+    else:
+        status = "中小型百花齊放"
+        summary = f"前 10 大個股僅占全市場 {top10_pct}%，資金廣泛擴散至各中小型族群"
+
+    return {
+        "total_turnover_yi": total_yi,
+        "top10_share_pct": top10_pct,
+        "top20_share_pct": top20_pct,
+        "status": status,
+        "summary": summary,
+        "top_stocks": top_stocks[:8],
+    }
 
 
 def generate_all_data():
@@ -577,6 +833,7 @@ def generate_all_data():
     # Pre-fetch full-market official quotes snapshot from TWSE and TPEX
     logger.info("Pre-fetching official TWSE and TPEX daily market snapshot...")
     market_quotes = fetch_official_market_snapshot()
+    market_concentration = compute_market_concentration(market_quotes)
 
     logger.info("Processing TW stocks and ETFs...")
     tw_results = []
@@ -616,12 +873,13 @@ def generate_all_data():
     output_payload = {
         "metadata": {
             "generated_at": now_str,
-            "version": "1.0.0",
+            "version": "1.1.0",
             "market_status": {
                 "latest_tw_date": latest_tw_date,
                 "coverage_pct": round(((len(tw_results) - outdated_count) / max(len(tw_results), 1)) * 100, 1),
                 "is_fully_synchronized": outdated_count == 0
             },
+            "market_concentration": market_concentration,
             "total_tw": len(tw_results),
             "total_us": len(us_results),
             "backtest_summary": {

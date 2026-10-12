@@ -84,6 +84,19 @@
 - [x] 支援自選股專屬預測履歷：自選股卡片直接顯示預測標籤與勝率，並提供展開式「每日預測回測驗證紀錄」
 - [x] 驗證前端互動與排版、執行單元測試並部署至 GitHub Pages
 
+## Task 16: 第一階段 — 15:30 盤後同步機制、大盤成交值集中度與「極簡買賣決策卡」改版
+- [x] 調整 `.github/workflows/deploy.yml` 排程為平日 15:30（UTC 07:30）與 16:15（UTC 08:15），確保上市櫃與法人盤後資料全數結算後自動同步
+- [x] 擴充 `generate_web_data.py`：整合 `MI_INDEX` 與 OpenAPI 雙重快照、計算全市場成交值集中度（Top 10 資金占比與個股吸金排名）、產出明確買賣動作結論與雙價位指引
+- [x] 修復 `web/index.html` 硬編碼「(週末休市中)」Toast 文字，改為動態星期與時段判斷
+- [x] 改版 `web/index.html` 新手模式為「極簡買賣決策卡」：正面直觀呈現「該買/該賣結論」、「建議買進價」、「建議賣出/停損價」與「資金集中度標籤」，隱藏複雜均線雜訊（收合至展開明細）
+- [x] 執行今日（2026-10-12）盤後數據更新、通過單元測試並推送至 GitHub Pages
+
+## Task 17: 第二階段 — Albedo 深度打通、08:30 盤前分析速報、美股機構/議員籌碼與推薦模擬績效 (待辦)
+- [ ] 打通 Albedo 主系統（`Albedo/llm_service.py`、`Albedo/bot.py`、`Albedo/stock_service.py`）讀取 `stockchoice` 最新盤後與盤前資料並支援 Function Calling 路由
+- [ ] 實作平日 08:30「盤前分析速報」（隔夜美股 TSM/NVDA/SOXX/QQQ 表現、台股開盤風向、當日到價盯盤清單），支援 Albedo Telegram 推播與網頁盤前區塊
+- [ ] 擴充美股籌碼面：整合 Dataroma 13F 頂級機構持倉與 Quiver 國會議員申報交易標籤
+- [ ] 借鏡 QuantDinger 閉環概念，新增「推薦清單模擬交易績效追蹤（Paper Trading）」
+
 ---
 
 ## 成果審查 (Review & Verification)
@@ -92,4 +105,5 @@
 - [x] **CLI 功能驗證**：驗證 `main.py --help` 正確解析 `--dry-run`、`--once` 與 `--tickers` 參數。
 - [x] **容器化與 NAS 準備**：已配置 Dockerfile 及 docker-compose.yml，包含 `./data:/app/data` 持久化磁碟映射與 `TZ=Asia/Taipei`。
 - [x] **文件齊備**：已產出完整的使用手冊 `README.md`、開發者擴充指南 `DEVELOPER.md` 與整合文件 `albedo_integration.md`。
+
 

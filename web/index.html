@@ -149,13 +149,42 @@
 
       <!-- ================= TAB 1: 台灣股市 & ETF ================= -->
       <section v-if="activeTab === 'tw'" class="space-y-4">
+
+        <!-- 台股大盤成交值集中度（資金流向雷達） -->
+        <div v-if="currentFilter === 'all' && !searchQuery && meta.market_concentration && meta.market_concentration.top_stocks && meta.market_concentration.top_stocks.length > 0"
+             class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 shadow-md space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-extrabold text-amber-400">資金集中度雷達</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                {{ meta.market_concentration.status }}
+              </span>
+            </div>
+            <div class="text-[11px] text-slate-400 font-mono">
+              前10大吸金占大盤 <strong class="text-white">{{ meta.market_concentration.top10_share_pct }}%</strong>
+              <span v-if="meta.market_concentration.total_turnover_yi" class="ml-1.5 text-slate-500">(總成交約 {{ meta.market_concentration.total_turnover_yi }} 億)</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            {{ meta.market_concentration.summary }}。點擊下方吸金熱門股可直接檢視買賣價位：
+          </p>
+          <div class="flex flex-wrap gap-1.5 pt-0.5">
+            <button v-for="ts in meta.market_concentration.top_stocks.slice(0, 6)" :key="ts.code"
+                    @click="searchQuery = ts.code"
+                    class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-indigo-950/60 border border-slate-800 hover:border-indigo-500/40 transition flex items-center space-x-1.5 active:scale-95">
+              <span class="font-mono font-bold text-amber-400">#{{ ts.rank }}</span>
+              <span class="font-bold text-slate-200">{{ ts.name }}</span>
+              <span class="font-mono text-indigo-300">{{ ts.turnover_yi }}億 ({{ ts.share_pct }}%)</span>
+            </button>
+          </div>
+        </div>
         
         <!-- Recommended Buy Picks (Top Section, only shown when no search/filter) -->
         <div v-if="currentFilter === 'all' && !searchQuery && data.tw_recommended && data.tw_recommended.length > 0" class="bg-gradient-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-sm font-bold text-indigo-300 flex items-center space-x-1.5">
               <span>🏆</span>
-              <span>台股精選推薦清單 (依信心度排序)</span>
+              <span>今日首選推薦買進清單 (依信心度排序)</span>
             </h2>
             <span class="text-[11px] text-slate-400">共 {{ data.tw_recommended.length }} 檔</span>
           </div>
@@ -164,12 +193,15 @@
             <div v-for="(item, idx) in data.tw_recommended" :key="item.ticker"
                  class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 hover:border-indigo-500/50 transition">
               <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center space-x-1.5 min-w-0">
+                <div class="flex items-center space-x-1.5 min-w-0 flex-wrap">
                   <button @click.stop="toggleFavorite(item.ticker)" class="text-base shrink-0 hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
                     {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
                   </button>
                   <span class="font-extrabold text-sm sm:text-base text-white whitespace-nowrap">{{ item.name }}</span>
                   <span class="text-xs text-slate-400 font-mono shrink-0">{{ item.ticker }}</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    建議買進
+                  </span>
                 </div>
                 <!-- TW Price: Red Up, Green Down -->
                 <div class="text-right shrink-0 font-mono">
@@ -196,24 +228,28 @@
                 </button>
               </div>
 
-              <!-- Recommendation Reason & Novice Tip -->
+              <!-- Recommendation Reason -->
               <p class="text-xs text-indigo-200/90 mt-2 bg-indigo-950/40 p-2 rounded-lg border border-indigo-900/50">
                 <strong>推薦理由:</strong> {{ item.recommendation_reason }}
               </p>
 
-              <!-- Trade Levels (Beginner & Pro Friendly) -->
-              <div class="grid grid-cols-3 gap-2 mt-2.5 pt-2 border-t border-slate-800 text-[11px] sm:text-xs">
-                <div class="bg-slate-800/60 p-2 rounded-lg text-center">
-                  <div class="text-slate-400">建議進場</div>
-                  <div class="font-mono font-bold text-sky-400 mt-0.5">{{ item.trade_levels.pullback_entry.toFixed(1) }} ~ {{ item.close.toFixed(1) }}</div>
+              <!-- Direct Buy / Sell Price Action Box -->
+              <div class="grid grid-cols-2 gap-2 mt-2.5 pt-2 border-t border-slate-800 text-xs">
+                <div class="bg-emerald-950/30 border border-emerald-500/30 p-2.5 rounded-xl">
+                  <div class="text-[11px] text-emerald-300 font-bold">多少價位可以買</div>
+                  <div class="font-mono font-black text-sm sm:text-base text-white mt-0.5">
+                    {{ item.trade_levels.pullback_entry.toFixed(1) }} ~ {{ item.close.toFixed(1) }} 元
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">拉回月線或現價分批買</div>
                 </div>
-                <div class="bg-slate-800/60 p-2 rounded-lg text-center">
-                  <div class="text-slate-400">停損防守</div>
-                  <div class="font-mono font-bold text-amber-400 mt-0.5">{{ item.trade_levels.stop_loss.toFixed(1) }}</div>
-                </div>
-                <div class="bg-slate-800/60 p-2 rounded-lg text-center">
-                  <div class="text-slate-400">第一目標停利</div>
-                  <div class="font-mono font-bold text-emerald-400 mt-0.5">{{ item.trade_levels.take_profit.toFixed(1) }} (+{{ item.trade_levels.upside_pct }}%)</div>
+                <div class="bg-slate-800/70 border border-slate-700 p-2.5 rounded-xl">
+                  <div class="text-[11px] text-amber-300 font-bold">多少價位要賣</div>
+                  <div class="font-mono font-bold text-xs sm:text-sm text-emerald-400 mt-0.5">
+                    停利: {{ item.trade_levels.take_profit.toFixed(1) }} (+{{ item.trade_levels.upside_pct }}%)
+                  </div>
+                  <div class="font-mono font-bold text-[11px] text-rose-400 mt-0.5">
+                    停損: 跌破 {{ item.trade_levels.stop_loss.toFixed(1) }} 元
+                  </div>
                 </div>
               </div>
 
@@ -233,9 +269,9 @@
         <div v-else-if="currentFilter === 'all' && !searchQuery" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-md flex items-center space-x-3.5">
           <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-xl shrink-0">🛡️</div>
           <div>
-            <h3 class="text-xs sm:text-sm font-bold text-slate-200">今日台股暫無強勢突破個股（盤勢回檔整理中）</h3>
+            <h3 class="text-xs sm:text-sm font-bold text-slate-200">今日推薦結論：大盤震盪整理，暫無強勢突破首選股</h3>
             <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 leading-relaxed">
-              權值股與高息 ETF 近期處於短線回檔或震盪防守期，未達「帶量突破20日新高」之條件。建議耐心觀望、緊盯下方防守價或分批定期定額扣款。
+              今日多數權值股未觸發帶量突破訊號。下方各股卡片已直接標示「該不該買、多少價位買、多少價位賣」，適合尋找「拉回低接」標的逢低佈局。
             </p>
           </div>
         </div>
@@ -247,14 +283,14 @@
               <span>{{ currentFilter === 'favorites' ? '❤️ 我的自選標的清單' : (currentFilter === 'etf' ? '📊 台股熱門 ETF 清單' : (currentFilter === 'stock' ? '🏢 台股個股清單' : '📊 全部監控台股與熱門 ETF')) }}</span>
               <span class="text-xs text-indigo-400 font-mono font-bold">({{ filteredTWStocks.length }} 檔)</span>
             </h3>
-            <span class="text-xs text-indigo-400 font-semibold">點選任一卡片可展開完整技術數據</span>
+            <span class="text-xs text-indigo-400 font-semibold">點擊卡片可展開均線與法人明細</span>
           </div>
 
           <!-- External Full Market Search Candidates -->
           <div v-if="matchedExternalSymbols.length > 0" class="my-3 space-y-2">
             <div class="flex items-center justify-between text-xs text-indigo-300 font-bold px-1">
               <span>🌐 全台股代碼庫找到以下標的：</span>
-              <span class="text-[10px] text-slate-400">點擊「載入分析」立即取得行情與 AI 報告</span>
+              <span class="text-[10px] text-slate-400">點擊「載入分析」立即取得買賣價位與 AI 報告</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div v-for="sym in matchedExternalSymbols" :key="sym.c"
@@ -299,25 +335,49 @@
             </p>
           </div>
 
-          <!-- Card View -->
+          <!-- Card View (極簡三問決策卡：該不該買/多少買、該不該賣/多少賣) -->
           <div v-if="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div v-for="item in filteredTWStocks" :key="item.ticker"
                  @click="toggleExpand(item.ticker)"
                  class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-3.5 shadow-md transition flex flex-col justify-between cursor-pointer active:scale-[0.99]">
               <div>
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-1.5">
-                    <button @click.stop="toggleFavorite(item.ticker)" class="text-base hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+                <!-- Header: Name + Verdict Badge + Current Price -->
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-start space-x-1.5">
+                    <button @click.stop="toggleFavorite(item.ticker)" class="text-base mt-0.5 hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
                       {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
                     </button>
                     <div>
-                      <span class="font-bold text-base text-white whitespace-nowrap">{{ item.name }}</span>
-                      <span class="text-xs text-slate-400 ml-1 font-mono">{{ item.ticker }}</span>
-                      <span v-if="item.type === 'etf'" class="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
+                      <div class="flex items-center flex-wrap gap-1.5">
+                        <span class="font-bold text-base text-white whitespace-nowrap">{{ item.name }}</span>
+                        <span class="text-xs text-slate-400 font-mono">{{ item.ticker.replace('.TW', '').replace('.TWO', '') }}</span>
+                        <span v-if="item.type === 'etf'" class="text-[10px] px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
+                        <!-- 該不該買/賣 一眼結論標籤 -->
+                        <span class="text-[11px] px-2 py-0.5 rounded-full font-extrabold border"
+                              :class="{
+                                'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': getActionPlan(item).verdict_color === 'emerald',
+                                'bg-indigo-500/20 text-indigo-300 border-indigo-500/40': getActionPlan(item).verdict_color === 'indigo',
+                                'bg-amber-500/20 text-amber-300 border-amber-500/40': getActionPlan(item).verdict_color === 'amber',
+                                'bg-rose-500/20 text-rose-300 border-rose-500/40': getActionPlan(item).verdict_color === 'rose',
+                                'bg-slate-800 text-slate-300 border-slate-700': getActionPlan(item).verdict_color === 'slate'
+                              }">
+                          {{ getActionPlan(item).verdict }}
+                        </span>
+                      </div>
+                      <!-- 資金集中度排名與策略觸發小標籤 -->
+                      <div class="flex flex-wrap items-center gap-1 mt-1">
+                        <span v-if="item.turnover_info && item.turnover_info.rank && item.turnover_info.rank <= 30"
+                              class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-mono">
+                          資金熱度 #{{ item.turnover_info.rank }} (占大盤 {{ item.turnover_info.share_pct }}%)
+                        </span>
+                        <span v-for="sig in (item.signals || [])" :key="sig" class="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-300 font-semibold">
+                          {{ sig }}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <!-- TW Color -->
-                  <div class="text-right font-mono">
+                  <!-- TW Color: Red Up, Green Down -->
+                  <div class="text-right font-mono shrink-0">
                     <span :class="item.change >= 0 ? 'text-rose-500' : 'text-emerald-400'" class="font-black text-base">
                       {{ item.change >= 0 ? '🔴' : '🟢' }} {{ item.close.toFixed(2) }}
                     </span>
@@ -327,29 +387,67 @@
                   </div>
                 </div>
 
-                <!-- Trigger Badges -->
-                <div v-if="item.signals && item.signals.length > 0" class="flex flex-wrap gap-1 mt-2">
-                  <span v-for="sig in item.signals" :key="sig" class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                    ⚡ {{ sig }}
-                  </span>
+                <!-- 核心雙欄：該不該買・多少買 vs 該不該賣・多少賣 -->
+                <div class="grid grid-cols-2 gap-2 mt-3">
+                  <!-- 左欄：買進決策 -->
+                  <div class="p-2.5 rounded-xl border"
+                       :class="getActionPlan(item).can_buy ? 'bg-emerald-950/25 border-emerald-500/30' : 'bg-slate-950/70 border-slate-800/90'">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] text-slate-400 font-bold">該不該買</span>
+                      <span class="text-[11px] font-extrabold"
+                            :class="getActionPlan(item).can_buy ? 'text-emerald-400' : 'text-slate-400'">
+                        {{ getActionPlan(item).buy_status }}
+                      </span>
+                    </div>
+                    <div class="mt-1">
+                      <div class="text-[10px] text-slate-400">建議買進價位</div>
+                      <div class="font-mono font-black text-sm text-sky-400 mt-0.5">
+                        {{ getActionPlan(item).buy_price.toFixed(2) }} 元
+                      </div>
+                    </div>
+                    <div class="text-[10px] text-slate-400 mt-1 truncate" :title="getActionPlan(item).buy_note">
+                      {{ getActionPlan(item).buy_note }}
+                    </div>
+                  </div>
+
+                  <!-- 右欄：賣出決策 -->
+                  <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/90">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] text-slate-400 font-bold">該不該賣</span>
+                      <span class="text-[11px] font-extrabold"
+                            :class="getActionPlan(item).verdict_color === 'rose' ? 'text-rose-400' : (getActionPlan(item).verdict_color === 'amber' ? 'text-amber-400' : 'text-slate-300')">
+                        {{ getActionPlan(item).sell_status }}
+                      </span>
+                    </div>
+                    <div class="mt-1 space-y-0.5 font-mono text-xs">
+                      <div class="flex items-center justify-between">
+                        <span class="text-[10px] text-slate-400 font-sans">停利賣價:</span>
+                        <span class="font-bold text-emerald-400">{{ item.trade_levels.take_profit.toFixed(2) }}</span>
+                      </div>
+                      <div class="flex items-center justify-between">
+                        <span class="text-[10px] text-slate-400 font-sans">停損防守:</span>
+                        <span class="font-bold text-amber-400">{{ item.trade_levels.stop_loss.toFixed(2) }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <!-- Fundamental Quick Line -->
-                <div class="flex items-center space-x-2 mt-2 text-[11px] text-slate-400">
+                <!-- Pro Mode Quick Line (僅在專業模式或展開時顯示，保持新手卡片極簡乾淨) -->
+                <div v-if="isProMode || expandedCards[item.ticker]" class="flex items-center flex-wrap gap-x-2 gap-y-1 mt-2.5 text-[11px] text-slate-400">
                   <span>殖利率: <strong class="text-emerald-400 font-mono">{{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}</strong></span>
                   <span class="text-slate-600">•</span>
                   <span>本益比: <strong class="text-slate-300 font-mono">{{ item.pe_ratio ? item.pe_ratio.toFixed(1) + 'x' : '--' }}</strong></span>
                   <span class="text-slate-600">•</span>
                   <span>量比: <strong class="text-amber-400 font-mono">{{ item.vol_ratio }}x</strong></span>
+                  <span v-if="item.turnover_info && item.turnover_info.turnover_yi" class="text-slate-600">•</span>
+                  <span v-if="item.turnover_info && item.turnover_info.turnover_yi">成交額: <strong class="text-indigo-300 font-mono">{{ item.turnover_info.turnover_yi }}億</strong></span>
                 </div>
-
-                <!-- Novice Tip (Always visible in Novice Mode) -->
-                <p v-if="!isProMode" class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80 mt-2.5 leading-relaxed">
-                  💬 <strong>新手解讀:</strong> {{ item.beginner_tip }}
-                </p>
 
                 <!-- Expanded Full Details (when clicked) -->
                 <div v-if="expandedCards[item.ticker]" class="mt-3 pt-3 border-t border-slate-800 space-y-2.5">
+                  <p class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80 leading-relaxed">
+                    <strong>詳細解讀:</strong> {{ item.beginner_tip }}
+                  </p>
                   <div class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">均線與擺盪指標</div>
                   <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
                     <div>MA5: <span class="font-mono text-slate-200">{{ item.ma5 || '--' }}</span></div>
@@ -391,22 +489,6 @@
                       {{ item.institutional_flows.flow_summary }}
                     </p>
                   </div>
-
-                  <div class="text-[11px] font-bold text-sky-400 uppercase tracking-wider">點位規劃</div>
-                  <div class="grid grid-cols-3 gap-1.5 text-center text-[11px] bg-slate-950/80 p-2 rounded-xl border border-slate-800/80">
-                    <div class="p-1 bg-slate-900/60 rounded">
-                      <div class="text-slate-400">回檔進場</div>
-                      <div class="font-mono font-bold text-sky-400 mt-0.5">{{ item.trade_levels.pullback_entry.toFixed(1) }}</div>
-                    </div>
-                    <div class="p-1 bg-slate-900/60 rounded">
-                      <div class="text-slate-400">防守停損</div>
-                      <div class="font-mono font-bold text-amber-400 mt-0.5">{{ item.trade_levels.stop_loss.toFixed(1) }}</div>
-                    </div>
-                    <div class="p-1 bg-slate-900/60 rounded">
-                      <div class="text-slate-400">目標停利</div>
-                      <div class="font-mono font-bold text-emerald-400 mt-0.5">{{ item.trade_levels.take_profit.toFixed(1) }} (+{{ item.trade_levels.upside_pct }}%)</div>
-                    </div>
-                  </div>
                 </div>
 
                 <!-- AI Trend Prediction & Verification Panel (Ultra-minimalist) -->
@@ -448,22 +530,6 @@
                     </span>
                   </div>
 
-                  <!-- Trade Levels Quick Bar -->
-                  <div class="grid grid-cols-3 gap-1.5 text-center text-[10px] pt-1">
-                    <div class="p-1.5 bg-slate-950/60 rounded border border-slate-800/80">
-                      <div class="text-slate-400">拉回防守買點</div>
-                      <div class="font-mono font-bold text-sky-400 mt-0.5">{{ aiDiagnosisMap[item.ticker].tradeLevels.pullback }}</div>
-                    </div>
-                    <div class="p-1.5 bg-slate-950/60 rounded border border-slate-800/80">
-                      <div class="text-slate-400">嚴格停損支撐</div>
-                      <div class="font-mono font-bold text-amber-400 mt-0.5">{{ aiDiagnosisMap[item.ticker].tradeLevels.stopLoss }}</div>
-                    </div>
-                    <div class="p-1.5 bg-slate-950/60 rounded border border-slate-800/80">
-                      <div class="text-slate-400">波段目標停利</div>
-                      <div class="font-mono font-bold text-emerald-400 mt-0.5">{{ aiDiagnosisMap[item.ticker].tradeLevels.takeProfit }} (+{{ aiDiagnosisMap[item.ticker].tradeLevels.upsidePct }}%)</div>
-                    </div>
-                  </div>
-
                   <!-- Collapsible Historical Verification Details -->
                   <div class="pt-1.5 border-t border-indigo-900/30">
                     <button @click.stop="toggleTrackHistory(item.ticker)" class="w-full flex items-center justify-between text-[11px] text-indigo-300 hover:text-white py-1">
@@ -493,7 +559,7 @@
               <!-- Footer action -->
               <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
                 <span class="text-slate-400 text-[10px] sm:text-[11px] shrink-0">
-                  點擊{{ expandedCards[item.ticker] ? '收合 ▲' : '展開數據 ▼' }}
+                  {{ expandedCards[item.ticker] ? '收合指標 ▲' : '展開技術指標 ▼' }}
                 </span>
                 <div class="flex items-center space-x-1 shrink-0">
                   <button @click.stop="triggerAiDiagnosis(item)" 
@@ -502,7 +568,7 @@
                           :class="aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200' : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/30 text-indigo-300'">
                     <span v-if="loadingAiTicker === item.ticker" class="animate-spin inline-block text-[10px]">⏳</span>
                     <span v-else class="text-[10px]">🤖</span>
-                    <span>{{ loadingAiTicker === item.ticker ? '診斷中' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合' : 'AI評級') }}</span>
+                    <span>{{ loadingAiTicker === item.ticker ? '診斷中' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合' : 'AI預測') }}</span>
                   </button>
                   <button @click.stop="quickAddToPortfolio(item)" 
                           class="text-[11px] font-semibold text-slate-300 hover:text-white py-1 px-2 rounded-md bg-slate-800 border border-slate-700 active:scale-95 transition"
@@ -526,9 +592,10 @@
                   <th class="p-3">標的</th>
                   <th class="p-3 text-right">現價</th>
                   <th class="p-3 text-right">漲跌幅</th>
-                  <th class="p-3 text-center">訊號條件</th>
-                  <th class="p-3 text-right">殖利率</th>
-                  <th class="p-3 text-right">防守停損</th>
+                  <th class="p-3 text-center">該買/該賣</th>
+                  <th class="p-3 text-right">建議買價</th>
+                  <th class="p-3 text-right">停利賣價</th>
+                  <th class="p-3 text-right">停損賣價</th>
                   <th class="p-3 text-center">操作</th>
                 </tr>
               </thead>
@@ -541,7 +608,7 @@
                       </button>
                       <div>
                         <div class="font-bold text-white">{{ item.name }}</div>
-                        <div class="text-[11px] text-slate-400 font-mono">{{ item.ticker }}</div>
+                        <div class="text-[11px] text-slate-400 font-mono">{{ item.ticker.replace('.TW', '').replace('.TWO', '') }}</div>
                       </div>
                     </div>
                   </td>
@@ -552,16 +619,25 @@
                     {{ item.change >= 0 ? '+' : '' }}{{ item.change_pct.toFixed(2) }}%
                   </td>
                   <td class="p-3 text-center">
-                    <span v-if="item.signals && item.signals.length" class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-[10px]">
-                      {{ item.signals[0] }}
+                    <span class="px-2 py-0.5 rounded-full font-bold text-[10px] border"
+                          :class="{
+                            'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': getActionPlan(item).verdict_color === 'emerald',
+                            'bg-indigo-500/20 text-indigo-300 border-indigo-500/40': getActionPlan(item).verdict_color === 'indigo',
+                            'bg-amber-500/20 text-amber-300 border-amber-500/40': getActionPlan(item).verdict_color === 'amber',
+                            'bg-rose-500/20 text-rose-300 border-rose-500/40': getActionPlan(item).verdict_color === 'rose',
+                            'bg-slate-800 text-slate-300 border-slate-700': getActionPlan(item).verdict_color === 'slate'
+                          }">
+                      {{ getActionPlan(item).verdict }}
                     </span>
-                    <span v-else class="text-slate-500">--</span>
+                  </td>
+                  <td class="p-3 text-right font-mono text-sky-400 font-bold">
+                    {{ getActionPlan(item).buy_price.toFixed(2) }}
                   </td>
                   <td class="p-3 text-right font-mono text-emerald-400 font-bold">
-                    {{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}
+                    {{ item.trade_levels.take_profit.toFixed(2) }}
                   </td>
                   <td class="p-3 text-right font-mono text-amber-400">
-                    {{ item.trade_levels.stop_loss.toFixed(1) }}
+                    {{ item.trade_levels.stop_loss.toFixed(2) }}
                   </td>
                   <td class="p-3 text-center space-x-1.5 whitespace-nowrap">
                     <button @click.stop="openAiModal(item)" class="text-xs font-bold text-indigo-300 hover:text-white px-2 py-0.5 rounded bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 active:scale-95 transition">
@@ -586,7 +662,7 @@
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-sm font-bold text-indigo-300 flex items-center space-x-1.5">
               <span>🏆</span>
-              <span>美股精選推薦清單 (依信心度排序)</span>
+              <span>今日美股首選推薦買進清單 (依信心度排序)</span>
             </h2>
             <span class="text-[11px] text-slate-400">共 {{ data.us_recommended.length }} 檔</span>
           </div>
@@ -595,17 +671,20 @@
             <div v-for="(item, idx) in data.us_recommended" :key="item.ticker"
                  class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 hover:border-indigo-500/50 transition">
               <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center space-x-1.5 min-w-0">
+                <div class="flex items-center space-x-1.5 min-w-0 flex-wrap">
                   <button @click.stop="toggleFavorite(item.ticker)" class="text-base shrink-0 hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
                     {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
                   </button>
                   <span class="font-extrabold text-sm sm:text-base text-white whitespace-nowrap">{{ item.name }}</span>
                   <span class="text-xs text-slate-400 font-mono shrink-0">{{ item.ticker }}</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    建議買進
+                  </span>
                 </div>
                 <!-- US Price: Green Up, Red Down -->
                 <div class="text-right shrink-0 font-mono">
                   <span :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-black text-sm sm:text-base">
-                    {{ item.change >= 0 ? '🟢' : '🔴' }} {{ item.close.toFixed(2) }}
+                    {{ item.change >= 0 ? '🟢' : '🔴' }} ${{ item.close.toFixed(2) }}
                   </span>
                   <span :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-400'" class="text-xs ml-1 font-semibold">
                     ({{ item.change >= 0 ? '+' : '' }}{{ item.change_pct.toFixed(2) }}%)
@@ -631,18 +710,23 @@
                 <strong>推薦理由:</strong> {{ item.recommendation_reason }}
               </p>
 
-              <div class="grid grid-cols-3 gap-2 mt-2.5 pt-2 border-t border-slate-800 text-[11px] sm:text-xs">
-                <div class="bg-slate-800/60 p-2 rounded-lg text-center">
-                  <div class="text-slate-400">建議進場</div>
-                  <div class="font-mono font-bold text-sky-400 mt-0.5">{{ item.trade_levels.pullback_entry.toFixed(1) }} ~ {{ item.close.toFixed(1) }}</div>
+              <!-- Direct Buy / Sell Price Action Box -->
+              <div class="grid grid-cols-2 gap-2 mt-2.5 pt-2 border-t border-slate-800 text-xs">
+                <div class="bg-emerald-950/30 border border-emerald-500/30 p-2.5 rounded-xl">
+                  <div class="text-[11px] text-emerald-300 font-bold">多少價位可以買</div>
+                  <div class="font-mono font-black text-sm sm:text-base text-white mt-0.5">
+                    ${{ item.trade_levels.pullback_entry.toFixed(1) }} ~ ${{ item.close.toFixed(1) }}
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">拉回月線或現價分批買</div>
                 </div>
-                <div class="bg-slate-800/60 p-2 rounded-lg text-center">
-                  <div class="text-slate-400">停損防守</div>
-                  <div class="font-mono font-bold text-amber-400 mt-0.5">{{ item.trade_levels.stop_loss.toFixed(1) }}</div>
-                </div>
-                <div class="bg-slate-800/60 p-2 rounded-lg text-center">
-                  <div class="text-slate-400">第一目標停利</div>
-                  <div class="font-mono font-bold text-emerald-400 mt-0.5">{{ item.trade_levels.take_profit.toFixed(1) }} (+{{ item.trade_levels.upside_pct }}%)</div>
+                <div class="bg-slate-800/70 border border-slate-700 p-2.5 rounded-xl">
+                  <div class="text-[11px] text-amber-300 font-bold">多少價位要賣</div>
+                  <div class="font-mono font-bold text-xs sm:text-sm text-emerald-400 mt-0.5">
+                    停利: ${{ item.trade_levels.take_profit.toFixed(1) }} (+{{ item.trade_levels.upside_pct }}%)
+                  </div>
+                  <div class="font-mono font-bold text-[11px] text-rose-400 mt-0.5">
+                    停損: 跌破 ${{ item.trade_levels.stop_loss.toFixed(1) }}
+                  </div>
                 </div>
               </div>
 
@@ -663,7 +747,7 @@
           <div>
             <h3 class="text-xs sm:text-sm font-bold text-slate-200">今日美股暫無強勢突破個股（盤勢回檔整理中）</h3>
             <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 leading-relaxed">
-              科技股與標竿 ETF 近期處於短線回檔或震盪防守期，未達突破標準。建議耐心觀望並留意下方防守停損價。
+              下方各檔美股卡片已直接標示「該不該買、多少價位買、多少價位賣」，可優先留意拉回低接區間。
             </p>
           </div>
         </div>
@@ -675,7 +759,7 @@
               <span>{{ currentFilter === 'favorites' ? '❤️ 我的美股自選標的' : (currentFilter === 'etf' ? '📊 美股標竿 ETF 清單' : (currentFilter === 'stock' ? '🏢 美股個股清單' : '📊 全部監控美股與標竿 ETF')) }}</span>
               <span class="text-xs text-indigo-400 font-mono font-bold">({{ filteredUSStocks.length }} 檔)</span>
             </h3>
-            <span class="text-xs text-indigo-400 font-semibold">點選任一卡片可展開完整技術數據</span>
+            <span class="text-xs text-indigo-400 font-semibold">點擊卡片可展開均線與機構籌碼</span>
           </div>
 
           <!-- Empty search or favorites result -->
@@ -695,27 +779,44 @@
             </p>
           </div>
 
-          <!-- Card View -->
+          <!-- Card View (極簡三問決策卡) -->
           <div v-if="viewMode === 'card'" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div v-for="item in filteredUSStocks" :key="item.ticker"
                  @click="toggleExpand(item.ticker)"
                  class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-3.5 shadow-md transition flex flex-col justify-between cursor-pointer active:scale-[0.99]">
               <div>
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-1.5">
-                    <button @click.stop="toggleFavorite(item.ticker)" class="text-base hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-start space-x-1.5">
+                    <button @click.stop="toggleFavorite(item.ticker)" class="text-base mt-0.5 hover:scale-125 transition active:scale-90" :title="isFavorite(item.ticker) ? '取消自選' : '加入自選'">
                       {{ isFavorite(item.ticker) ? '❤️' : '🤍' }}
                     </button>
                     <div>
-                      <span class="font-bold text-base text-white whitespace-nowrap">{{ item.name }}</span>
-                      <span class="text-xs text-slate-400 ml-1 font-mono">{{ item.ticker }}</span>
-                      <span v-if="item.type === 'etf'" class="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
+                      <div class="flex items-center flex-wrap gap-1.5">
+                        <span class="font-bold text-base text-white whitespace-nowrap">{{ item.name }}</span>
+                        <span class="text-xs text-slate-400 font-mono">{{ item.ticker }}</span>
+                        <span v-if="item.type === 'etf'" class="text-[10px] px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">ETF</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded-full font-extrabold border"
+                              :class="{
+                                'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': getActionPlan(item).verdict_color === 'emerald',
+                                'bg-indigo-500/20 text-indigo-300 border-indigo-500/40': getActionPlan(item).verdict_color === 'indigo',
+                                'bg-amber-500/20 text-amber-300 border-amber-500/40': getActionPlan(item).verdict_color === 'amber',
+                                'bg-rose-500/20 text-rose-300 border-rose-500/40': getActionPlan(item).verdict_color === 'rose',
+                                'bg-slate-800 text-slate-300 border-slate-700': getActionPlan(item).verdict_color === 'slate'
+                              }">
+                          {{ getActionPlan(item).verdict }}
+                        </span>
+                      </div>
+                      <div v-if="item.signals && item.signals.length > 0" class="flex flex-wrap gap-1 mt-1">
+                        <span v-for="sig in item.signals" :key="sig" class="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-300 font-semibold">
+                          {{ sig }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <!-- US Color: Green Up, Red Down -->
-                  <div class="text-right font-mono">
+                  <div class="text-right font-mono shrink-0">
                     <span :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-black text-base">
-                      {{ item.change >= 0 ? '🟢' : '🔴' }} {{ item.close.toFixed(2) }}
+                      {{ item.change >= 0 ? '🟢' : '🔴' }} ${{ item.close.toFixed(2) }}
                     </span>
                     <div :class="item.change >= 0 ? 'text-emerald-400' : 'text-rose-400'" class="text-xs font-bold">
                       {{ item.change >= 0 ? '+' : '' }}{{ item.change_pct.toFixed(2) }}%
@@ -723,14 +824,51 @@
                   </div>
                 </div>
 
-                <div v-if="item.signals && item.signals.length > 0" class="flex flex-wrap gap-1 mt-2">
-                  <span v-for="sig in item.signals" :key="sig" class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                    ⚡ {{ sig }}
-                  </span>
+                <!-- 核心雙欄：該不該買・多少買 vs 該不該賣・多少賣 -->
+                <div class="grid grid-cols-2 gap-2 mt-3">
+                  <div class="p-2.5 rounded-xl border"
+                       :class="getActionPlan(item).can_buy ? 'bg-emerald-950/25 border-emerald-500/30' : 'bg-slate-950/70 border-slate-800/90'">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] text-slate-400 font-bold">該不該買</span>
+                      <span class="text-[11px] font-extrabold"
+                            :class="getActionPlan(item).can_buy ? 'text-emerald-400' : 'text-slate-400'">
+                        {{ getActionPlan(item).buy_status }}
+                      </span>
+                    </div>
+                    <div class="mt-1">
+                      <div class="text-[10px] text-slate-400">建議買進價位</div>
+                      <div class="font-mono font-black text-sm text-sky-400 mt-0.5">
+                        ${{ getActionPlan(item).buy_price.toFixed(2) }}
+                      </div>
+                    </div>
+                    <div class="text-[10px] text-slate-400 mt-1 truncate" :title="getActionPlan(item).buy_note">
+                      {{ getActionPlan(item).buy_note }}
+                    </div>
+                  </div>
+
+                  <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/90">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] text-slate-400 font-bold">該不該賣</span>
+                      <span class="text-[11px] font-extrabold"
+                            :class="getActionPlan(item).verdict_color === 'rose' ? 'text-rose-400' : (getActionPlan(item).verdict_color === 'amber' ? 'text-amber-400' : 'text-slate-300')">
+                        {{ getActionPlan(item).sell_status }}
+                      </span>
+                    </div>
+                    <div class="mt-1 space-y-0.5 font-mono text-xs">
+                      <div class="flex items-center justify-between">
+                        <span class="text-[10px] text-slate-400 font-sans">停利賣價:</span>
+                        <span class="font-bold text-emerald-400">${{ item.trade_levels.take_profit.toFixed(2) }}</span>
+                      </div>
+                      <div class="flex items-center justify-between">
+                        <span class="text-[10px] text-slate-400 font-sans">停損防守:</span>
+                        <span class="font-bold text-amber-400">${{ item.trade_levels.stop_loss.toFixed(2) }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <!-- Fundamental Quick Line -->
-                <div class="flex items-center space-x-2 mt-2 text-[11px] text-slate-400">
+                <!-- Fundamental Quick Line (Pro Mode or Expanded) -->
+                <div v-if="isProMode || expandedCards[item.ticker]" class="flex items-center space-x-2 mt-2.5 text-[11px] text-slate-400">
                   <span>殖利率: <strong class="text-emerald-400 font-mono">{{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}</strong></span>
                   <span class="text-slate-600">•</span>
                   <span>本益比: <strong class="text-slate-300 font-mono">{{ item.pe_ratio ? item.pe_ratio.toFixed(1) + 'x' : '--' }}</strong></span>
@@ -738,12 +876,11 @@
                   <span>量比: <strong class="text-amber-400 font-mono">{{ item.vol_ratio }}x</strong></span>
                 </div>
 
-                <p v-if="!isProMode" class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80 mt-2.5 leading-relaxed">
-                  💬 <strong>新手解讀:</strong> {{ item.beginner_tip }}
-                </p>
-
                 <!-- Expanded Full Details (when clicked) -->
                 <div v-if="expandedCards[item.ticker]" class="mt-3 pt-3 border-t border-slate-800 space-y-2.5">
+                  <p class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80 leading-relaxed">
+                    <strong>詳細解讀:</strong> {{ item.beginner_tip }}
+                  </p>
                   <div class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">均線與擺盪指標</div>
                   <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
                     <div>MA5: <span class="font-mono text-slate-200">{{ item.ma5 || '--' }}</span></div>
@@ -783,22 +920,6 @@
                       {{ item.institutional_flows.flow_summary }}
                     </p>
                   </div>
-
-                  <div class="text-[11px] font-bold text-sky-400 uppercase tracking-wider">點位規劃</div>
-                  <div class="grid grid-cols-3 gap-1.5 text-center text-[11px] bg-slate-950/80 p-2 rounded-xl border border-slate-800/80">
-                    <div class="p-1 bg-slate-900/60 rounded">
-                      <div class="text-slate-400">回檔進場</div>
-                      <div class="font-mono font-bold text-sky-400 mt-0.5">{{ item.trade_levels.pullback_entry.toFixed(1) }}</div>
-                    </div>
-                    <div class="p-1 bg-slate-900/60 rounded">
-                      <div class="text-slate-400">防守停損</div>
-                      <div class="font-mono font-bold text-amber-400 mt-0.5">{{ item.trade_levels.stop_loss.toFixed(1) }}</div>
-                    </div>
-                    <div class="p-1 bg-slate-900/60 rounded">
-                      <div class="text-slate-400">目標停利</div>
-                      <div class="font-mono font-bold text-emerald-400 mt-0.5">{{ item.trade_levels.take_profit.toFixed(1) }} (+{{ item.trade_levels.upside_pct }}%)</div>
-                    </div>
-                  </div>
                 </div>
 
                 <!-- AI Trend Prediction & Verification Panel (Ultra-minimalist) -->
@@ -840,22 +961,6 @@
                     </span>
                   </div>
 
-                  <!-- Trade Levels Quick Bar -->
-                  <div class="grid grid-cols-3 gap-1.5 text-center text-[10px] pt-1">
-                    <div class="p-1.5 bg-slate-950/60 rounded border border-slate-800/80">
-                      <div class="text-slate-400">拉回防守買點</div>
-                      <div class="font-mono font-bold text-sky-400 mt-0.5">${{ aiDiagnosisMap[item.ticker].tradeLevels.pullback }}</div>
-                    </div>
-                    <div class="p-1.5 bg-slate-950/60 rounded border border-slate-800/80">
-                      <div class="text-slate-400">嚴格停損支撐</div>
-                      <div class="font-mono font-bold text-amber-400 mt-0.5">${{ aiDiagnosisMap[item.ticker].tradeLevels.stopLoss }}</div>
-                    </div>
-                    <div class="p-1.5 bg-slate-950/60 rounded border border-slate-800/80">
-                      <div class="text-slate-400">波段目標停利</div>
-                      <div class="font-mono font-bold text-emerald-400 mt-0.5">${{ aiDiagnosisMap[item.ticker].tradeLevels.takeProfit }} (+{{ aiDiagnosisMap[item.ticker].tradeLevels.upsidePct }}%)</div>
-                    </div>
-                  </div>
-
                   <!-- Collapsible Historical Verification Details -->
                   <div class="pt-1.5 border-t border-indigo-900/30">
                     <button @click.stop="toggleTrackHistory(item.ticker)" class="w-full flex items-center justify-between text-[11px] text-indigo-300 hover:text-white py-1">
@@ -884,7 +989,7 @@
 
               <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
                 <span class="text-slate-400 text-[10px] sm:text-[11px] shrink-0">
-                  點擊{{ expandedCards[item.ticker] ? '收合 ▲' : '展開數據 ▼' }}
+                  {{ expandedCards[item.ticker] ? '收合指標 ▲' : '展開技術指標 ▼' }}
                 </span>
                 <div class="flex items-center space-x-1 shrink-0">
                   <button @click.stop="triggerAiDiagnosis(item)" 
@@ -893,7 +998,7 @@
                           :class="aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200' : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/30 text-indigo-300'">
                     <span v-if="loadingAiTicker === item.ticker" class="animate-spin inline-block text-[10px]">⏳</span>
                     <span v-else class="text-[10px]">🤖</span>
-                    <span>{{ loadingAiTicker === item.ticker ? '診斷中' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合' : 'AI評級') }}</span>
+                    <span>{{ loadingAiTicker === item.ticker ? '診斷中' : (aiDiagnosisMap[item.ticker] && showAiBlock[item.ticker] ? '收合' : 'AI預測') }}</span>
                   </button>
                   <button @click.stop="quickAddToPortfolio(item)" 
                           class="text-[11px] font-semibold text-slate-300 hover:text-white py-1 px-2 rounded-md bg-slate-800 border border-slate-700 active:scale-95 transition"
@@ -908,7 +1013,7 @@
             </div>
           </div>
 
-          <!-- Table View for US Stocks (Previously missing!) -->
+          <!-- Table View for US Stocks -->
           <div v-if="viewMode === 'table'" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-md">
             <table class="w-full text-left text-xs whitespace-nowrap">
               <thead class="bg-slate-950/80 text-slate-400 border-b border-slate-800 font-bold">
@@ -916,9 +1021,10 @@
                   <th class="p-3">標的</th>
                   <th class="p-3 text-right">現價 ($)</th>
                   <th class="p-3 text-right">漲跌幅</th>
-                  <th class="p-3 text-center">訊號條件</th>
-                  <th class="p-3 text-right">殖利率</th>
-                  <th class="p-3 text-right">防守停損</th>
+                  <th class="p-3 text-center">該買/該賣</th>
+                  <th class="p-3 text-right">建議買價</th>
+                  <th class="p-3 text-right">停利賣價</th>
+                  <th class="p-3 text-right">停損賣價</th>
                   <th class="p-3 text-center">操作</th>
                 </tr>
               </thead>
@@ -942,16 +1048,25 @@
                     {{ item.change >= 0 ? '+' : '' }}{{ item.change_pct.toFixed(2) }}%
                   </td>
                   <td class="p-3 text-center">
-                    <span v-if="item.signals && item.signals.length" class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-[10px]">
-                      {{ item.signals[0] }}
+                    <span class="px-2 py-0.5 rounded-full font-bold text-[10px] border"
+                          :class="{
+                            'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': getActionPlan(item).verdict_color === 'emerald',
+                            'bg-indigo-500/20 text-indigo-300 border-indigo-500/40': getActionPlan(item).verdict_color === 'indigo',
+                            'bg-amber-500/20 text-amber-300 border-amber-500/40': getActionPlan(item).verdict_color === 'amber',
+                            'bg-rose-500/20 text-rose-300 border-rose-500/40': getActionPlan(item).verdict_color === 'rose',
+                            'bg-slate-800 text-slate-300 border-slate-700': getActionPlan(item).verdict_color === 'slate'
+                          }">
+                      {{ getActionPlan(item).verdict }}
                     </span>
-                    <span v-else class="text-slate-500">--</span>
+                  </td>
+                  <td class="p-3 text-right font-mono text-sky-400 font-bold">
+                    ${{ getActionPlan(item).buy_price.toFixed(2) }}
                   </td>
                   <td class="p-3 text-right font-mono text-emerald-400 font-bold">
-                    {{ item.dividend_yield ? item.dividend_yield.toFixed(2) + '%' : '--' }}
+                    ${{ item.trade_levels.take_profit.toFixed(2) }}
                   </td>
                   <td class="p-3 text-right font-mono text-amber-400">
-                    ${{ item.trade_levels.stop_loss.toFixed(1) }}
+                    ${{ item.trade_levels.stop_loss.toFixed(2) }}
                   </td>
                   <td class="p-3 text-center space-x-1.5 whitespace-nowrap">
                     <button @click.stop="openAiModal(item)" class="text-xs font-bold text-indigo-300 hover:text-white px-2 py-0.5 rounded bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 active:scale-95 transition">
@@ -1864,7 +1979,20 @@
               const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
               lastCheckedTime.value = timeStr;
               if (!silent) {
-                showToast(`已完成伺服器連線確認 (${timeStr})：目前已是最新盤後資料 (週末休市中)`);
+                const day = now.getDay();
+                const todayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                const latestTwDate = (res.tw_stocks && res.tw_stocks[0] && res.tw_stocks[0].date) ? res.tw_stocks[0].date : '';
+                let statusDesc = '';
+                if (day === 0 || day === 6) {
+                  statusDesc = `週末休市中，目前最新資料日 ${latestTwDate}`;
+                } else if (latestTwDate === todayIso) {
+                  statusDesc = `已同步今日 (${latestTwDate}) 最新盤後收盤資料`;
+                } else if (now.getHours() < 15 || (now.getHours() === 15 && now.getMinutes() < 30)) {
+                  statusDesc = `台股盤中/結算中 (每日 15:30 釋出盤後資料)，目前為 ${latestTwDate} 收盤`;
+                } else {
+                  statusDesc = `目前已載入最新資料日 ${latestTwDate}`;
+                }
+                showToast(`已完成伺服器連線確認 (${timeStr})：${statusDesc}`);
               }
             } else if (!silent) {
               showToast('伺服器資料取得失敗');
@@ -1879,6 +2007,77 @@
           isRefreshing.value = true;
           await loadData(false);
           setTimeout(() => { isRefreshing.value = false; }, 400);
+        };
+
+        const getActionPlan = (item) => {
+          if (!item) return {
+            verdict: '觀望等待',
+            verdict_color: 'slate',
+            can_buy: false,
+            buy_status: '暫不建議買進',
+            buy_price: 0,
+            buy_note: '等待訊號',
+            sell_status: '觸價賣出',
+            take_profit_price: 0,
+            stop_loss_price: 0
+          };
+          if (item.action_plan) return item.action_plan;
+          const close = item.close || 0;
+          const ma20 = item.ma20 || close;
+          const ma60 = item.ma60 || close;
+          const score = item.score || 0;
+          const tl = item.trade_levels || {};
+          const pullback = tl.pullback_entry || parseFloat((close * 0.98).toFixed(2));
+          const stopLoss = tl.stop_loss || parseFloat((close * 0.95).toFixed(2));
+          const takeProfit = tl.take_profit || parseFloat((close * 1.08).toFixed(2));
+          if (score >= 4.0 && close >= ma20) {
+            return {
+              verdict: '建議買進',
+              verdict_color: 'emerald',
+              can_buy: true,
+              buy_status: '可分批買進',
+              buy_price: pullback,
+              buy_note: `拉回 ${pullback} 附近或現價分批`,
+              sell_status: '達標停利 / 破線停損',
+              take_profit_price: takeProfit,
+              stop_loss_price: stopLoss
+            };
+          } else if (score >= 2.5 && close >= ma20) {
+            return {
+              verdict: '拉回可買',
+              verdict_color: 'teal',
+              can_buy: true,
+              buy_status: '等拉回買進',
+              buy_price: pullback,
+              buy_note: `不追高，等回測 ${pullback} 買進`,
+              sell_status: '達標停利 / 破線停損',
+              take_profit_price: takeProfit,
+              stop_loss_price: stopLoss
+            };
+          } else if (close < ma20 && close < ma60) {
+            return {
+              verdict: '暫不買進・逢高減碼',
+              verdict_color: 'rose',
+              can_buy: false,
+              buy_status: '暫不建議買進',
+              buy_price: stopLoss,
+              buy_note: `空頭弱勢，靜待站回 ${ma20}`,
+              sell_status: '反彈減碼 / 嚴守停損',
+              take_profit_price: ma20,
+              stop_loss_price: stopLoss
+            };
+          }
+          return {
+            verdict: '觀望等待',
+            verdict_color: 'amber',
+            can_buy: false,
+            buy_status: '等待回測支撐',
+            buy_price: stopLoss,
+            buy_note: `區間整理，守穩 ${stopLoss} 再考慮`,
+            sell_status: '壓力區停利 / 破支撐停損',
+            take_profit_price: takeProfit,
+            stop_loss_price: stopLoss
+          };
         };
 
         const calculateStockMetrics = (symbolInfo, rawPrices, rawPers) => {
@@ -2998,7 +3197,8 @@
           triggerAiDiagnosis,
           openAiModal,
           generateAiDiagnosis,
-          calculateStockMetrics
+          calculateStockMetrics,
+          getActionPlan
         };
 
 
