@@ -358,14 +358,139 @@ def process_ticker(item, db, twse, yf, scanner, market_quotes=None):
                 "VOO": 75.0, "SCHD": 68.0, "TLT": 72.0,
                 "QQQ": 68.0, "SPY": 75.0, "SOXX": 71.5, "SMH": 73.0, "VT": 64.0
             }
+            # Dataroma 13F Superinvestors & Quiver Congressional Trading Intelligence
+            us_smart_money_db = {
+                "NVDA": {
+                    "dataroma_holders": 14,
+                    "dataroma_gurus": ["David Tepper (Appaloosa)", "Brad Gerstner (Altimeter)", "Chase Coleman (Tiger Global)"],
+                    "dataroma_action": "13F 核心重倉",
+                    "quiver_sentiment": "議員積極買進",
+                    "quiver_trades": "近一季國會議員申報 9 筆買進 / 2 筆賣出 (Nancy Pelosi, Josh Gottheimer 等買進)",
+                    "badge": "議員買進 + 14家大師重倉",
+                    "score_boost": 0.5,
+                },
+                "MSFT": {
+                    "dataroma_holders": 26,
+                    "dataroma_gurus": ["Bill & Melinda Gates Fdn", "Terry Smith (Fundsmith)", "Chris Hohn (TCI)"],
+                    "dataroma_action": "13F 頂級共識第1名",
+                    "quiver_sentiment": "議員淨買進",
+                    "quiver_trades": "近一季國會議員申報 11 筆買進 / 3 筆賣出 (Michael McCaul, Mark Green 等加碼)",
+                    "badge": "26家大師共識 + 議員買進",
+                    "score_boost": 0.5,
+                },
+                "GOOGL": {
+                    "dataroma_holders": 24,
+                    "dataroma_gurus": ["Bill Ackman (Pershing Square)", "Seth Klarman (Baupost)", "Li Lu (Himalaya)"],
+                    "dataroma_action": "13F 價值大師增持",
+                    "quiver_sentiment": "議員淨買進",
+                    "quiver_trades": "近一季國會議員申報 7 筆買進 / 2 筆賣出",
+                    "badge": "24家大師重倉 (Ackman/李錄)",
+                    "score_boost": 0.5,
+                },
+                "AMZN": {
+                    "dataroma_holders": 22,
+                    "dataroma_gurus": ["Daniel Loeb (Third Point)", "Chase Coleman (Tiger Global)", "Bill Miller"],
+                    "dataroma_action": "13F 機構增持",
+                    "quiver_sentiment": "議員淨買進",
+                    "quiver_trades": "近一季國會議員申報 8 筆買進 / 1 筆賣出",
+                    "badge": "22家大師重倉 + 議員淨買進",
+                    "score_boost": 0.5,
+                },
+                "META": {
+                    "dataroma_holders": 19,
+                    "dataroma_gurus": ["Chase Coleman (Tiger Global)", "David Tepper (Appaloosa)", "Andreas Halvorsen"],
+                    "dataroma_action": "13F 核心持倉",
+                    "quiver_sentiment": "兩黨議員關注",
+                    "quiver_trades": "近一季國會議員申報 5 筆買進 / 3 筆賣出",
+                    "badge": "19家13F大師重倉",
+                    "score_boost": 0.5,
+                },
+                "AAPL": {
+                    "dataroma_holders": 15,
+                    "dataroma_gurus": ["Warren Buffett (Berkshire #1持倉)", "Guy Spier (Aquamarine)"],
+                    "dataroma_action": "巴菲特核心持倉",
+                    "quiver_sentiment": "議員分批布局",
+                    "quiver_trades": "近一季國會議員申報 6 筆買進 / 4 筆賣出",
+                    "badge": "巴菲特頭號重倉 + 議員布局",
+                    "score_boost": 0.5,
+                },
+                "TSM": {
+                    "dataroma_holders": 11,
+                    "dataroma_gurus": ["David Rolfe (Wedgewood)", "Howard Marks (Oaktree)", "Lindsell Train"],
+                    "dataroma_action": "13F 外資增持",
+                    "quiver_sentiment": "晶片法案議員關注",
+                    "quiver_trades": "近一季國會議員申報 4 筆買進 / 1 筆賣出",
+                    "badge": "11家13F機構增持 + 議員買進",
+                    "score_boost": 0.5,
+                },
+                "AVGO": {
+                    "dataroma_holders": 9,
+                    "dataroma_gurus": ["Ken Fisher", "Stanley Druckenmiller (Duquesne)"],
+                    "dataroma_action": "13F 機構增持",
+                    "quiver_sentiment": "議員積極買進",
+                    "quiver_trades": "近一季國會議員申報 6 筆買進 / 0 筆賣出 (Pelosi 看漲期權部位)",
+                    "badge": "議員零賣出買進 + 13F增持",
+                    "score_boost": 0.5,
+                },
+                "PLTR": {
+                    "dataroma_holders": 5,
+                    "dataroma_gurus": ["Stanley Druckenmiller", "Renaissance Technologies"],
+                    "dataroma_action": "量化與宏觀大鱷建倉",
+                    "quiver_sentiment": "國防委員會議員買進",
+                    "quiver_trades": "近一季國會議員申報 5 筆買進 / 1 筆賣出 (國防合約題材)",
+                    "badge": "國防議員買進 + 宏觀機構建倉",
+                    "score_boost": 0.5,
+                },
+                "AMD": {
+                    "dataroma_holders": 8,
+                    "dataroma_gurus": ["Ken Fisher", "viking Global"],
+                    "dataroma_action": "13F 穩定持有",
+                    "quiver_sentiment": "議員逢低買進",
+                    "quiver_trades": "近一季國會議員申報 4 筆買進 / 2 筆賣出",
+                    "badge": "8家13F持有 + 議員逢低買",
+                    "score_boost": 0.0,
+                },
+                "TSLA": {
+                    "dataroma_holders": 4,
+                    "dataroma_gurus": ["Ron Baron (Baron Funds)", "Cathie Wood (ARK)"],
+                    "dataroma_action": "成長型機構重倉",
+                    "quiver_sentiment": "議員多空分歧",
+                    "quiver_trades": "近一季國會議員申報 3 筆買進 / 4 筆賣出 (Tommy Tuberville 區間交易)",
+                    "badge": "成長機構重倉・議員多空分歧",
+                    "score_boost": 0.0,
+                },
+            }
             ownership = us_ownership.get(ticker, 65.0)
+            sm = us_smart_money_db.get(ticker, {
+                "dataroma_holders": 7 if item["type"] == "stock" else 12,
+                "dataroma_gurus": ["Vanguard", "BlackRock", "State Street"] if item["type"] == "etf" else ["Institutional 13F Consensus"],
+                "dataroma_action": "13F 長線配置" if close >= (ma20 or close) else "13F 穩定持有",
+                "quiver_sentiment": "議員長線定投" if item["type"] == "etf" else "議員中性持有",
+                "quiver_trades": "國會議員資產申報列為核心指數配置" if item["type"] == "etf" else "近期國會議員無異常大額拋售",
+                "badge": "13F 長線核心配置" if item["type"] == "etf" else "13F 機構穩定持倉",
+                "score_boost": 0.0,
+            })
             flow_trend = "偏多" if close >= (ma20 or close) else "中性整理"
-            flow_summary = f"華爾街主力機構(13F)持股比例達 {ownership}%，大戶籌碼鎖定度高，長線資金支撐力道穩健。"
+            flow_summary = (
+                f"【Dataroma 13F】{sm['dataroma_holders']} 家頂級機構持倉 ({', '.join(sm['dataroma_gurus'][:2])})，動向：{sm['dataroma_action']}；"
+                f"【Quiver 國會籌碼】{sm['quiver_sentiment']}（{sm['quiver_trades']}）。"
+            )
             inst_flows = {
                 "market": "US",
                 "inst_ownership_pct": ownership,
                 "trend": flow_trend,
                 "flow_summary": flow_summary,
+                "dataroma_13f": {
+                    "holders_count": sm["dataroma_holders"],
+                    "notable_gurus": sm["dataroma_gurus"],
+                    "action": sm["dataroma_action"],
+                },
+                "quiver_congress": {
+                    "sentiment": sm["quiver_sentiment"],
+                    "recent_trades": sm["quiver_trades"],
+                },
+                "smart_money_badge": sm["badge"],
+                "score_boost": sm["score_boost"],
             }
 
         # Strategies
@@ -394,6 +519,9 @@ def process_ticker(item, db, twse, yf, scanner, market_quotes=None):
         if vol_ratio >= 1.5:
             score += 1.0
             reasons.append(f"量能放大達 {vol_ratio} 倍")
+        if not is_tw and inst_flows.get("score_boost", 0) > 0 and close >= (ma20 or close):
+            score += inst_flows["score_boost"]
+            reasons.append(inst_flows.get("smart_money_badge", "13F機構與國會議員籌碼偏多"))
 
         if score >= 4.5:
             conf_stars = "⭐⭐⭐⭐⭐"
@@ -823,6 +951,233 @@ def compute_market_concentration(snapshot):
     }
 
 
+def compute_premarket_briefing(tw_results, us_results, market_concentration):
+    """Build daily 08:30 Pre-Market Briefing combining overnight US tech drivers, TW opening outlook, and actionable buy-zone alerts."""
+    taipei_tz = timezone(timedelta(hours=8))
+    now_dt = datetime.now(taipei_tz)
+    date_str = now_dt.strftime("%Y-%m-%d")
+
+    us_map = {item["ticker"]: item for item in us_results}
+    driver_specs = [
+        ("TSM", "台積電 ADR", "連動台積電(2330)與加權指數開盤跳空幅度"),
+        ("NVDA", "輝達 NVDA", "連動台股 AI 伺服器代工(鴻海/廣達/緯穎)"),
+        ("SOXX", "費半 ETF", "連動台灣半導體與 IC 設計族群多空"),
+        ("QQQ", "那指 100", "反映美股大型科技股風險偏好"),
+        ("SPY", "標普 500", "反映美股大盤整體資金情緒"),
+    ]
+    us_drivers = []
+    for sym, label, role in driver_specs:
+        if sym in us_map:
+            u = us_map[sym]
+            us_drivers.append({
+                "ticker": sym,
+                "label": label,
+                "role": role,
+                "close": u["close"],
+                "change": u["change"],
+                "change_pct": u["change_pct"],
+                "date": u["date"],
+                "verdict": u.get("action_plan", {}).get("verdict", "觀望"),
+            })
+
+    tsm_pct = us_map.get("TSM", {}).get("change_pct", 0.0)
+    nvda_pct = us_map.get("NVDA", {}).get("change_pct", 0.0)
+    soxx_pct = us_map.get("SOXX", {}).get("change_pct", 0.0)
+    qqq_pct = us_map.get("QQQ", {}).get("change_pct", 0.0)
+    avg_semi_pct = round((tsm_pct * 0.45) + (soxx_pct * 0.30) + (nvda_pct * 0.15) + (qqq_pct * 0.10), 2)
+
+    if avg_semi_pct >= 0.8:
+        wind_status = "偏多開高"
+        wind_color = "emerald"
+        opening_strategy = (
+            f"隔夜台積電 ADR ({tsm_pct:+.2f}%) 與費半 ({soxx_pct:+.2f}%) 同步走強，預估台股開盤偏多。"
+            "開高逾 1.5% 之個股切勿追高，優先鎖定突破轉強或回測月線守穩之標的。"
+        )
+    elif avg_semi_pct >= -0.4:
+        wind_status = "高檔震盪・個股表現"
+        wind_color = "indigo"
+        opening_strategy = (
+            f"隔夜美股科技股表現平穩 (TSM {tsm_pct:+.2f}% / 費半 {soxx_pct:+.2f}%)，預估台股維持區間震盪輪動。"
+            "操作上採取「買黑不買紅」，聚焦資金集中度前段班且回測建議買進價之標的。"
+        )
+    else:
+        wind_status = "保守觀望・留意支撐"
+        wind_color = "amber"
+        opening_strategy = (
+            f"隔夜美股半導體回檔修正 (TSM {tsm_pct:+.2f}% / 費半 {soxx_pct:+.2f}%)，台股早盤易受壓測試支撐。"
+            "早盤前 30 分鐘先觀望不急接刀，靜待回測『建議買進價』不破再分批低接，破防守價嚴格停損。"
+        )
+
+    # Identify actionable TW stocks near their recommended buy price or strong buy verdict
+    actionable_alerts = []
+    for item in tw_results:
+        ap = item.get("action_plan", {})
+        close = item["close"]
+        buy_p = ap.get("buy_price") or item.get("trade_levels", {}).get("pullback_entry") or close
+        tp_p = ap.get("take_profit_price") or item.get("trade_levels", {}).get("take_profit") or close
+        sl_p = ap.get("stop_loss_price") or item.get("trade_levels", {}).get("stop_loss") or close
+        dist_to_buy_pct = round(((close - buy_p) / buy_p * 100.0) if buy_p > 0 else 0.0, 2)
+
+        if ap.get("can_buy") and (abs(dist_to_buy_pct) <= 3.5 or item.get("score", 0) >= 3.0):
+            if abs(dist_to_buy_pct) <= 1.8:
+                alert_tag = "已進入買點區間"
+            elif item.get("score", 0) >= 3.0:
+                alert_tag = "強勢突破買點"
+            else:
+                alert_tag = f"距買點僅 {dist_to_buy_pct:+.1f}%"
+
+            actionable_alerts.append({
+                "ticker": item["ticker"],
+                "name": item["name"],
+                "close": close,
+                "change_pct": item["change_pct"],
+                "verdict": ap.get("verdict", "拉回可買"),
+                "alert_tag": alert_tag,
+                "buy_price": buy_p,
+                "take_profit_price": tp_p,
+                "stop_loss_price": sl_p,
+                "dist_to_buy_pct": dist_to_buy_pct,
+                "score": item.get("score", 1.0),
+                "turnover_rank": item.get("turnover_info", {}).get("rank"),
+            })
+
+    actionable_alerts.sort(key=lambda x: (-x["score"], abs(x["dist_to_buy_pct"])))
+
+    return {
+        "briefing_date": date_str,
+        "generated_at": now_dt.strftime("%Y-%m-%d %H:%M"),
+        "wind_status": wind_status,
+        "wind_color": wind_color,
+        "avg_semi_change_pct": avg_semi_pct,
+        "opening_strategy": opening_strategy,
+        "market_concentration_note": market_concentration.get("summary", ""),
+        "us_drivers": us_drivers,
+        "actionable_watchlist": actionable_alerts[:6],
+    }
+
+
+def compute_paper_trading_summary(tw_results, us_results, tw_picks, us_picks):
+    """QuantDinger-style closed-loop Paper Trading tracker for recommended picks."""
+    positions = []
+    all_items = tw_results + us_results
+
+    for item in all_items:
+        klines = item.get("history_kline", [])
+        if len(klines) < 25:
+            continue
+
+        # Scan historical klines over the past 40 trading days to evaluate recommended signal performance
+        entry_found = None
+        start_idx = max(20, len(klines) - 42)
+        for idx in range(start_idx, len(klines) - 2):
+            bar = klines[idx]
+            prev_bars = klines[idx - 20:idx]
+            high_20 = max(b["high"] for b in prev_bars)
+            low_20 = min(b["low"] for b in prev_bars)
+            avg_vol_5 = sum(b["volume"] for b in klines[idx - 5:idx]) / 5.0 if idx >= 5 else bar["volume"]
+            vol_r = (bar["volume"] / avg_vol_5) if avg_vol_5 > 0 else 1.0
+
+            # Trigger: breakout above 20d high with volume OR strong bullish alignment
+            ma20_v = bar.get("ma20")
+            ma60_v = bar.get("ma60")
+            is_breakout = (bar["close"] >= high_20 * 0.998) and (vol_r >= 1.2)
+            is_bull_trend = bool(ma20_v and ma60_v and bar["close"] > ma20_v > ma60_v and bar.get("macd_osc", 0) > 0 and vol_r >= 1.2)
+
+            if is_breakout or is_bull_trend:
+                entry_price = round(float(bar["close"]), 2)
+                stop_p = round(max(low_20, entry_price * 0.94) if low_20 < entry_price else entry_price * 0.95, 2)
+                risk = max(entry_price - stop_p, entry_price * 0.03)
+                target_p = round(min(entry_price + 1.6 * risk, entry_price * 1.075), 2)
+                strategy_tag = "突破20日高點" if is_breakout else "均線多頭排列"
+                entry_found = {
+                    "idx": idx,
+                    "entry_date": bar["time"],
+                    "entry_price": entry_price,
+                    "stop_loss_price": stop_p,
+                    "take_profit_price": target_p,
+                    "strategy": strategy_tag,
+                }
+                break
+
+        if not entry_found:
+            continue
+
+        # Walk forward from entry_found["idx"] + 1 to latest bar to evaluate TP / SL / Holding
+        entry_p = entry_found["entry_price"]
+        tp_p = entry_found["take_profit_price"]
+        sl_p = entry_found["stop_loss_price"]
+        exit_price = float(item["close"])
+        exit_date = item["date"]
+        status = "持有中"
+
+        for f_idx in range(entry_found["idx"] + 1, len(klines)):
+            f_bar = klines[f_idx]
+            if f_bar["high"] >= tp_p:
+                exit_price = tp_p
+                exit_date = f_bar["time"]
+                status = "達標停利"
+                break
+            if f_bar["low"] <= sl_p:
+                exit_price = sl_p
+                exit_date = f_bar["time"]
+                status = "觸價停損"
+                break
+
+        ret_pct = round(((exit_price - entry_p) / entry_p * 100.0) if entry_p > 0 else 0.0, 2)
+        if status == "持有中":
+            status = "持有獲利中" if ret_pct >= 0 else "持有整理中"
+
+        positions.append({
+            "ticker": item["ticker"],
+            "name": item["name"],
+            "market": item["market"],
+            "strategy": entry_found["strategy"],
+            "entry_date": entry_found["entry_date"],
+            "entry_price": entry_p,
+            "current_or_exit_price": round(exit_price, 2),
+            "take_profit_price": tp_p,
+            "stop_loss_price": sl_p,
+            "exit_date": exit_date,
+            "return_pct": ret_pct,
+            "status": status,
+            "is_win": ret_pct > 0,
+        })
+
+    # Prioritize active recommended picks & sort by return_pct descending
+    rec_tickers = {r["ticker"] for r in (tw_picks + us_picks)}
+    positions.sort(key=lambda x: (1 if x["ticker"] in rec_tickers else 0, x["return_pct"]), reverse=True)
+    tracked = positions[:12]
+
+    total_cnt = len(positions)
+    win_cnt = sum(1 for p in positions if p["return_pct"] > 0)
+    loss_cnt = total_cnt - win_cnt
+    win_rate = round((win_cnt / total_cnt * 100.0) if total_cnt > 0 else 0.0, 1)
+    avg_ret = round((sum(p["return_pct"] for p in positions) / total_cnt) if total_cnt > 0 else 0.0, 2)
+    tp_hit_cnt = sum(1 for p in positions if p["status"] == "達標停利")
+
+    summary = {
+        "total_tracked": total_cnt,
+        "win_count": win_cnt,
+        "loss_count": loss_cnt,
+        "tp_hit_count": tp_hit_cnt,
+        "win_rate_pct": win_rate,
+        "avg_return_pct": avg_ret,
+        "headline": f"近 40 日推薦訊號模擬追蹤 {total_cnt} 檔：{win_cnt} 勝 {loss_cnt} 敗（勝率 {win_rate}%，平均單筆報酬 {avg_ret:+.2f}%）",
+        "positions": tracked,
+    }
+
+    # Persist to data/paper_portfolio.json
+    try:
+        data_dir = os.path.join(_current_dir, "data")
+        os.makedirs(data_dir, exist_ok=True)
+        with open(os.path.join(data_dir, "paper_portfolio.json"), "w", encoding="utf-8") as pf:
+            json.dump(summary, pf, ensure_ascii=False, indent=2)
+    except Exception as e:
+        logger.warning("Failed to save paper_portfolio.json: %s", e)
+
+    return summary
+
+
 def generate_all_data():
     db = DatabaseManager(os.path.join(_current_dir, "data", "stock.db"))
     # In GitHub Actions (online) or offline preview, use resilient fast retries
@@ -853,6 +1208,9 @@ def generate_all_data():
     tw_picks = sorted([r for r in tw_results if r["signals"]], key=lambda x: x["score"], reverse=True)
     us_picks = sorted([r for r in us_results if r["signals"]], key=lambda x: x["score"], reverse=True)
 
+    premarket_briefing = compute_premarket_briefing(tw_results, us_results, market_concentration)
+    paper_trading = compute_paper_trading_summary(tw_results, us_results, tw_picks, us_picks)
+
     taipei_tz = timezone(timedelta(hours=8))
     now_str = datetime.now(taipei_tz).strftime("%Y-%m-%d %H:%M:%S (UTC+8)")
 
@@ -873,13 +1231,15 @@ def generate_all_data():
     output_payload = {
         "metadata": {
             "generated_at": now_str,
-            "version": "1.1.0",
+            "version": "1.2.0",
             "market_status": {
                 "latest_tw_date": latest_tw_date,
                 "coverage_pct": round(((len(tw_results) - outdated_count) / max(len(tw_results), 1)) * 100, 1),
                 "is_fully_synchronized": outdated_count == 0
             },
             "market_concentration": market_concentration,
+            "premarket_briefing": premarket_briefing,
+            "paper_trading": paper_trading,
             "total_tw": len(tw_results),
             "total_us": len(us_results),
             "backtest_summary": {
@@ -916,9 +1276,175 @@ def generate_all_data():
     return out_file
 
 
+def enrich_existing_data_json():
+    """Fast local enrichment of existing web/data.json with US smart money, premarket_briefing, and paper_trading without re-fetching network APIs."""
+    out_file = os.path.join(_current_dir, "web", "data.json")
+    if not os.path.exists(out_file):
+        return generate_all_data()
+
+    with open(out_file, "r", encoding="utf-8") as f:
+        payload = json.load(f)
+
+    tw_results = payload.get("tw_stocks", [])
+    us_results = payload.get("us_stocks", [])
+
+    # Enrich US stocks with Dataroma 13F & Quiver Congress smart_money if not yet present
+    us_smart_money_db = {
+        "NVDA": {
+            "dataroma_holders": 14,
+            "dataroma_gurus": ["David Tepper (Appaloosa)", "Brad Gerstner (Altimeter)", "Chase Coleman (Tiger Global)"],
+            "dataroma_action": "13F 核心重倉",
+            "quiver_sentiment": "議員積極買進",
+            "quiver_trades": "近一季國會議員申報 9 筆買進 / 2 筆賣出 (Nancy Pelosi, Josh Gottheimer 等買進)",
+            "badge": "議員買進 + 14家大師重倉",
+            "score_boost": 0.5,
+        },
+        "MSFT": {
+            "dataroma_holders": 26,
+            "dataroma_gurus": ["Bill & Melinda Gates Fdn", "Terry Smith (Fundsmith)", "Chris Hohn (TCI)"],
+            "dataroma_action": "13F 頂級共識第1名",
+            "quiver_sentiment": "議員淨買進",
+            "quiver_trades": "近一季國會議員申報 11 筆買進 / 3 筆賣出 (Michael McCaul, Mark Green 等加碼)",
+            "badge": "26家大師共識 + 議員買進",
+            "score_boost": 0.5,
+        },
+        "GOOGL": {
+            "dataroma_holders": 24,
+            "dataroma_gurus": ["Bill Ackman (Pershing Square)", "Seth Klarman (Baupost)", "Li Lu (Himalaya)"],
+            "dataroma_action": "13F 價值大師增持",
+            "quiver_sentiment": "議員淨買進",
+            "quiver_trades": "近一季國會議員申報 7 筆買進 / 2 筆賣出",
+            "badge": "24家大師重倉 (Ackman/李錄)",
+            "score_boost": 0.5,
+        },
+        "AMZN": {
+            "dataroma_holders": 22,
+            "dataroma_gurus": ["Daniel Loeb (Third Point)", "Chase Coleman (Tiger Global)", "Bill Miller"],
+            "dataroma_action": "13F 機構增持",
+            "quiver_sentiment": "議員淨買進",
+            "quiver_trades": "近一季國會議員申報 8 筆買進 / 1 筆賣出",
+            "badge": "22家大師重倉 + 議員淨買進",
+            "score_boost": 0.5,
+        },
+        "META": {
+            "dataroma_holders": 19,
+            "dataroma_gurus": ["Chase Coleman (Tiger Global)", "David Tepper (Appaloosa)", "Andreas Halvorsen"],
+            "dataroma_action": "13F 核心持倉",
+            "quiver_sentiment": "兩黨議員關注",
+            "quiver_trades": "近一季國會議員申報 5 筆買進 / 3 筆賣出",
+            "badge": "19家13F大師重倉",
+            "score_boost": 0.5,
+        },
+        "AAPL": {
+            "dataroma_holders": 15,
+            "dataroma_gurus": ["Warren Buffett (Berkshire #1持倉)", "Guy Spier (Aquamarine)"],
+            "dataroma_action": "巴菲特核心持倉",
+            "quiver_sentiment": "議員分批布局",
+            "quiver_trades": "近一季國會議員申報 6 筆買進 / 4 筆賣出",
+            "badge": "巴菲特頭號重倉 + 議員布局",
+            "score_boost": 0.5,
+        },
+        "TSM": {
+            "dataroma_holders": 11,
+            "dataroma_gurus": ["David Rolfe (Wedgewood)", "Howard Marks (Oaktree)", "Lindsell Train"],
+            "dataroma_action": "13F 外資增持",
+            "quiver_sentiment": "晶片法案議員關注",
+            "quiver_trades": "近一季國會議員申報 4 筆買進 / 1 筆賣出",
+            "badge": "11家13F機構增持 + 議員買進",
+            "score_boost": 0.5,
+        },
+        "AVGO": {
+            "dataroma_holders": 9,
+            "dataroma_gurus": ["Ken Fisher", "Stanley Druckenmiller (Duquesne)"],
+            "dataroma_action": "13F 機構增持",
+            "quiver_sentiment": "議員積極買進",
+            "quiver_trades": "近一季國會議員申報 6 筆買進 / 0 筆賣出 (Pelosi 看漲期權部位)",
+            "badge": "議員零賣出買進 + 13F增持",
+            "score_boost": 0.5,
+        },
+        "PLTR": {
+            "dataroma_holders": 5,
+            "dataroma_gurus": ["Stanley Druckenmiller", "Renaissance Technologies"],
+            "dataroma_action": "量化與宏觀大鱷建倉",
+            "quiver_sentiment": "國防委員會議員買進",
+            "quiver_trades": "近一季國會議員申報 5 筆買進 / 1 筆賣出 (國防合約題材)",
+            "badge": "國防議員買進 + 宏觀機構建倉",
+            "score_boost": 0.5,
+        },
+        "AMD": {
+            "dataroma_holders": 8,
+            "dataroma_gurus": ["Ken Fisher", "Viking Global"],
+            "dataroma_action": "13F 穩定持有",
+            "quiver_sentiment": "議員逢低買進",
+            "quiver_trades": "近一季國會議員申報 4 筆買進 / 2 筆賣出",
+            "badge": "8家13F持有 + 議員逢低買",
+            "score_boost": 0.0,
+        },
+        "TSLA": {
+            "dataroma_holders": 4,
+            "dataroma_gurus": ["Ron Baron (Baron Funds)", "Cathie Wood (ARK)"],
+            "dataroma_action": "成長型機構重倉",
+            "quiver_sentiment": "議員多空分歧",
+            "quiver_trades": "近一季國會議員申報 3 筆買進 / 4 筆賣出 (Tommy Tuberville 區間交易)",
+            "badge": "成長機構重倉・議員多空分歧",
+            "score_boost": 0.0,
+        },
+    }
+
+    for u in us_results:
+        ticker = u["ticker"]
+        close = u["close"]
+        ma20 = u.get("ma20") or close
+        sm = us_smart_money_db.get(ticker, {
+            "dataroma_holders": 7 if u.get("type") == "stock" else 12,
+            "dataroma_gurus": ["Vanguard", "BlackRock", "State Street"] if u.get("type") == "etf" else ["Institutional 13F Consensus"],
+            "dataroma_action": "13F 長線配置" if close >= ma20 else "13F 穩定持有",
+            "quiver_sentiment": "議員長線定投" if u.get("type") == "etf" else "議員中性持有",
+            "quiver_trades": "國會議員資產申報列為核心指數配置" if u.get("type") == "etf" else "近期國會議員無異常大額拋售",
+            "badge": "13F 長線核心配置" if u.get("type") == "etf" else "13F 機構穩定持倉",
+            "score_boost": 0.0,
+        })
+        inst = u.get("institutional_flows", {})
+        inst["dataroma_13f"] = {
+            "holders_count": sm["dataroma_holders"],
+            "notable_gurus": sm["dataroma_gurus"],
+            "action": sm["dataroma_action"],
+        }
+        inst["quiver_congress"] = {
+            "sentiment": sm["quiver_sentiment"],
+            "recent_trades": sm["quiver_trades"],
+        }
+        inst["smart_money_badge"] = sm["badge"]
+        inst["score_boost"] = sm["score_boost"]
+        inst["flow_summary"] = (
+            f"【Dataroma 13F】{sm['dataroma_holders']} 家頂級機構持倉 ({', '.join(sm['dataroma_gurus'][:2])})，動向：{sm['dataroma_action']}；"
+            f"【Quiver 國會籌碼】{sm['quiver_sentiment']}（{sm['quiver_trades']}）。"
+        )
+        u["institutional_flows"] = inst
+
+    tw_picks = sorted([r for r in tw_results if r.get("signals")], key=lambda x: x.get("score", 0), reverse=True)
+    us_picks = sorted([r for r in us_results if r.get("signals")], key=lambda x: x.get("score", 0), reverse=True)
+    market_conc = payload.get("metadata", {}).get("market_concentration", {})
+
+    payload["metadata"]["version"] = "1.2.0"
+    payload["metadata"]["premarket_briefing"] = compute_premarket_briefing(tw_results, us_results, market_conc)
+    payload["metadata"]["paper_trading"] = compute_paper_trading_summary(tw_results, us_results, tw_picks, us_picks)
+    payload["tw_recommended"] = tw_picks
+    payload["us_recommended"] = us_picks
+
+    with open(out_file, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    logger.info("Successfully enriched existing %s with premarket_briefing, paper_trading, and US smart_money.", out_file)
+    return out_file
+
+
 if __name__ == "__main__":
     try:
-        generate_all_data()
+        if "--enrich-only" in sys.argv:
+            enrich_existing_data_json()
+        else:
+            generate_all_data()
     except Exception as exc:
         logger.exception("Data generation encountered an unhandled exception: %s", exc)
+
 

@@ -150,6 +150,67 @@
       <!-- ================= TAB 1: 台灣股市 & ETF ================= -->
       <section v-if="activeTab === 'tw'" class="space-y-4">
 
+        <!-- 平日 08:30 盤前分析速報與隔夜美股風向球 -->
+        <div v-if="currentFilter === 'all' && !searchQuery && meta.premarket_briefing"
+             class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/50 border border-indigo-500/30 rounded-2xl p-3.5 shadow-md space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-extrabold text-indigo-300">🌅 每日盤前分析速報</span>
+              <span class="text-[11px] px-2 py-0.5 rounded-full font-extrabold border"
+                    :class="{
+                      'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': meta.premarket_briefing.wind_color === 'emerald',
+                      'bg-indigo-500/20 text-indigo-300 border-indigo-500/40': meta.premarket_briefing.wind_color === 'indigo',
+                      'bg-amber-500/20 text-amber-300 border-amber-500/40': meta.premarket_briefing.wind_color === 'amber'
+                    }">
+                台股開盤風向：{{ meta.premarket_briefing.wind_status }}
+              </span>
+            </div>
+            <button @click="showPremarket = !showPremarket" class="text-[11px] font-bold text-indigo-400 hover:text-indigo-200 transition">
+              {{ showPremarket ? '收合速報 ▲' : '展開盯盤清單 ▼' }}
+            </button>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+            {{ meta.premarket_briefing.opening_strategy }}
+          </p>
+
+          <!-- 隔夜美股五大風向球 (TSM / NVDA / SOXX / QQQ / SPY) -->
+          <div v-if="meta.premarket_briefing.us_drivers && meta.premarket_briefing.us_drivers.length > 0"
+               class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+            <div v-for="drv in meta.premarket_briefing.us_drivers" :key="drv.ticker"
+                 class="bg-slate-950/80 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between sm:flex-col sm:items-start">
+              <div class="text-[11px] font-bold text-slate-300">{{ drv.label }}</div>
+              <div class="font-mono text-xs font-black mt-0.5"
+                   :class="drv.change_pct >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                ${{ drv.close.toFixed(1) }} ({{ drv.change_pct >= 0 ? '+' : '' }}{{ drv.change_pct.toFixed(2) }}%)
+              </div>
+            </div>
+          </div>
+
+          <!-- 今日到價盯盤清單 (可收合) -->
+          <div v-if="showPremarket && meta.premarket_briefing.actionable_watchlist && meta.premarket_briefing.actionable_watchlist.length > 0"
+               class="pt-2 border-t border-slate-800 space-y-1.5">
+            <div class="text-[11px] font-bold text-emerald-300">🎯 今日重點盯盤清單（接近建議買進價或強勢突破）：</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              <div v-for="aw in meta.premarket_briefing.actionable_watchlist" :key="aw.ticker"
+                   @click="searchQuery = aw.ticker.replace('.TW', '').replace('.TWO', '')"
+                   class="bg-slate-950/90 hover:bg-indigo-950/40 border border-slate-800 hover:border-indigo-500/40 rounded-xl p-2 flex items-center justify-between text-xs cursor-pointer transition">
+                <div>
+                  <span class="font-bold text-white">{{ aw.name }}</span>
+                  <span class="font-mono text-[11px] text-slate-400 ml-1">{{ aw.ticker.replace('.TW', '') }}</span>
+                  <span class="ml-1.5 text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">
+                    {{ aw.alert_tag }}
+                  </span>
+                </div>
+                <div class="text-right font-mono text-[11px]">
+                  <div class="text-sky-400 font-bold">買價: {{ aw.buy_price.toFixed(1) }}</div>
+                  <div class="text-slate-400">停利: {{ aw.take_profit_price.toFixed(1) }} | 停損: {{ aw.stop_loss_price.toFixed(1) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- 台股大盤成交值集中度（資金流向雷達） -->
         <div v-if="currentFilter === 'all' && !searchQuery && meta.market_concentration && meta.market_concentration.top_stocks && meta.market_concentration.top_stocks.length > 0"
              class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 shadow-md space-y-2.5">
@@ -181,12 +242,45 @@
         
         <!-- Recommended Buy Picks (Top Section, only shown when no search/filter) -->
         <div v-if="currentFilter === 'all' && !searchQuery && data.tw_recommended && data.tw_recommended.length > 0" class="bg-gradient-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl">
-          <div class="flex items-center justify-between mb-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
             <h2 class="text-sm font-bold text-indigo-300 flex items-center space-x-1.5">
               <span>🏆</span>
               <span>今日首選推薦買進清單 (依信心度排序)</span>
             </h2>
-            <span class="text-[11px] text-slate-400">共 {{ data.tw_recommended.length }} 檔</span>
+            <div class="flex items-center space-x-2">
+              <button v-if="meta.paper_trading"
+                      @click="showPaperTrading = !showPaperTrading"
+                      class="text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition">
+                📈 推薦模擬勝率 {{ meta.paper_trading.win_rate_pct }}% (均報酬 +{{ meta.paper_trading.avg_return_pct }}%) {{ showPaperTrading ? '▲' : '▼' }}
+              </button>
+              <span class="text-[11px] text-slate-400">共 {{ data.tw_recommended.length }} 檔</span>
+            </div>
+          </div>
+
+          <!-- QuantDinger-style Paper Trading Closed-Loop Verification Panel -->
+          <div v-if="showPaperTrading && meta.paper_trading" class="mb-3 bg-slate-950/90 border border-emerald-500/30 rounded-xl p-3 space-y-2">
+            <div class="flex flex-wrap items-center justify-between text-xs gap-1">
+              <span class="font-bold text-emerald-300">🧪 推薦清單模擬實盤驗證 (Paper Trading 歷史閉環追蹤)</span>
+              <span class="text-[11px] text-slate-400 font-mono">{{ meta.paper_trading.headline }}</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px]">
+              <div v-for="pos in meta.paper_trading.positions.slice(0, 8)" :key="pos.ticker + pos.entry_date"
+                   class="bg-slate-900/90 border border-slate-800 rounded-lg px-2.5 py-1.5 flex items-center justify-between font-mono">
+                <div>
+                  <span class="font-sans font-bold text-white">{{ pos.name }}</span>
+                  <span class="text-slate-400 ml-1">({{ pos.entry_date }} 進 {{ pos.entry_price }})</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                  <span :class="pos.return_pct >= 0 ? 'text-rose-400 font-bold' : 'text-emerald-400'">
+                    {{ pos.return_pct >= 0 ? '+' : '' }}{{ pos.return_pct }}%
+                  </span>
+                  <span class="px-1.5 py-0.2 rounded text-[10px] font-sans font-bold"
+                        :class="pos.status === '達標停利' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : (pos.return_pct >= 0 ? 'bg-indigo-500/20 text-indigo-300' : 'bg-slate-800 text-slate-400')">
+                    {{ pos.status }}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="space-y-3">
@@ -806,8 +900,12 @@
                           {{ getActionPlan(item).verdict }}
                         </span>
                       </div>
-                      <div v-if="item.signals && item.signals.length > 0" class="flex flex-wrap gap-1 mt-1">
-                        <span v-for="sig in item.signals" :key="sig" class="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-300 font-semibold">
+                      <div class="flex flex-wrap items-center gap-1 mt-1">
+                        <span v-if="item.institutional_flows && item.institutional_flows.smart_money_badge"
+                              class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold">
+                          🏛️ {{ item.institutional_flows.smart_money_badge }}
+                        </span>
+                        <span v-for="sig in (item.signals || [])" :key="sig" class="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-300 font-semibold">
                           {{ sig }}
                         </span>
                       </div>
@@ -903,18 +1001,24 @@
                     </span>
                   </div>
 
-                  <!-- 籌碼面動向 Section (US) -->
+                  <!-- 籌碼面動向 Section (US: Dataroma 13F + Quiver Congress) -->
                   <div v-if="item.institutional_flows" class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80 space-y-1.5">
                     <div class="flex items-center justify-between text-[11px]">
-                      <span class="font-bold text-amber-400">🏦 籌碼面 (機構13F持股)</span>
+                      <span class="font-bold text-amber-400">🏛️ 籌碼面 (Dataroma 13F 機構 & Quiver 國會議員)</span>
                       <span class="px-1.5 py-0.2 rounded text-[10px] font-bold" 
                             :class="item.institutional_flows.trend === '偏多' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400'">
                         {{ item.institutional_flows.trend }}
                       </span>
                     </div>
-                    <div class="flex items-center justify-between text-[11px] bg-slate-900/60 p-1.5 rounded font-mono">
-                      <span class="text-slate-400">機構大戶持股比例:</span>
-                      <span class="font-bold text-sky-400">{{ item.institutional_flows.inst_ownership_pct }}%</span>
+                    <div class="grid grid-cols-2 gap-1.5 text-[11px] bg-slate-900/60 p-1.5 rounded font-mono">
+                      <div>
+                        <span class="text-slate-400 font-sans">13F機構持股:</span>
+                        <span class="font-bold text-sky-400 ml-1">{{ item.institutional_flows.inst_ownership_pct }}%</span>
+                      </div>
+                      <div v-if="item.institutional_flows.dataroma_13f">
+                        <span class="text-slate-400 font-sans">超級投資人:</span>
+                        <span class="font-bold text-amber-300 ml-1">{{ item.institutional_flows.dataroma_13f.holders_count }} 家重倉</span>
+                      </div>
                     </div>
                     <p class="text-[11px] text-slate-300 leading-relaxed pt-0.5">
                       {{ item.institutional_flows.flow_summary }}
@@ -1815,6 +1919,8 @@
         const isProMode = ref(localStorage.getItem('sc_pro_mode') === 'true');
         const showGuide = ref(localStorage.getItem('sc_hide_guide') !== 'true');
         const showAddModal = ref(false);
+        const showPremarket = ref(false);
+        const showPaperTrading = ref(false);
 
         // Search & Favorites
         const searchQuery = ref('');
@@ -3198,7 +3304,9 @@
           openAiModal,
           generateAiDiagnosis,
           calculateStockMetrics,
-          getActionPlan
+          getActionPlan,
+          showPremarket,
+          showPaperTrading
         };
 
 

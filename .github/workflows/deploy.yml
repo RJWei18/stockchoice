@@ -1,8 +1,9 @@
 name: Deploy StockChoice Web to GitHub Pages
 
 on:
-  # Daily scheduled run (Mon-Fri at 15:30 and 16:15 Taipei time / 07:30 & 08:15 UTC)
+  # Daily scheduled run: Mon-Fri 08:25 (Pre-market US sync), 15:30 & 16:15 (Post-market TW sync) Taipei time
   schedule:
+    - cron: '25 0 * * 1-5'
     - cron: '30 7 * * 1-5'
     - cron: '15 8 * * 1-5'
   # Allow manual trigger from GitHub Actions tab
