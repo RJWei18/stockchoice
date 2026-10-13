@@ -3282,8 +3282,17 @@
           aiModal.value.show = true;
         };
 
-        onMounted(() => {
-          loadData();
+        onMounted(async () => {
+          await loadData();
+          // 若網址帶有 ?q=聯亞 或 ?q=3081，自動填入搜尋並觸發顯示
+          try {
+            const params = new URLSearchParams(window.location.search);
+            const q = params.get('q');
+            if (q) {
+              searchQuery.value = q.trim();
+              showToast(`已自動鎖定查詢「${q.trim()}」AI 策略`);
+            }
+          } catch (e) {}
         });
 
         // PIN 碼跨裝置備份與同步方法
