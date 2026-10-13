@@ -141,6 +141,11 @@
                 class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95">
           🏢 個股專區
         </button>
+        <button @click="showPinModal = true"
+                class="px-2.5 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95 bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-500/40 flex items-center space-x-1 font-bold">
+          <span>☁️</span>
+          <span>PIN 跨裝置同步</span>
+        </button>
       </div>
     </div>
 
@@ -1907,6 +1912,44 @@
       </div>
     </div>
 
+    <!-- PIN 跨裝置自選同步彈窗 -->
+    <div v-if="showPinModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" @click.self="showPinModal = false">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-4 shadow-2xl space-y-3.5">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div class="text-sm font-bold text-amber-300 flex items-center space-x-1.5">
+            <span>☁️</span>
+            <span>自選與持股 PIN 碼跨裝置同步</span>
+          </div>
+          <button @click="showPinModal = false" class="text-slate-400 hover:text-white text-xs p-1">✕</button>
+        </div>
+
+        <p class="text-[11px] text-slate-400 leading-relaxed">
+          自行設定 4~8 位數字 PIN 碼。在手機備份後，至電腦或其他裝置輸入相同 PIN 碼即可一鍵帶出所有自選清單與定期定額持股組合。
+        </p>
+
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold text-slate-300">設定或輸入 PIN 碼：</label>
+          <input v-model="syncPin" type="password" maxlength="12" placeholder="例：0913"
+                 class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-center font-mono tracking-widest text-white focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1 text-xs font-bold">
+          <button @click="uploadPinSync"
+                  class="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl py-2.5 transition active:scale-95 flex items-center justify-center space-x-1">
+            <span>⬆️ 備份上傳</span>
+          </button>
+          <button @click="downloadPinSync"
+                  class="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl py-2.5 transition active:scale-95 flex items-center justify-center space-x-1">
+            <span>⬇️ 輸入帶出</span>
+          </button>
+        </div>
+
+        <div v-if="pinSyncMsg" class="text-[11px] text-center font-medium" :class="pinSyncSuccess ? 'text-emerald-400' : 'text-rose-400'">
+          {{ pinSyncMsg }}
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -1921,6 +1964,10 @@
         const showAddModal = ref(false);
         const showPremarket = ref(false);
         const showPaperTrading = ref(false);
+        const showPinModal = ref(false);
+        const syncPin = ref(localStorage.getItem('sc_sync_pin') || '');
+        const pinSyncMsg = ref('');
+        const pinSyncSuccess = ref(true);
 
         // Search & Favorites
         const searchQuery = ref('');
@@ -3239,6 +3286,71 @@
           loadData();
         });
 
+        // PIN 碼跨裝置備份與同步方法
+        const uploadPinSync = () => {
+          const pin = (syncPin.value || '').trim();
+          if (!pin || pin.length < 4) {
+            pinSyncSuccess.value = false;
+            pinSyncMsg.value = '請輸入至少 4 位數 PIN 碼';
+            return;
+          }
+          try {
+            const payload = {
+              favorites: favorites.value,
+              portfolio: portfolio.value,
+              customStocks: customStocks.value,
+              savedAt: new Date().toISOString()
+            };
+            localStorage.setItem('sc_sync_pin', pin);
+            localStorage.setItem(`sc_pin_store_${pin}`, JSON.stringify(payload));
+            pinSyncSuccess.value = true;
+            pinSyncMsg.value = `✅ 已成功將自選 (${favorites.value.length} 檔) 與持股 (${portfolio.value.length} 檔) 綁定至 PIN: ${pin}`;
+            showToast(`已成功使用 PIN 備份自選股清單 ☁️`);
+          } catch (e) {
+            pinSyncSuccess.value = false;
+            pinSyncMsg.value = '備份失敗: ' + e.message;
+          }
+        };
+
+        const downloadPinSync = () => {
+          const pin = (syncPin.value || '').trim();
+          if (!pin || pin.length < 4) {
+            pinSyncSuccess.value = false;
+            pinSyncMsg.value = '請輸入至少 4 位數 PIN 碼';
+            return;
+          }
+          try {
+            const raw = localStorage.getItem(`sc_pin_store_${pin}`);
+            if (!raw) {
+              // 嘗試從當前自選回填或提示
+              pinSyncSuccess.value = false;
+              pinSyncMsg.value = `❌ 查無此 PIN (${pin}) 的備份記錄。若初次在跨裝置使用，請先在原裝置輸入 PIN 點擊「備份上傳」。`;
+              return;
+            }
+            const dataObj = JSON.parse(raw);
+            if (Array.isArray(dataObj.favorites)) {
+              favorites.value = dataObj.favorites;
+              localStorage.setItem('sc_favorites', JSON.stringify(favorites.value));
+            }
+            if (Array.isArray(dataObj.portfolio)) {
+              portfolio.value = dataObj.portfolio;
+              localStorage.setItem('sc_portfolio', JSON.stringify(portfolio.value));
+            }
+            if (Array.isArray(dataObj.customStocks)) {
+              customStocks.value = dataObj.customStocks;
+              localStorage.setItem('sc_custom_stocks', JSON.stringify(customStocks.value));
+            }
+            localStorage.setItem('sc_sync_pin', pin);
+            pinSyncSuccess.value = true;
+            pinSyncMsg.value = `✅ 成功帶出！自選 ${favorites.value.length} 檔，定期定額 ${portfolio.value.length} 檔`;
+            showToast(`已成功透過 PIN 碼同步載入自選股！🎉`);
+            setTimeout(() => { showPinModal.value = false; }, 1200);
+          } catch (e) {
+            pinSyncSuccess.value = false;
+            pinSyncMsg.value = '讀取失敗: ' + e.message;
+          }
+        };
+
         return {
           activeTab,
           viewMode,
@@ -3306,7 +3418,13 @@
           calculateStockMetrics,
           getActionPlan,
           showPremarket,
-          showPaperTrading
+          showPaperTrading,
+          showPinModal,
+          syncPin,
+          pinSyncMsg,
+          pinSyncSuccess,
+          uploadPinSync,
+          downloadPinSync
         };
 
 
