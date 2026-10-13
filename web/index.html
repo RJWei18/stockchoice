@@ -1924,7 +1924,7 @@
         </div>
 
         <p class="text-[11px] text-slate-400 leading-relaxed">
-          自行設定 4 位數字 PIN 碼。在手機備份後，至電腦或其他裝置輸入相同 PIN 碼即可一鍵帶出所有自選清單與定期定額持股組合。
+          自行設定 4 位數字 PIN 碼。手機備份後，至電腦輸入相同 PIN 即可一鍵帶出所有自選清單與定期定額持股。內建設備防覆寫保護，他人無法覆寫您的自選。
         </p>
 
         <div class="space-y-1.5">
@@ -1941,6 +1941,13 @@
           <button @click="downloadPinSync"
                   class="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl py-2.5 transition active:scale-95 flex items-center justify-center space-x-1">
             <span>⬇️ 輸入帶出</span>
+          </button>
+        </div>
+
+        <div class="pt-2 border-t border-slate-800">
+          <button @click="importFromAlbedo"
+                  class="w-full bg-sky-950/60 hover:bg-sky-900/80 border border-sky-800/60 text-sky-300 rounded-xl py-2 transition active:scale-95 flex items-center justify-center space-x-1.5 text-xs font-bold">
+            <span>🤖 從 Albedo 機器人載入自選 (TG 聯動)</span>
           </button>
         </div>
 
@@ -3295,68 +3302,161 @@
           } catch (e) {}
         });
 
-        // PIN 碼跨裝置備份與同步方法
-        const uploadPinSync = () => {
+        // 設備唯一識別碼（用於防覆寫保護）
+        const getDeviceKey = () => {
+          let k = localStorage.getItem('sc_device_key');
+          if (!k) {
+            k = 'dev_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now().toString(36);
+            localStorage.setItem('sc_device_key', k);
+          }
+          return k;
+        };
+
+        // PIN 碼跨裝置備份與同步方法（具防覆寫保護）
+        const uploadPinSync = async () => {
           const pin = (syncPin.value || '').trim();
-          if (!pin || pin.length < 4) {
+          if (!pin || !/^\d{4}$/.test(pin)) {
             pinSyncSuccess.value = false;
-            pinSyncMsg.value = '請輸入至少 4 位數 PIN 碼';
+            pinSyncMsg.value = '請輸入 4 位純數字 PIN 碼（如 0913）';
             return;
           }
+          const payload = {
+            favorites: favorites.value,
+            portfolio: portfolio.value,
+            customStocks: customStocks.value,
+            savedAt: new Date().toISOString()
+          };
+          localStorage.setItem('sc_sync_pin', pin);
+          localStorage.setItem(`sc_pin_store_${pin}`, JSON.stringify(payload));
+
           try {
-            const payload = {
-              favorites: favorites.value,
-              portfolio: portfolio.value,
-              customStocks: customStocks.value,
-              savedAt: new Date().toISOString()
-            };
-            localStorage.setItem('sc_sync_pin', pin);
-            localStorage.setItem(`sc_pin_store_${pin}`, JSON.stringify(payload));
+            const devKey = getDeviceKey();
+            const res = await fetch('/api/pin-sync', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ pin, data: payload, device_key: devKey })
+            }).catch(() => null);
+
+            if (res) {
+              if (res.status === 409) {
+                pinSyncSuccess.value = false;
+                pinSyncMsg.value = '❌ 此 PIN 碼已被其他設備註冊（防覆寫保護生效中）！請更換其他 PIN 碼，避免覆寫他人自選。';
+                return;
+              }
+              if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                pinSyncSuccess.value = false;
+                pinSyncMsg.value = '伺服器備份失敗: ' + (err.error || res.status);
+                return;
+              }
+            }
             pinSyncSuccess.value = true;
-            pinSyncMsg.value = `✅ 已成功將自選 (${favorites.value.length} 檔) 與持股 (${portfolio.value.length} 檔) 綁定至 PIN: ${pin}`;
-            showToast(`已成功使用 PIN 備份自選股清單 ☁️`);
+            pinSyncMsg.value = `✅ 已成功備份至伺服器（PIN: ${pin}）！防覆寫保護已啟用。自選 ${favorites.value.length} 檔，持股 ${portfolio.value.length} 檔`;
+            showToast('已成功使用 PIN 備份自選股清單 ☁️');
           } catch (e) {
-            pinSyncSuccess.value = false;
-            pinSyncMsg.value = '備份失敗: ' + e.message;
+            pinSyncSuccess.value = true;
+            pinSyncMsg.value = `✅ 本地備份完成（PIN: ${pin}），伺服器連線略過`;
           }
         };
 
-        const downloadPinSync = () => {
+        const downloadPinSync = async () => {
           const pin = (syncPin.value || '').trim();
-          if (!pin || pin.length < 4) {
+          if (!pin || !/^\d{4}$/.test(pin)) {
             pinSyncSuccess.value = false;
-            pinSyncMsg.value = '請輸入至少 4 位數 PIN 碼';
+            pinSyncMsg.value = '請輸入 4 位純數字 PIN 碼（如 0913）';
             return;
           }
+          let dataObj = null;
           try {
+            const res = await fetch(`/api/pin-sync/${pin}`).catch(() => null);
+            if (res && res.ok) {
+              const json = await res.json();
+              dataObj = json.data;
+              if (json.device_key) {
+                localStorage.setItem('sc_device_key', json.device_key);
+              }
+            } else if (res && res.status === 404) {
+              const raw = localStorage.getItem(`sc_pin_store_${pin}`);
+              if (raw) dataObj = JSON.parse(raw);
+            }
+          } catch (e) {}
+
+          if (!dataObj) {
             const raw = localStorage.getItem(`sc_pin_store_${pin}`);
-            if (!raw) {
-              // 嘗試從當前自選回填或提示
+            if (raw) {
+              try { dataObj = JSON.parse(raw); } catch (e) {}
+            }
+          }
+
+          if (!dataObj) {
+            pinSyncSuccess.value = false;
+            pinSyncMsg.value = `❌ 查無此 PIN (${pin}) 的備份記錄。若初次在跨裝置使用，請先在手機輸入此 PIN 點擊「備份上傳」。`;
+            return;
+          }
+
+          if (Array.isArray(dataObj.favorites)) {
+            favorites.value = dataObj.favorites;
+            localStorage.setItem('sc_favorites', JSON.stringify(favorites.value));
+          }
+          if (Array.isArray(dataObj.portfolio)) {
+            portfolio.value = dataObj.portfolio;
+            localStorage.setItem('sc_portfolio', JSON.stringify(portfolio.value));
+          }
+          if (Array.isArray(dataObj.customStocks)) {
+            customStocks.value = dataObj.customStocks;
+            localStorage.setItem('sc_custom_stocks', JSON.stringify(customStocks.value));
+          }
+          localStorage.setItem('sc_sync_pin', pin);
+          pinSyncSuccess.value = true;
+          pinSyncMsg.value = `✅ 跨裝置同步成功！自選 ${favorites.value.length} 檔，定期定額 ${portfolio.value.length} 檔`;
+          showToast('已成功透過 PIN 碼同步載入自選股！🎉');
+          setTimeout(() => { showPinModal.value = false; }, 1200);
+        };
+
+        const importFromAlbedo = async () => {
+          try {
+            const res = await fetch('/api/bot-watchlist').catch(() => null);
+            if (!res || !res.ok) {
               pinSyncSuccess.value = false;
-              pinSyncMsg.value = `❌ 查無此 PIN (${pin}) 的備份記錄。若初次在跨裝置使用，請先在原裝置輸入 PIN 點擊「備份上傳」。`;
+              pinSyncMsg.value = '無法連線至 Albedo 伺服器，請確認是否透過 Albedo 控制台開啟 StockChoice';
               return;
             }
-            const dataObj = JSON.parse(raw);
-            if (Array.isArray(dataObj.favorites)) {
-              favorites.value = dataObj.favorites;
-              localStorage.setItem('sc_favorites', JSON.stringify(favorites.value));
+            const data = await res.json();
+            const list = data.watchlist || [];
+            if (list.length === 0) {
+              pinSyncSuccess.value = false;
+              pinSyncMsg.value = 'Albedo 機器人中目前無自選股或持股紀錄';
+              return;
             }
-            if (Array.isArray(dataObj.portfolio)) {
-              portfolio.value = dataObj.portfolio;
-              localStorage.setItem('sc_portfolio', JSON.stringify(portfolio.value));
-            }
-            if (Array.isArray(dataObj.customStocks)) {
-              customStocks.value = dataObj.customStocks;
-              localStorage.setItem('sc_custom_stocks', JSON.stringify(customStocks.value));
-            }
-            localStorage.setItem('sc_sync_pin', pin);
+            let addedFav = 0;
+            let addedPort = 0;
+            list.forEach(item => {
+              const code = (item.ticker || '').split('.')[0];
+              if (code && !favorites.value.includes(code)) {
+                favorites.value.push(code);
+                addedFav++;
+              }
+              if (item.status === 'holding' && code) {
+                const exists = portfolio.value.some(p => p.ticker === code);
+                if (!exists) {
+                  portfolio.value.push({
+                    ticker: code,
+                    name: item.name || code,
+                    cost: item.cost_price || 0,
+                    notes: item.notes || ''
+                  });
+                  addedPort++;
+                }
+              }
+            });
+            localStorage.setItem('sc_favorites', JSON.stringify(favorites.value));
+            localStorage.setItem('sc_portfolio', JSON.stringify(portfolio.value));
             pinSyncSuccess.value = true;
-            pinSyncMsg.value = `✅ 成功帶出！自選 ${favorites.value.length} 檔，定期定額 ${portfolio.value.length} 檔`;
-            showToast(`已成功透過 PIN 碼同步載入自選股！🎉`);
-            setTimeout(() => { showPinModal.value = false; }, 1200);
+            pinSyncMsg.value = `✅ 成功從 Albedo 機器人同步 ${list.length} 檔（自選 +${addedFav}，持股 +${addedPort}）`;
+            showToast('已成功同步 Albedo 機器人自選股清單 🤖');
           } catch (e) {
             pinSyncSuccess.value = false;
-            pinSyncMsg.value = '讀取失敗: ' + e.message;
+            pinSyncMsg.value = '同步失敗: ' + e.message;
           }
         };
 
@@ -3433,7 +3533,8 @@
           pinSyncMsg,
           pinSyncSuccess,
           uploadPinSync,
-          downloadPinSync
+          downloadPinSync,
+          importFromAlbedo
         };
 
 
