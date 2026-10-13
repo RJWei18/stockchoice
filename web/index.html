@@ -1929,7 +1929,7 @@
 
         <div class="space-y-1.5">
           <label class="text-[11px] font-bold text-slate-300">設定或輸入 4 位數 PIN 碼：</label>
-          <input v-model="syncPin" type="password" maxlength="4" placeholder="例：0913"
+          <input v-model="syncPin" type="password" maxlength="4" placeholder="例：1234"
                  class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-center font-mono tracking-widest text-white focus:outline-none focus:border-indigo-500">
         </div>
 
@@ -1949,6 +1949,20 @@
                   class="w-full bg-sky-950/60 hover:bg-sky-900/80 border border-sky-800/60 text-sky-300 rounded-xl py-2 transition active:scale-95 flex items-center justify-center space-x-1.5 text-xs font-bold">
             <span>🤖 從 Albedo 機器人載入自選 (TG 聯動)</span>
           </button>
+        </div>
+
+        <div v-if="isGitHubPages" class="p-2.5 bg-amber-950/40 border border-amber-800/40 rounded-xl text-[11px] text-amber-300 space-y-1">
+          <div class="font-bold flex items-center space-x-1">
+            <span>💡</span>
+            <span>目前為公開版 (GitHub Pages)</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            TG 機器人自選與跨裝置雲端儲存由您的私有 Albedo 伺服器提供。請透過 Tailscale 開啟專屬控制台使用完整連動功能：
+          </p>
+          <a href="http://100.91.48.61:8099/stockchoice/" target="_blank"
+             class="inline-block text-sky-400 hover:text-sky-300 font-bold underline">
+            開啟 Albedo 私人控制台 (http://100.91.48.61:8099/stockchoice/) ↗
+          </a>
         </div>
 
         <div v-if="pinSyncMsg" class="text-[11px] text-center font-medium" :class="pinSyncSuccess ? 'text-emerald-400' : 'text-rose-400'">
@@ -1975,6 +1989,7 @@
         const syncPin = ref(localStorage.getItem('sc_sync_pin') || '');
         const pinSyncMsg = ref('');
         const pinSyncSuccess = ref(true);
+        const isGitHubPages = ref(window.location.hostname.includes('github.io'));
 
         // Search & Favorites
         const searchQuery = ref('');
@@ -3317,7 +3332,7 @@
           const pin = (syncPin.value || '').trim();
           if (!pin || !/^\d{4}$/.test(pin)) {
             pinSyncSuccess.value = false;
-            pinSyncMsg.value = '請輸入 4 位純數字 PIN 碼（如 0913）';
+            pinSyncMsg.value = '請輸入 4 位純數字 PIN 碼（如 1234）';
             return;
           }
           const payload = {
@@ -3363,7 +3378,7 @@
           const pin = (syncPin.value || '').trim();
           if (!pin || !/^\d{4}$/.test(pin)) {
             pinSyncSuccess.value = false;
-            pinSyncMsg.value = '請輸入 4 位純數字 PIN 碼（如 0913）';
+            pinSyncMsg.value = '請輸入 4 位純數字 PIN 碼（如 1234）';
             return;
           }
           let dataObj = null;
@@ -3415,10 +3430,15 @@
 
         const importFromAlbedo = async () => {
           try {
+            if (isGitHubPages.value) {
+              pinSyncSuccess.value = false;
+              pinSyncMsg.value = '⚠️ 目前為 GitHub Pages 公開版，無法直接連線您的 NAS。請透過 Tailscale 開啟 Albedo 私人控制台 (http://100.91.48.61:8099/stockchoice/) 即可一鍵連動 TG 機器人自選清單。';
+              return;
+            }
             const res = await fetch('/api/bot-watchlist').catch(() => null);
             if (!res || !res.ok) {
               pinSyncSuccess.value = false;
-              pinSyncMsg.value = '無法連線至 Albedo 伺服器，請確認是否透過 Albedo 控制台開啟 StockChoice';
+              pinSyncMsg.value = '無法連線至 Albedo 伺服器，請確認是否透過 Albedo 控制台 (http://100.91.48.61:8099/stockchoice/) 開啟';
               return;
             }
             const data = await res.json();
@@ -3534,7 +3554,8 @@
           pinSyncSuccess,
           uploadPinSync,
           downloadPinSync,
-          importFromAlbedo
+          importFromAlbedo,
+          isGitHubPages
         };
 
 
