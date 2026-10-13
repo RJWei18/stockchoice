@@ -2450,8 +2450,13 @@
         };
 
         const getLatestPrice = (ticker) => {
+          if (!ticker) return null;
+          const clean = String(ticker).toUpperCase().split('.')[0];
           const all = [...allTWStocksCombined.value, ...data.value.us_stocks];
-          const found = all.find(s => s.ticker.toUpperCase() === ticker.toUpperCase());
+          const found = all.find(s => {
+            const sClean = s.ticker.toUpperCase().split('.')[0];
+            return s.ticker.toUpperCase() === String(ticker).toUpperCase() || sClean === clean;
+          });
           return found ? found.close : null;
         };
 
@@ -3344,6 +3349,14 @@
           localStorage.setItem('sc_sync_pin', pin);
           localStorage.setItem(`sc_pin_store_${pin}`, JSON.stringify(payload));
 
+          // 若處於 GitHub Pages 靜態站點，不向伺服器發送 POST 避免 405 錯誤
+          if (isGitHubPages.value) {
+            pinSyncSuccess.value = true;
+            pinSyncMsg.value = `✅ 已成功保存至手機本地（PIN: ${pin}）！自選 ${favorites.value.length} 檔，持股 ${portfolio.value.length} 檔。如需跨裝置雲端同步，請開啟 Albedo 控制台。`;
+            showToast('已成功使用 PIN 備份自選股清單 ☁️');
+            return;
+          }
+
           try {
             const devKey = getDeviceKey();
             const res = await fetch('/api/pin-sync', {
@@ -3382,19 +3395,18 @@
             return;
           }
           let dataObj = null;
-          try {
-            const res = await fetch(`/api/pin-sync/${pin}`).catch(() => null);
-            if (res && res.ok) {
-              const json = await res.json();
-              dataObj = json.data;
-              if (json.device_key) {
-                localStorage.setItem('sc_device_key', json.device_key);
+          if (!isGitHubPages.value) {
+            try {
+              const res = await fetch(`/api/pin-sync/${pin}`).catch(() => null);
+              if (res && res.ok) {
+                const json = await res.json();
+                dataObj = json.data;
+                if (json.device_key) {
+                  localStorage.setItem('sc_device_key', json.device_key);
+                }
               }
-            } else if (res && res.status === 404) {
-              const raw = localStorage.getItem(`sc_pin_store_${pin}`);
-              if (raw) dataObj = JSON.parse(raw);
-            }
-          } catch (e) {}
+            } catch (e) {}
+          }
 
           if (!dataObj) {
             const raw = localStorage.getItem(`sc_pin_store_${pin}`);
@@ -3405,7 +3417,9 @@
 
           if (!dataObj) {
             pinSyncSuccess.value = false;
-            pinSyncMsg.value = `❌ 查無此 PIN (${pin}) 的備份記錄。若初次在跨裝置使用，請先在手機輸入此 PIN 點擊「備份上傳」。`;
+            pinSyncMsg.value = isGitHubPages.value
+              ? `❌ 本地查無此 PIN (${pin}) 的備份記錄。若在電腦儲存過，請在手機透過 Tailscale 開啟 Albedo 控制台進行跨裝置下載。`
+              : `❌ 伺服器查無此 PIN (${pin}) 的備份記錄。請確認 PIN 碼是否正確，或先在原設備點擊「備份上傳」。`;
             return;
           }
 
@@ -3423,8 +3437,8 @@
           }
           localStorage.setItem('sc_sync_pin', pin);
           pinSyncSuccess.value = true;
-          pinSyncMsg.value = `✅ 跨裝置同步成功！自選 ${favorites.value.length} 檔，定期定額 ${portfolio.value.length} 檔`;
-          showToast('已成功透過 PIN 碼同步載入自選股！🎉');
+          pinSyncMsg.value = `✅ 同步成功！自選 ${favorites.value.length} 檔，定期定額 ${portfolio.value.length} 檔`;
+          showToast('已成功透過 PIN 碼載入自選股！🎉');
           setTimeout(() => { showPinModal.value = false; }, 1200);
         };
 
@@ -3457,12 +3471,36 @@
                 addedFav++;
               }
               if (item.status === 'holding' && code) {
-                const exists = portfolio.value.some(p => p.ticker === code);
-                if (!exists) {
+                // 從備註中解析持股股數 (例: "20 股", "20股", "1 張", "1000")
+                let parsedShares = 0;
+                if (item.notes) {
+                  const m = String(item.notes).match(/(\d+(?:\.\d+)?)\s*(股|張)?/);
+                  if (m) {
+                    const val = parseFloat(m[1]);
+                    const unit = m[2] || '股';
+                    parsedShares = unit === '張' ? Math.round(val * 1000) : Math.round(val);
+                  }
+                }
+                const costVal = Number(item.cost_price) || 0;
+                const rawTicker = item.ticker || code;
+
+                const existingIdx = portfolio.value.findIndex(p => {
+                  const pClean = p.ticker.toUpperCase().split('.')[0];
+                  return pClean === code.toUpperCase();
+                });
+
+                if (existingIdx >= 0) {
+                  portfolio.value[existingIdx].name = item.name || portfolio.value[existingIdx].name || code;
+                  if (costVal > 0) portfolio.value[existingIdx].avgCost = costVal;
+                  if (parsedShares > 0) portfolio.value[existingIdx].shares = parsedShares;
+                  portfolio.value[existingIdx].notes = item.notes || portfolio.value[existingIdx].notes;
+                } else {
                   portfolio.value.push({
-                    ticker: code,
+                    ticker: rawTicker,
                     name: item.name || code,
-                    cost: item.cost_price || 0,
+                    monthlyBudget: 5000,
+                    shares: parsedShares,
+                    avgCost: costVal,
                     notes: item.notes || ''
                   });
                   addedPort++;
