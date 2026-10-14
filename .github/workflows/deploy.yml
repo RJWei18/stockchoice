@@ -1,4 +1,4 @@
-name: Deploy StockChoice Web to GitHub Pages
+name: Deploy StockChoice Web to GitHub Pages and Vercel
 
 on:
   # Daily scheduled run: Mon-Fri 08:25 (Pre-market US sync), 15:30 & 16:15 (Post-market TW sync) Taipei time
@@ -18,9 +18,9 @@ on:
       - 'generate_web_data.py'
       - '.github/workflows/deploy.yml'
 
-# Grant GITHUB_TOKEN permissions required for GitHub Pages
+# Grant GITHUB_TOKEN permissions required for GitHub Pages and data auto-commit
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -54,6 +56,21 @@ jobs:
         run: |
           python generate_web_data.py || echo "Warning: market data refresh failed, using existing web/data.json"
 
+      - name: Commit Updated Data to Main
+        continue-on-error: true
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add web/data.json
+          if ! git diff --quiet --cached; then
+            git commit -m "chore(data): auto update market data [skip ci]"
+            git push origin main
+          fi
+
+      - name: Trigger Vercel Deploy Hook
+        continue-on-error: true
+        run: |
+          curl -s -X POST https://api.vercel.com/v1/integrations/deploy/prj_dY7RFCkJAzBUAcub5kj5TY0lObA2/DOQGp6GHfi || echo "Vercel deploy hook trigger failed"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

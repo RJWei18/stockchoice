@@ -10,6 +10,8 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <!-- Lightweight Charts CDN (pinned v4.2.1 stable) -->
   <script src="https://unpkg.com/lightweight-charts@4.2.1/dist/lightweight-charts.standalone.production.js"></script>
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     /* Mobile-first touch friendly optimizations */
@@ -141,11 +143,17 @@
                 class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95">
           🏢 個股專區
         </button>
-        <button @click="showPinModal = true"
-                class="px-2.5 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95 bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-500/40 flex items-center space-x-1 font-bold">
+        <button @click="showAuthModal = true"
+                :class="currentUser ? 'bg-emerald-950/80 hover:bg-emerald-900 border-emerald-500/50 text-emerald-300' : 'bg-slate-900 hover:bg-slate-800 text-sky-300 border-sky-500/40'"
+                class="px-2.5 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95 border flex items-center space-x-1.5 font-bold shadow-sm">
           <span>☁️</span>
-          <span>PIN 跨裝置同步</span>
+          <span v-if="!currentUser">雲端同步</span>
+          <span v-else class="flex items-center space-x-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+            <span>{{ userDisplayName }}</span>
+          </span>
         </button>
+
       </div>
     </div>
 
@@ -1912,62 +1920,148 @@
       </div>
     </div>
 
-    <!-- PIN 跨裝置自選同步彈窗 -->
-    <div v-if="showPinModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" @click.self="showPinModal = false">
+    <!-- Supabase 雲端多裝置同步與會員認證彈窗 -->
+    <div v-if="showAuthModal || showPinModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" @click.self="showAuthModal = false; showPinModal = false">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-4 shadow-2xl space-y-3.5">
         <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-          <div class="text-sm font-bold text-amber-300 flex items-center space-x-1.5">
+          <div class="text-sm font-bold text-sky-400 flex items-center space-x-1.5">
             <span>☁️</span>
-            <span>自選與持股 PIN 碼跨裝置同步</span>
+            <span>{{ currentUser ? '雲端帳號與同步管理' : 'StockChoice 雲端跨裝置同步' }}</span>
           </div>
-          <button @click="showPinModal = false" class="text-slate-400 hover:text-white text-xs p-1">✕</button>
+          <button @click="showAuthModal = false; showPinModal = false" class="text-slate-400 hover:text-white text-xs p-1">✕</button>
         </div>
 
-        <p class="text-[11px] text-slate-400 leading-relaxed">
-          自行設定 4 位數字 PIN 碼。手機備份後，至電腦輸入相同 PIN 即可一鍵帶出所有自選清單與定期定額持股。內建設備防覆寫保護，他人無法覆寫您的自選。
-        </p>
-
-        <div class="space-y-1.5">
-          <label class="text-[11px] font-bold text-slate-300">設定或輸入 4 位數 PIN 碼：</label>
-          <input v-model="syncPin" type="password" maxlength="4" placeholder="例：1234"
-                 class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-center font-mono tracking-widest text-white focus:outline-none focus:border-indigo-500">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 pt-1 text-xs font-bold">
-          <button @click="uploadPinSync"
-                  class="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl py-2.5 transition active:scale-95 flex items-center justify-center space-x-1">
-            <span>⬆️ 備份上傳</span>
-          </button>
-          <button @click="downloadPinSync"
-                  class="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl py-2.5 transition active:scale-95 flex items-center justify-center space-x-1">
-            <span>⬇️ 輸入帶出</span>
-          </button>
-        </div>
-
-        <div class="pt-2 border-t border-slate-800">
-          <button @click="importFromAlbedo"
-                  class="w-full bg-sky-950/60 hover:bg-sky-900/80 border border-sky-800/60 text-sky-300 rounded-xl py-2 transition active:scale-95 flex items-center justify-center space-x-1.5 text-xs font-bold">
-            <span>🤖 從 Albedo 機器人載入自選 (TG 聯動)</span>
-          </button>
-        </div>
-
-        <div v-if="isGitHubPages" class="p-2.5 bg-amber-950/40 border border-amber-800/40 rounded-xl text-[11px] text-amber-300 space-y-1">
-          <div class="font-bold flex items-center space-x-1">
-            <span>💡</span>
-            <span>目前為公開版 (GitHub Pages)</span>
+        <!-- 情況 A: 未登入狀態（登入 / 註冊） -->
+        <div v-if="!currentUser" class="space-y-3">
+          <div class="grid grid-cols-2 p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs font-bold text-center">
+            <button @click="authMode = 'login'; authError = ''; authMsg = ''"
+                    :class="authMode === 'login' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'"
+                    class="py-1.5 rounded-lg transition">
+              會員登入
+            </button>
+            <button @click="authMode = 'signup'; authError = ''; authMsg = ''"
+                    :class="authMode === 'signup' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'"
+                    class="py-1.5 rounded-lg transition">
+              註冊新帳號
+            </button>
           </div>
-          <p class="text-slate-300 leading-relaxed">
-            TG 機器人自選與跨裝置雲端儲存由您的私有 Albedo 伺服器提供。請透過 Tailscale 開啟專屬控制台使用完整連動功能：
+
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            透過 Supabase 雲端資料庫，免 VPN 即可在任何手機、電腦或平板無縫雙向即時同步「❤️ 我的自選」與「📊 定期定額持股」。
           </p>
-          <a href="http://100.91.48.61:8099/stockchoice/" target="_blank"
-             class="inline-block text-sky-400 hover:text-sky-300 font-bold underline">
-            開啟 Albedo 私人控制台 (http://100.91.48.61:8099/stockchoice/) ↗
-          </a>
+
+          <div class="space-y-2">
+            <div>
+              <label class="text-[11px] font-bold text-slate-300 block mb-1">Email 電子信箱：</label>
+              <input v-model="authEmail" type="email" placeholder="name@example.com"
+                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-300 block mb-1">登入密碼：</label>
+              <input v-model="authPassword" type="password" placeholder="請輸入 6 位以上密碼"
+                     @keyup.enter="handleAuthSubmit"
+                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+
+          <button @click="handleAuthSubmit"
+                  :disabled="authLoading"
+                  class="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-bold py-2.5 rounded-xl transition active:scale-95 flex items-center justify-center space-x-1 shadow-md">
+            <span v-if="authLoading" class="inline-block animate-spin">🔄</span>
+            <span>{{ authMode === 'login' ? '登入並載入雲端資料' : '立即註冊並自動登入' }}</span>
+          </button>
+
+          <div v-if="authError" class="p-2 bg-rose-950/40 border border-rose-800/40 rounded-xl text-[11px] text-rose-300">
+            {{ authError }}
+          </div>
+          <div v-if="authMsg" class="p-2 bg-emerald-950/40 border border-emerald-800/40 rounded-xl text-[11px] text-emerald-300">
+            {{ authMsg }}
+          </div>
+
+          <!-- 舊版 PIN 碼摺疊載入 -->
+          <div class="pt-2 border-t border-slate-800">
+            <button @click="showLegacyPin = !showLegacyPin" class="text-[11px] text-slate-500 hover:text-slate-400 flex items-center justify-between w-full">
+              <span>🔑 從舊版 4 碼 PIN 載入歷史自選/持股</span>
+              <span>{{ showLegacyPin ? '▲' : '▼' }}</span>
+            </button>
+            <div v-if="showLegacyPin" class="mt-2 space-y-2 p-2 bg-slate-950/60 rounded-xl border border-slate-800">
+              <input v-model="syncPin" type="password" maxlength="4" placeholder="輸入 4 位數 PIN"
+                     class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-center font-mono text-white">
+              <div class="grid grid-cols-2 gap-1.5">
+                <button @click="downloadPinSync" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-300 py-1.5 rounded-lg text-xs font-bold">
+                  載入 PIN 資料
+                </button>
+                <button @click="importFromAlbedo" class="w-full bg-slate-800 hover:bg-slate-700 text-sky-300 py-1.5 rounded-lg text-xs font-bold">
+                  TG 機器人聯動
+                </button>
+              </div>
+              <div v-if="pinSyncMsg" class="text-[10px] text-center" :class="pinSyncSuccess ? 'text-emerald-400' : 'text-rose-400'">
+                {{ pinSyncMsg }}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div v-if="pinSyncMsg" class="text-[11px] text-center font-medium" :class="pinSyncSuccess ? 'text-emerald-400' : 'text-rose-400'">
-          {{ pinSyncMsg }}
+        <!-- 情況 B: 已登入狀態（檢視帳號、群組與手動同步） -->
+        <div v-else class="space-y-3">
+          <div class="p-3 bg-slate-950/80 border border-slate-800 rounded-xl space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-slate-400">目前帳號</span>
+              <span class="text-xs font-mono font-bold text-sky-300">{{ currentUser.email }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-slate-400">家庭群組 ID</span>
+              <span class="text-xs font-mono font-bold text-emerald-400">{{ userProfile?.group_id || 'default_family' }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-slate-400">連線狀態</span>
+              <span class="text-[11px] text-emerald-400 font-bold flex items-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Supabase 雲端連線中</span>
+              </span>
+            </div>
+            <div class="flex items-center justify-between border-t border-slate-800/80 pt-1.5">
+              <span class="text-[11px] text-slate-400">目前清單</span>
+              <span class="text-xs font-bold text-slate-200">
+                自選 {{ favorites.length }} 檔 / 持股 {{ portfolio.length }} 檔
+              </span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <button @click="loadCloudData(true)"
+                    :disabled="authLoading"
+                    class="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-bold py-2.5 rounded-xl transition active:scale-95 flex items-center justify-center space-x-1 shadow">
+              <span :class="{'inline-block animate-spin': authLoading}">🔄</span>
+              <span>立即雙向更新同步</span>
+            </button>
+            <button @click="uploadLocalToCloud"
+                    :disabled="authLoading"
+                    class="w-full bg-slate-800 hover:bg-slate-750 disabled:opacity-50 text-amber-300 border border-amber-500/30 text-xs font-bold py-2.5 rounded-xl transition active:scale-95 flex items-center justify-center space-x-1 shadow">
+              <span>⬆️</span>
+              <span>將本機所有資料覆蓋上傳至雲端</span>
+            </button>
+          </div>
+
+          <div v-if="authMsg" class="p-2 bg-emerald-950/40 border border-emerald-800/40 rounded-xl text-[11px] text-emerald-300">
+            {{ authMsg }}
+          </div>
+          <div v-if="authError" class="p-2 bg-rose-950/40 border border-rose-800/40 rounded-xl text-[11px] text-rose-300">
+            {{ authError }}
+          </div>
+
+          <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <button @click="importFromAlbedo"
+                    class="text-[11px] text-sky-400 hover:text-sky-300 font-semibold underline">
+              從 NAS Albedo 機器人載入自選
+            </button>
+            <button @click="signOutUser"
+                    class="text-[11px] text-rose-400 hover:text-rose-300 font-bold px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 transition active:scale-95">
+              登出
+            </button>
+          </div>
         </div>
+
       </div>
     </div>
 
@@ -1990,6 +2084,35 @@
         const pinSyncMsg = ref('');
         const pinSyncSuccess = ref(true);
         const isGitHubPages = ref(window.location.hostname.includes('github.io'));
+
+        // Supabase Client & Cloud Sync
+        const SUPABASE_URL = 'https://imjokoconknoflsxjsaj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imltam9rb2Nvbmtub2Zsc3hqc2FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4Nzk5ODksImV4cCI6MjEwNzQ1NTk4OX0.RQxz3J2QRNFtvoorB9CkGFVpvGEIZYFvdZtCSKBWHWc';
+        let supabaseClient = null;
+        try {
+          if (window.supabase && typeof window.supabase.createClient === 'function') {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          }
+        } catch (e) {
+          console.warn('Supabase init failed:', e);
+        }
+
+        const currentUser = ref(null);
+        const userProfile = ref(null);
+        const showAuthModal = ref(false);
+        const authMode = ref('login'); // 'login' | 'signup'
+        const authEmail = ref('');
+        const authPassword = ref('');
+        const authLoading = ref(false);
+        const authError = ref('');
+        const authMsg = ref('');
+        const showLegacyPin = ref(false);
+
+        const userDisplayName = computed(() => {
+          if (!currentUser.value) return '';
+          const email = currentUser.value.email || '';
+          return email.split('@')[0] || '會員';
+        });
 
         // Search & Favorites
         const searchQuery = ref('');
@@ -2017,16 +2140,37 @@
           return favorites.value.includes(ticker);
         };
 
-        const toggleFavorite = (ticker) => {
+        const toggleFavorite = async (ticker) => {
           const idx = favorites.value.indexOf(ticker);
+          let isAdd = false;
           if (idx >= 0) {
             favorites.value.splice(idx, 1);
             showToast(`已從自選移除 ${ticker}`);
           } else {
             favorites.value.push(ticker);
+            isAdd = true;
             showToast(`已加入我的自選 ❤️ ${ticker}`);
           }
           localStorage.setItem('sc_favorites', JSON.stringify(favorites.value));
+
+          if (supabaseClient && currentUser.value) {
+            try {
+              if (isAdd) {
+                await supabaseClient.from('watchlists').upsert({
+                  user_id: currentUser.value.id,
+                  ticker: ticker,
+                  market: ticker.includes('.TW') ? 'TW' : 'US',
+                  group_id: userProfile.value?.group_id || 'default_family'
+                }, { onConflict: 'user_id,ticker' });
+              } else {
+                await supabaseClient.from('watchlists').delete()
+                  .eq('user_id', currentUser.value.id)
+                  .eq('ticker', ticker);
+              }
+            } catch (e) {
+              console.warn('Sync favorite to Supabase failed:', e);
+            }
+          }
         };
 
         const allTWStocksCombined = computed(() => {
@@ -2502,17 +2646,49 @@
           }, 0));
         });
 
-        const saveNewItem = () => {
+        const saveNewItem = async () => {
           if (!newItem.value.ticker) return;
-          portfolio.value.push({ ...newItem.value, ticker: newItem.value.ticker.toUpperCase().trim() });
+          const cleanTicker = newItem.value.ticker.toUpperCase().trim();
+          const item = { ...newItem.value, ticker: cleanTicker };
+          portfolio.value.push(item);
           localStorage.setItem('sc_portfolio', JSON.stringify(portfolio.value));
           showAddModal.value = false;
           newItem.value = { ticker: '', name: '', monthlyBudget: 5000, shares: 0, avgCost: 0 };
+          showToast(`已新增持股 ${cleanTicker}`);
+
+          if (supabaseClient && currentUser.value) {
+            try {
+              await supabaseClient.from('portfolios').upsert({
+                user_id: currentUser.value.id,
+                ticker: cleanTicker,
+                shares: Number(item.shares) || 0,
+                avg_cost: Number(item.avgCost) || 0,
+                market: cleanTicker.includes('.TW') ? 'TW' : 'US',
+                notes: item.notes || item.name || '',
+                group_id: userProfile.value?.group_id || 'default_family',
+                updated_at: new Date().toISOString()
+              }, { onConflict: 'user_id,ticker' });
+            } catch (e) {
+              console.warn('Sync portfolio item to Supabase failed:', e);
+            }
+          }
         };
 
-        const removePortfolioItem = (idx) => {
-          portfolio.value.splice(idx, 1);
+        const removePortfolioItem = async (idx) => {
+          const removed = portfolio.value.splice(idx, 1)[0];
           localStorage.setItem('sc_portfolio', JSON.stringify(portfolio.value));
+          if (removed) {
+            showToast(`已移除持股 ${removed.ticker}`);
+          }
+          if (supabaseClient && currentUser.value && removed) {
+            try {
+              await supabaseClient.from('portfolios').delete()
+                .eq('user_id', currentUser.value.id)
+                .eq('ticker', removed.ticker);
+            } catch (e) {
+              console.warn('Delete portfolio item from Supabase failed:', e);
+            }
+          }
         };
 
         const addSamplePortfolio = () => {
@@ -3309,6 +3485,218 @@
           aiModal.value.show = true;
         };
 
+        // Supabase Auth & Cloud Sync 實作
+        const fetchUserProfile = async () => {
+          if (!supabaseClient || !currentUser.value) return;
+          try {
+            const { data, error } = await supabaseClient
+              .from('user_profiles')
+              .select('*')
+              .eq('id', currentUser.value.id)
+              .maybeSingle();
+            if (!error && data) {
+              userProfile.value = data;
+            } else if (!data) {
+              // 若無 profile 記錄則主動建立
+              const { data: created } = await supabaseClient
+                .from('user_profiles')
+                .upsert({ id: currentUser.value.id, email: currentUser.value.email, group_id: 'default_family' })
+                .select()
+                .maybeSingle();
+              if (created) userProfile.value = created;
+            }
+          } catch (e) {
+            console.warn('fetchUserProfile error:', e);
+          }
+        };
+
+        const loadCloudData = async (notify = false) => {
+          if (!supabaseClient || !currentUser.value) return;
+          authLoading.value = true;
+          authError.value = '';
+          try {
+            // 1. 讀取自選股 watchlists
+            const { data: wl, error: wlErr } = await supabaseClient
+              .from('watchlists')
+              .select('ticker, market')
+              .order('created_at', { ascending: true });
+
+            if (!wlErr && wl) {
+              const cloudTickers = wl.map(w => w.ticker);
+              // 合併本地與雲端自選股
+              const merged = Array.from(new Set([...cloudTickers, ...favorites.value]));
+              favorites.value = merged;
+              localStorage.setItem('sc_favorites', JSON.stringify(favorites.value));
+            }
+
+            // 2. 讀取庫存持股 portfolios
+            const { data: pf, error: pfErr } = await supabaseClient
+              .from('portfolios')
+              .select('ticker, shares, avg_cost, market, notes')
+              .order('updated_at', { ascending: false });
+
+            if (!pfErr && pf && pf.length > 0) {
+              const cloudMap = new Map();
+              pf.forEach(item => {
+                cloudMap.set(item.ticker.toUpperCase(), {
+                  ticker: item.ticker,
+                  name: item.notes || item.ticker,
+                  monthlyBudget: 5000,
+                  shares: Number(item.shares) || 0,
+                  avgCost: Number(item.avg_cost) || 0,
+                  notes: item.notes || ''
+                });
+              });
+              // 補齊名稱與既有項目
+              const mergedPf = [...portfolio.value];
+              cloudMap.forEach((val, key) => {
+                const idx = mergedPf.findIndex(p => p.ticker.toUpperCase() === key);
+                if (idx >= 0) {
+                  mergedPf[idx] = {
+                    ...mergedPf[idx],
+                    shares: val.shares > 0 ? val.shares : mergedPf[idx].shares,
+                    avgCost: val.avgCost > 0 ? val.avgCost : mergedPf[idx].avgCost,
+                    notes: val.notes || mergedPf[idx].notes
+                  };
+                } else {
+                  mergedPf.push(val);
+                }
+              });
+              portfolio.value = mergedPf;
+              localStorage.setItem('sc_portfolio', JSON.stringify(portfolio.value));
+            }
+
+            if (notify) {
+              showToast(`雲端同步完成！自選 ${favorites.value.length} 檔，持股 ${portfolio.value.length} 檔`);
+              authMsg.value = `同步成功 (自選: ${favorites.value.length}，持股: ${portfolio.value.length})`;
+            }
+          } catch (e) {
+            authError.value = '雲端同步失敗: ' + (e.message || e);
+          } finally {
+            authLoading.value = false;
+          }
+        };
+
+        const uploadLocalToCloud = async () => {
+          if (!supabaseClient || !currentUser.value) return;
+          authLoading.value = true;
+          authError.value = '';
+          authMsg.value = '';
+          try {
+            const groupId = userProfile.value?.group_id || 'default_family';
+            // 1. 上傳自選股
+            if (favorites.value.length > 0) {
+              const wlRows = favorites.value.map(t => ({
+                user_id: currentUser.value.id,
+                group_id: groupId,
+                ticker: t,
+                market: t.includes('.TW') ? 'TW' : 'US'
+              }));
+              const { error: wlErr } = await supabaseClient
+                .from('watchlists')
+                .upsert(wlRows, { onConflict: 'user_id,ticker' });
+              if (wlErr) throw wlErr;
+            }
+
+            // 2. 上傳持股
+            if (portfolio.value.length > 0) {
+              const pfRows = portfolio.value.map(p => ({
+                user_id: currentUser.value.id,
+                group_id: groupId,
+                ticker: p.ticker.toUpperCase(),
+                shares: Number(p.shares) || 0,
+                avg_cost: Number(p.avgCost) || 0,
+                market: p.ticker.includes('.TW') ? 'TW' : 'US',
+                notes: p.notes || p.name || '',
+                updated_at: new Date().toISOString()
+              }));
+              const { error: pfErr } = await supabaseClient
+                .from('portfolios')
+                .upsert(pfRows, { onConflict: 'user_id,ticker' });
+              if (pfErr) throw pfErr;
+            }
+
+            authMsg.value = `已將本地自選 ${favorites.value.length} 檔、持股 ${portfolio.value.length} 檔成功上傳至 Supabase！`;
+            showToast('本地資料已全數上傳至雲端！');
+          } catch (e) {
+            authError.value = '上傳至雲端失敗: ' + (e.message || e);
+          } finally {
+            authLoading.value = false;
+          }
+        };
+
+        const handleAuthSubmit = async () => {
+          if (!supabaseClient) {
+            authError.value = 'Supabase SDK 尚未載入，請確認網路連線';
+            return;
+          }
+          const email = (authEmail.value || '').trim();
+          const password = (authPassword.value || '').trim();
+          if (!email || !email.includes('@')) {
+            authError.value = '請輸入正確的 Email 格式';
+            return;
+          }
+          if (password.length < 6) {
+            authError.value = '密碼請至少輸入 6 位字元';
+            return;
+          }
+
+          authLoading.value = true;
+          authError.value = '';
+          authMsg.value = '';
+
+          try {
+            if (authMode.value === 'signup') {
+              const { data, error } = await supabaseClient.auth.signUp({
+                email,
+                password
+              });
+              if (error) throw error;
+              if (data.session && data.user) {
+                currentUser.value = data.user;
+                showToast(`註冊成功，歡迎 ${email.split('@')[0]}`);
+                await fetchUserProfile();
+                // 註冊後若本地有資料，自動備份至雲端
+                await uploadLocalToCloud();
+                showAuthModal.value = false;
+              } else if (data.user) {
+                authMsg.value = '註冊成功！已建立帳號，請進行登入。';
+              }
+            } else {
+              const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+              });
+              if (error) throw error;
+              if (data.session && data.user) {
+                currentUser.value = data.user;
+                showToast(`登入成功，歡迎 ${email.split('@')[0]}`);
+                await fetchUserProfile();
+                await loadCloudData();
+                showAuthModal.value = false;
+              }
+            }
+          } catch (e) {
+            authError.value = '操作失敗: ' + (e.message || e);
+          } finally {
+            authLoading.value = false;
+          }
+        };
+
+        const signOutUser = async () => {
+          if (!supabaseClient) return;
+          try {
+            await supabaseClient.auth.signOut();
+            currentUser.value = null;
+            userProfile.value = null;
+            authMsg.value = '';
+            authError.value = '';
+            showToast('已登出雲端帳號');
+          } catch (e) {
+            console.warn('Sign out error:', e);
+          }
+        };
+
         onMounted(async () => {
           await loadData();
           // 若網址帶有 ?q=聯亞 或 ?q=3081，自動填入搜尋並觸發顯示
@@ -3320,6 +3708,30 @@
               showToast(`已自動鎖定查詢「${q.trim()}」AI 策略`);
             }
           } catch (e) {}
+
+          // Supabase Auth 初始化與 Session 偵測
+          if (supabaseClient) {
+            try {
+              const { data: { session } } = await supabaseClient.auth.getSession();
+              if (session && session.user) {
+                currentUser.value = session.user;
+                await fetchUserProfile();
+                await loadCloudData();
+              }
+              supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                if (session && session.user) {
+                  currentUser.value = session.user;
+                  await fetchUserProfile();
+                  await loadCloudData();
+                } else {
+                  currentUser.value = null;
+                  userProfile.value = null;
+                }
+              });
+            } catch (e) {
+              console.warn('Supabase auth state check error:', e);
+            }
+          }
         });
 
         // 設備唯一識別碼（用於防覆寫保護）
@@ -3593,7 +4005,22 @@
           uploadPinSync,
           downloadPinSync,
           importFromAlbedo,
-          isGitHubPages
+          isGitHubPages,
+          currentUser,
+          userProfile,
+          userDisplayName,
+          showAuthModal,
+          authMode,
+          authEmail,
+          authPassword,
+          authLoading,
+          authError,
+          authMsg,
+          showLegacyPin,
+          handleAuthSubmit,
+          signOutUser,
+          loadCloudData,
+          uploadLocalToCloud
         };
 
 
