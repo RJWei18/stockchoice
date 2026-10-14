@@ -7,7 +7,7 @@ import os
 import sqlite3
 from contextlib import contextmanager
 from datetime import datetime
-from typing import Generator, List, Optional
+from typing import Generator, List, Optional, Dict, Any
 import pandas as pd
 
 
