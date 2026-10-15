@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2026-10-15 20:47:23 (UTC+8)",
+    "generated_at": "2026-10-15 21:25:12 (UTC+8)",
     "version": "1.2.0",
     "market_status": {
       "latest_tw_date": "2026-10-15",
@@ -82,7 +82,7 @@
     },
     "premarket_briefing": {
       "briefing_date": "2026-10-15",
-      "generated_at": "2026-10-15 20:47",
+      "generated_at": "2026-10-15 21:25",
       "wind_status": "保守觀望・留意支撐",
       "wind_color": "amber",
       "avg_semi_change_pct": -3.55,
@@ -36229,7 +36229,7 @@
       "change_pct": -1.8,
       "volume": 22200800.0,
       "vol_ratio": 1.14,
-      "pe_ratio": 30.27,
+      "pe_ratio": 30.07,
       "dividend_yield": 72.0,
       "pb_ratio": 8.96,
       "ma5": 535.19,
@@ -50011,7 +50011,7 @@
       "vol_ratio": 1.38,
       "pe_ratio": 24.88,
       "dividend_yield": 1.06,
-      "pb_ratio": 4.9,
+      "pb_ratio": 1.81,
       "ma5": 712.93,
       "ma10": 711.74,
       "ma20": 708.9,
