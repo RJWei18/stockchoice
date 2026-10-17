@@ -97,6 +97,16 @@
 - [x] 擴充美股籌碼面：整合 Dataroma 13F 頂級機構持倉與 Quiver 國會議員申報交易標籤
 - [x] 借鏡 QuantDinger 閉環概念，新增「推薦清單模擬交易績效追蹤（Paper Trading）」
 
+## Task 18: 歷史盲測挑戰實驗室 (Historical Blind Test Lab)
+- [x] 1. 設計去識別化隨機行情抽取與時間序列切片引擎 (Blind Market Data Generator)
+- [x] 2. 於 `web/index.html` 頂部導覽列新增「歷史盲測」分頁 Tab（位於回測 Tab 旁）
+- [x] 3. 實作挑戰條件設定面板（初始資金、交易次數/回合上限、自訂步長）
+- [x] 4. 實作盲測即時 K 線圖表與步進推演器（整合 Lightweight Charts，隱藏名稱與日期時間）
+- [x] 5. 實作逐筆下單決策面板（買進、賣出、觀望）與決策理由標籤/筆記紀錄器
+- [x] 6. 實作結算成績單、真身揭曉（Reveal 股票代號與真實歷史區間）與全景走勢解鎖
+- [x] 7. 實作逐筆決策覆盤分析面板（比對理由與走勢偏差、四象限歸因與修正建議）
+- [x] 8. 驗證前端操作流暢度、響應式排版與資料完整性
+
 ---
 
 ## 成果審查 (Review & Verification)
@@ -105,5 +115,6 @@
 - [x] **CLI 功能驗證**：驗證 `main.py --help` 正確解析 `--dry-run`、`--once` 與 `--tickers` 參數。
 - [x] **容器化與 NAS 準備**：已配置 Dockerfile 及 docker-compose.yml，包含 `./data:/app/data` 持久化磁碟映射與 `TZ=Asia/Taipei`。
 - [x] **文件齊備**：已產出完整的使用手冊 `README.md`、開發者擴充指南 `DEVELOPER.md` 與整合文件 `albedo_integration.md`。
+
 
 

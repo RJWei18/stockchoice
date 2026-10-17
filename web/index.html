@@ -1555,6 +1555,414 @@
 
       </section>
 
+      <!-- ================= TAB 5: 歷史盲測挑戰實驗室 (Historical Blind Test Lab) ================= -->
+      <section v-if="activeTab === 'blindtest'" class="space-y-4">
+        
+        <!-- Header Info Card -->
+        <div class="bg-gradient-to-br from-emerald-950/70 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 shadow-xl">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold text-emerald-300 flex items-center space-x-1.5">
+              <span>🎯</span>
+              <span>歷史盲測挑戰實驗室 (Blind Backtest Simulation)</span>
+            </h2>
+            <div class="flex items-center space-x-2">
+              <span class="text-[11px] text-emerald-300 bg-emerald-900/50 px-2 py-0.5 rounded-full border border-emerald-700/50">去識別化實戰</span>
+              <button @click="showBlindHistoryModal = true" class="text-xs text-slate-300 hover:text-white bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700 flex items-center space-x-1">
+                <span>📜</span>
+                <span>歷史履歷 ({{ blindHistory.length }})</span>
+              </button>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">
+            系統自歷史資料庫隨機抽取真實標的，完全遮蔽代碼、名稱與時間軸。在零先驗偏見下，依據盤面結構逐日進行買進、賣出或觀望決策，並記錄下單理由。挑戰結束後揭曉真實身分，完整覆盤當初判斷與走勢偏差。
+          </p>
+        </div>
+
+        <!-- State 1: IDLE / Configuration -->
+        <div v-if="blindStatus === 'IDLE'" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-5 shadow-lg">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-slate-200 flex items-center space-x-2">
+              <span>⚙️</span>
+              <span>挑戰條件與資金配置</span>
+            </h3>
+            <span class="text-xs text-slate-500">準備進入未知行情</span>
+          </div>
+
+          <!-- Parameter Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div>
+              <label class="block text-slate-400 mb-1.5 font-semibold">初始模擬資金</label>
+              <div class="flex items-center space-x-2">
+                <input v-model.number="blindConfig.initialCapital" type="number" step="10000" min="10000"
+                       class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-emerald-500">
+              </div>
+              <div class="flex space-x-1 mt-1.5">
+                <button v-for="cap in [50000, 100000, 300000]" :key="cap"
+                        @click="blindConfig.initialCapital = cap"
+                        :class="blindConfig.initialCapital === cap ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500' : 'bg-slate-950 text-slate-400 border-slate-800'"
+                        class="px-2 py-0.5 rounded text-[11px] border">
+                  ${{ (cap / 10000).toFixed(0) }}萬
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-slate-400 mb-1.5 font-semibold">決策回合數 (K棒步數)</label>
+              <div class="flex items-center space-x-2">
+                <input v-model.number="blindConfig.totalRounds" type="number" min="3" max="25"
+                       class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-emerald-500">
+              </div>
+              <div class="flex space-x-1 mt-1.5">
+                <button v-for="r in [5, 10, 15]" :key="r"
+                        @click="blindConfig.totalRounds = r"
+                        :class="blindConfig.totalRounds === r ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500' : 'bg-slate-950 text-slate-400 border-slate-800'"
+                        class="px-2 py-0.5 rounded text-[11px] border">
+                  {{ r }} 回合
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-slate-400 mb-1.5 font-semibold">單次下單倉位配置</label>
+              <select v-model.number="blindConfig.positionSizePct" 
+                      class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+                <option :value="25">25% (輕倉試單)</option>
+                <option :value="50">50% (標準部位)</option>
+                <option :value="100">100% (全倉進出)</option>
+              </select>
+              <span class="text-[11px] text-slate-500 block mt-1.5">初始提供 30 根歷史 K 棒作為盤面型態觀察期</span>
+            </div>
+          </div>
+
+          <!-- Start Button -->
+          <div class="pt-2">
+            <button @click="startBlindTest" 
+                    class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm rounded-2xl shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2 transition-all active:scale-95">
+              <span>🎲</span>
+              <span>隨機抽取未知行情，開始盲測挑戰</span>
+            </button>
+          </div>
+
+          <!-- Quick Guidelines -->
+          <div class="bg-slate-950/60 rounded-xl p-3.5 border border-slate-800/80 text-xs text-slate-400 space-y-1.5">
+            <div class="font-bold text-slate-300 flex items-center space-x-1">
+              <span>💡</span>
+              <span>盲測修煉心法：</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-400 pl-1">
+              <div>1. <b>不預設立場</b>：完全沒有基本面與新聞干擾，專注於均線、支撐壓力與量價結構。</div>
+              <div>2. <b>白紙黑字記理由</b>：每次決策必須選擇或輸入當初判斷理由，避免事後心理作祟。</div>
+              <div>3. <b>嚴守風控紀律</b>：即使是盲測，也要執行設定好的停損與停利條件。</div>
+              <div>4. <b>重視決策歸因</b>：賺錢不代表正確，賠錢不代表失敗，結算時審視假說與市場的偏差。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- State 2 & 3: PLAYING or REVEALED -->
+        <div v-show="blindStatus === 'PLAYING' || blindStatus === 'REVEALED'" class="space-y-4">
+          
+          <!-- Round & Account Status HUD -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+              <div class="flex items-center space-x-2">
+                <span class="px-2.5 py-1 bg-emerald-950/80 text-emerald-400 border border-emerald-800/80 rounded-lg font-mono font-bold text-xs">
+                  {{ blindSession.anonymousCode }}
+                </span>
+                <span v-if="blindStatus === 'PLAYING'" class="text-xs text-slate-300 flex items-center space-x-1">
+                  <span>回合：</span>
+                  <strong class="text-white font-mono text-sm">{{ blindSession.currentRound }}</strong>
+                  <span class="text-slate-500">/ {{ blindConfig.totalRounds }}</span>
+                </span>
+                <span v-else class="text-xs font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60">
+                  🎉 挑戰結算完成
+                </span>
+              </div>
+
+              <!-- Quick action to abort/finish early -->
+              <div class="flex items-center space-x-2">
+                <button v-if="blindStatus === 'PLAYING'" @click="finishBlindTest" 
+                        class="text-xs text-slate-400 hover:text-rose-400 px-2.5 py-1 rounded bg-slate-950 border border-slate-800">
+                  提前結算
+                </button>
+                <button v-if="blindStatus === 'REVEALED'" @click="resetBlindTest" 
+                        class="text-xs text-white bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded-xl font-bold shadow flex items-center space-x-1">
+                  <span>🎲</span>
+                  <span>再來一局</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Account Metrics Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-mono">
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                <span class="text-[11px] text-slate-500 block">總資產淨值</span>
+                <span class="text-white font-bold text-sm">${{ blindCurrentEquity.toLocaleString() }}</span>
+                <span :class="blindTotalReturnPct >= 0 ? 'text-rose-400' : 'text-emerald-400'" class="text-[11px] block mt-0.5">
+                  {{ blindTotalReturnPct >= 0 ? '+' : '' }}{{ blindTotalReturnPct }}%
+                </span>
+              </div>
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                <span class="text-[11px] text-slate-500 block">可用現金</span>
+                <span class="text-slate-200 font-bold text-sm">${{ Math.round(blindSession.cash).toLocaleString() }}</span>
+                <span class="text-[11px] text-slate-500 block mt-0.5">佔比 {{ Math.round((blindSession.cash / (blindCurrentEquity || 1)) * 100) }}%</span>
+              </div>
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                <span class="text-[11px] text-slate-500 block">當前持股</span>
+                <span class="text-slate-200 font-bold text-sm">{{ blindSession.shares.toLocaleString() }} 股</span>
+                <span class="text-[11px] text-slate-400 block mt-0.5">成本 ${{ blindSession.avgCost ? blindSession.avgCost.toFixed(2) : '0.00' }}</span>
+              </div>
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                <span class="text-[11px] text-slate-500 block">未實現損益</span>
+                <span :class="blindUnrealizedPnl >= 0 ? 'text-rose-400' : 'text-emerald-400'" class="font-bold text-sm">
+                  {{ blindUnrealizedPnl >= 0 ? '+' : '' }}${{ Math.round(blindUnrealizedPnl).toLocaleString() }}
+                </span>
+                <span :class="blindUnrealizedPnlPct >= 0 ? 'text-rose-400' : 'text-emerald-400'" class="text-[11px] block mt-0.5">
+                  ({{ blindUnrealizedPnlPct >= 0 ? '+' : '' }}{{ blindUnrealizedPnlPct }}%)
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart Container -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-xl space-y-2">
+            <div class="flex items-center justify-between text-xs text-slate-400">
+              <div class="flex items-center space-x-2 font-mono">
+                <span class="text-slate-300 font-bold">{{ blindStatus === 'REVEALED' ? blindSession.realStock?.name : blindSession.anonymousCode }}</span>
+                <span class="text-slate-500">最新收盤:</span>
+                <span class="text-white font-bold">${{ blindCurrentBar?.close || 0 }}</span>
+                <span :class="(blindCurrentBar?.close >= blindCurrentBar?.open) ? 'text-rose-400' : 'text-emerald-400'" class="font-bold">
+                  {{ blindCurrentBar ? (blindCurrentBar.close >= blindCurrentBar.open ? '+' : '') + (((blindCurrentBar.close - blindCurrentBar.open) / (blindCurrentBar.open || 1)) * 100).toFixed(2) + '%' : '' }}
+                </span>
+              </div>
+              <div class="flex items-center space-x-2 text-[11px]">
+                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-yellow-500 inline-block"></span><span>MA20</span></span>
+                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-sky-500 inline-block"></span><span>MA60</span></span>
+              </div>
+            </div>
+
+            <!-- Lightweight Chart Mount Element -->
+            <div id="blind-chart-container" class="w-full h-72 sm:h-96 bg-slate-950 rounded-2xl border border-slate-800 relative"></div>
+            
+            <div class="flex items-center justify-between text-[11px] text-slate-500 px-1">
+              <span>X 軸：相對推演天數 (已遮蔽真實日期)</span>
+              <span>第 {{ blindSession.currentIndex + 1 }} 根 K 棒</span>
+            </div>
+          </div>
+
+          <!-- Decision Action & Thesis Journaling Panel (Only when PLAYING) -->
+          <div v-if="blindStatus === 'PLAYING'" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4 shadow-xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <h3 class="text-xs sm:text-sm font-bold text-slate-200 flex items-center space-x-1.5">
+                <span>📝</span>
+                <span>第 {{ blindSession.currentRound }} 回合決策 — 請下達買賣指令並記錄依據</span>
+              </h3>
+              <span class="text-xs text-amber-400 font-mono">當前價格: ${{ blindCurrentBar?.close }}</span>
+            </div>
+
+            <!-- Thesis Quick Tags -->
+            <div class="space-y-1.5">
+              <label class="block text-xs text-slate-400 font-semibold">1. 選擇本次下單的核心依據 (可複選或直接點選)：</label>
+              <div class="flex flex-wrap gap-1.5">
+                <button v-for="tag in quickThesisTags" :key="tag"
+                        @click="selectQuickThesis(tag)"
+                        :class="blindSelectedTheses.includes(tag) ? 'bg-indigo-600 text-white border-indigo-500 font-bold' : 'bg-slate-950 text-slate-400 hover:text-slate-200 border-slate-800'"
+                        class="px-2.5 py-1 rounded-lg text-xs border transition-all">
+                  {{ tag }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Custom Thesis Note Input -->
+            <div class="space-y-1">
+              <label class="block text-xs text-slate-400 font-semibold">2. 補充自訂假說或交易筆記 (選填)：</label>
+              <input v-model="blindCustomNote" type="text" placeholder="例如：帶量突破盤整區高點，預期回測不破續攻；若跌破均線則停損"
+                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500">
+            </div>
+
+            <!-- Action Buttons Grid -->
+            <div class="grid grid-cols-3 gap-2.5 pt-1">
+              <!-- Buy Button -->
+              <button @click="executeBlindAction('BUY')" 
+                      :disabled="blindSession.cash < (blindCurrentBar?.close || 1)"
+                      class="py-3 px-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 disabled:opacity-40 disabled:pointer-events-none text-white font-bold text-xs sm:text-sm shadow-lg shadow-rose-600/30 flex flex-col items-center justify-center space-y-0.5 transition-all active:scale-95">
+                <span class="flex items-center space-x-1"><span>📈</span><span>買進 / 加碼</span></span>
+                <span class="text-[10px] text-rose-200 font-normal">買進 {{ blindConfig.positionSizePct }}% 倉位</span>
+              </button>
+
+              <!-- Sell Button -->
+              <button @click="executeBlindAction('SELL')" 
+                      :disabled="blindSession.shares <= 0"
+                      class="py-3 px-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 disabled:opacity-40 disabled:pointer-events-none text-white font-bold text-xs sm:text-sm shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center space-y-0.5 transition-all active:scale-95">
+                <span class="flex items-center space-x-1"><span>📉</span><span>賣出 / 平倉</span></span>
+                <span class="text-[10px] text-emerald-200 font-normal">全數出清獲利/停損</span>
+              </button>
+
+              <!-- Hold Button -->
+              <button @click="executeBlindAction('HOLD')" 
+                      class="py-3 px-2 rounded-xl bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold text-xs sm:text-sm shadow-lg flex flex-col items-center justify-center space-y-0.5 transition-all active:scale-95">
+                <span class="flex items-center space-x-1"><span>👀</span><span>觀望 / 下一根</span></span>
+                <span class="text-[10px] text-slate-300 font-normal">持股續抱或空手等待</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Reveal & Post-Mortem Analysis Section (When REVEALED) -->
+          <div v-if="blindStatus === 'REVEALED'" class="space-y-4">
+            
+            <!-- Big Reveal Card -->
+            <div class="bg-gradient-to-r from-indigo-950 via-purple-950 to-slate-900 border-2 border-indigo-500/50 rounded-2xl p-5 shadow-2xl space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-indigo-300 font-bold bg-indigo-900/60 px-2.5 py-1 rounded-full border border-indigo-700/60">
+                  🎉 本檔標的真實身分大揭曉
+                </span>
+                <span class="text-xs text-slate-400 font-mono">{{ blindSession.realStock?.market === 'TW' ? '台股' : '美股' }}</span>
+              </div>
+              <div class="flex flex-wrap items-baseline gap-3">
+                <h2 class="text-2xl sm:text-3xl font-black text-white">
+                  {{ blindSession.realStock?.name }}
+                </h2>
+                <span class="text-lg font-mono text-indigo-300 font-bold">{{ blindSession.realStock?.ticker }}</span>
+                <span class="text-xs text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800">
+                  真實區間: {{ blindSession.slicedKlines[0]?.realDate }} ~ {{ blindSession.slicedKlines[blindSession.slicedKlines.length - 1]?.realDate }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Performance Scorecard -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+              <h3 class="text-xs font-bold text-slate-300 flex items-center space-x-1.5">
+                <span>📊</span>
+                <span>盲測實戰績效總結</span>
+              </h3>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                  <span class="text-slate-500 block mb-0.5">最終模擬淨值</span>
+                  <span class="text-white font-bold text-base">${{ Math.round(blindSession.cash).toLocaleString() }}</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                  <span class="text-slate-500 block mb-0.5">實戰總報酬率</span>
+                  <span :class="blindTotalReturnPct >= 0 ? 'text-rose-400' : 'text-emerald-400'" class="font-bold text-base">
+                    {{ blindTotalReturnPct >= 0 ? '+' : '' }}{{ blindTotalReturnPct }}%
+                  </span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                  <span class="text-slate-500 block mb-0.5">同期買進持有 (B&H)</span>
+                  <span :class="blindBenchmarkReturnPct >= 0 ? 'text-rose-400' : 'text-emerald-400'" class="font-bold text-base">
+                    {{ blindBenchmarkReturnPct >= 0 ? '+' : '' }}{{ blindBenchmarkReturnPct }}%
+                  </span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                  <span class="text-slate-500 block mb-0.5">超額報酬 (Alpha)</span>
+                  <span :class="blindAlphaPct >= 0 ? 'text-amber-400' : 'text-slate-400'" class="font-bold text-base">
+                    {{ blindAlphaPct >= 0 ? '+' : '' }}{{ blindAlphaPct }}%
+                  </span>
+                </div>
+              </div>
+
+              <!-- Trade Summary Metrics -->
+              <div class="grid grid-cols-3 gap-2 text-xs font-mono pt-1 text-center">
+                <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+                  <span class="text-slate-500 block text-[11px]">總交易筆數</span>
+                  <span class="text-slate-200 font-bold">{{ blindTradeCount }} 筆</span>
+                </div>
+                <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+                  <span class="text-slate-500 block text-[11px]">勝率</span>
+                  <span class="text-rose-400 font-bold">{{ blindWinRatePct }}%</span>
+                </div>
+                <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+                  <span class="text-slate-500 block text-[11px]">全期最大回撤</span>
+                  <span class="text-emerald-400 font-bold">{{ blindMaxDrawdownPct }}%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Post-Mortem Diagnosis & Calibration Recommendations -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+              <h3 class="text-xs font-bold text-slate-300 flex items-center space-x-1.5">
+                <span>🧠</span>
+                <span>覆盤與認知偏差修訂建議 (Post-Mortem Insights)</span>
+              </h3>
+              <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-xs text-slate-300 leading-relaxed">
+                {{ blindDiagnosisText }}
+              </div>
+            </div>
+
+            <!-- Decision Journal Review Table -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-slate-300 flex items-center space-x-1.5">
+                  <span>📋</span>
+                  <span>逐回合決策履歷與走勢驗證 (Audit Trail)</span>
+                </h3>
+                <span class="text-[11px] text-slate-500">檢驗最初判斷與事後走勢偏差</span>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs whitespace-nowrap">
+                  <thead>
+                    <tr class="text-slate-400 border-b border-slate-800 font-semibold">
+                      <th class="py-2 px-2">回合</th>
+                      <th class="py-2 px-2">決策動作</th>
+                      <th class="py-2 px-2">決策價</th>
+                      <th class="py-2 px-2">當時下單理由 / 假說</th>
+                      <th class="py-2 px-2">次日/後續走勢</th>
+                      <th class="py-2 px-2 text-right">損益結算</th>
+                      <th class="py-2 px-2 text-center">認知偏差歸因</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800/60 font-mono">
+                    <tr v-for="(item, idx) in blindSession.journal" :key="idx" class="hover:bg-slate-800/40">
+                      <td class="py-2.5 px-2 text-slate-400">R{{ item.round }}</td>
+                      <td class="py-2.5 px-2">
+                        <span :class="item.action === 'BUY' ? 'bg-rose-950 text-rose-300 border-rose-800' : (item.action === 'SELL' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' : 'bg-slate-800 text-slate-300 border-slate-700')"
+                              class="px-2 py-0.5 rounded text-[10px] border font-sans font-bold">
+                          {{ item.action === 'BUY' ? '🟢 買進' : (item.action === 'SELL' ? '🔴 賣出' : '⚪ 觀望') }}
+                        </span>
+                      </td>
+                      <td class="py-2.5 px-2 text-slate-200">${{ item.price }}</td>
+                      <td class="py-2.5 px-2 text-slate-300 font-sans max-w-xs truncate" :title="item.thesis + (item.note ? ' - ' + item.note : '')">
+                        <span class="text-indigo-400 font-semibold">{{ item.thesis || '無標籤' }}</span>
+                        <span v-if="item.note" class="text-slate-400 text-[11px] block truncate">{{ item.note }}</span>
+                      </td>
+                      <td class="py-2.5 px-2 text-slate-300">
+                        <span v-if="item.nextPrice" :class="item.nextPrice >= item.price ? 'text-rose-400' : 'text-emerald-400'">
+                          次日 ${{ item.nextPrice }} ({{ item.nextPrice >= item.price ? '+' : '' }}{{ (((item.nextPrice - item.price) / item.price) * 100).toFixed(2) }}%)
+                        </span>
+                        <span v-else class="text-slate-500">最後一根</span>
+                      </td>
+                      <td class="py-2.5 px-2 text-right font-bold" :class="(item.realizedPnl || 0) >= 0 ? 'text-rose-400' : 'text-emerald-400'">
+                        {{ item.action === 'SELL' ? ((item.realizedPnl >= 0 ? '+' : '') + '$' + Math.round(item.realizedPnl).toLocaleString()) : '-' }}
+                      </td>
+                      <td class="py-2.5 px-2 text-center font-sans">
+                        <span :class="item.attributionClass" class="px-2 py-0.5 rounded text-[10px] border">
+                          {{ item.attributionLabel }}
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Bottom Action Row -->
+            <div class="flex items-center justify-between pt-2">
+              <button @click="resetBlindTest" 
+                      class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">
+                ← 返回設定
+              </button>
+              <button @click="startBlindTest" 
+                      class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg flex items-center space-x-1.5">
+                <span>🎲</span>
+                <span>進行下一場盲測挑戰</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
     </main>
 
     <!-- Modal: Add New Portfolio Item -->
@@ -1598,6 +2006,62 @@
         <div class="flex space-x-2 pt-2">
           <button @click="showAddModal = false" class="flex-1 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">取消</button>
           <button @click="saveNewItem" class="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg">確認新增</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Blind Test History Records -->
+    <div v-if="showBlindHistoryModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 max-w-lg w-full space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-base">📜</span>
+            <h3 class="font-bold text-sm text-white">歷史盲測挑戰履歷</h3>
+            <span class="text-xs text-slate-500 font-mono">({{ blindHistory.length }} 筆)</span>
+          </div>
+          <button @click="showBlindHistoryModal = false" class="text-slate-400 hover:text-white text-sm">✕</button>
+        </div>
+
+        <div v-if="blindHistory.length === 0" class="py-12 text-center text-slate-500 text-xs">
+          尚無盲測歷史紀錄，立即開始您的第一場挑戰吧！
+        </div>
+
+        <div v-else class="overflow-y-auto space-y-2.5 pr-1 flex-1">
+          <div v-for="(rec, rIdx) in blindHistory" :key="rec.id || rIdx" 
+               class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800/80 space-y-2 hover:border-slate-700 transition-all">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="font-bold text-xs text-white">{{ rec.stockName }}</span>
+                <span class="text-[11px] font-mono text-slate-400">{{ rec.ticker }}</span>
+                <span class="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">{{ rec.market === 'TW' ? '台股' : '美股' }}</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span :class="rec.totalReturnPct >= 0 ? 'text-rose-400' : 'text-emerald-400'" class="font-mono font-bold text-xs">
+                  {{ rec.totalReturnPct >= 0 ? '+' : '' }}{{ rec.totalReturnPct }}%
+                </span>
+                <button @click="deleteBlindHistoryRecord(rIdx)" class="text-slate-600 hover:text-rose-400 text-xs px-1">✕</button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-[11px] font-mono text-slate-400 bg-slate-900/60 p-2 rounded-xl">
+              <div>勝率: <span class="text-slate-200 font-bold">{{ rec.winRatePct }}%</span></div>
+              <div>B&H: <span :class="rec.benchmarkReturnPct >= 0 ? 'text-rose-400' : 'text-emerald-400'">{{ rec.benchmarkReturnPct >= 0 ? '+' : '' }}{{ rec.benchmarkReturnPct }}%</span></div>
+              <div>Alpha: <span :class="rec.alphaPct >= 0 ? 'text-amber-400' : 'text-slate-400'">{{ rec.alphaPct >= 0 ? '+' : '' }}{{ rec.alphaPct }}%</span></div>
+            </div>
+
+            <div class="flex items-center justify-between text-[10px] text-slate-500">
+              <span>{{ rec.createdAt }} · {{ rec.rounds }} 回合</span>
+              <span class="truncate max-w-[200px] text-slate-400" :title="rec.diagnosis">{{ rec.diagnosis }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-slate-800 flex justify-between items-center">
+          <button v-if="blindHistory.length > 0" @click="clearAllBlindHistory" class="text-[11px] text-slate-500 hover:text-rose-400">
+            清空所有履歷
+          </button>
+          <span v-else></span>
+          <button @click="showBlindHistoryModal = false" class="py-1.5 px-4 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">關閉</button>
         </div>
       </div>
     </div>
@@ -2254,7 +2718,8 @@
           { id: 'tw', name: '台股與 ETF', icon: '🇹🇼', badge: data.value.tw_stocks.length },
           { id: 'us', name: '美股與 ETF', icon: '🇺🇸', badge: data.value.us_stocks.length },
           { id: 'dca', name: '定期定額與存股', icon: '💰', badge: portfolio.value.length },
-          { id: 'backtest', name: '策略回測實驗室', icon: '🧪', badge: 'Lab' }
+          { id: 'backtest', name: '策略回測實驗室', icon: '🧪', badge: 'Lab' },
+          { id: 'blindtest', name: '歷史盲測挑戰', icon: '🎯', badge: 'New' }
         ]);
 
         const toggleViewMode = () => {
@@ -3194,6 +3659,536 @@
           showHistoryMap.value[ticker] = !showHistoryMap.value[ticker];
         };
 
+        // ================= Historical Blind Test Lab (歷史盲測挑戰) =================
+        const quickThesisTags = [
+          '🚀 帶量突破壓力',
+          '📈 均線多頭排列',
+          '🛡️ 回測支撐不破',
+          '📉 跌破關鍵均線',
+          '⚠️ 高檔爆量長黑',
+          '👀 震盪整理觀望',
+          '🎯 達到預期停利',
+          '🛑 跌破防守停損'
+        ];
+
+        const blindStatus = ref('IDLE'); // 'IDLE' | 'PLAYING' | 'REVEALED'
+        const showBlindHistoryModal = ref(false);
+        const blindHistory = ref(JSON.parse(localStorage.getItem('sc_blindtest_history') || '[]'));
+
+        const blindConfig = ref({
+          initialCapital: 100000,
+          totalRounds: 10,
+          observeBars: 30,
+          positionSizePct: 50
+        });
+
+        const blindSession = ref({
+          anonymousCode: '',
+          realStock: null,
+          slicedKlines: [],
+          currentIndex: 0,
+          currentRound: 1,
+          cash: 100000,
+          shares: 0,
+          avgCost: 0,
+          totalTrades: 0,
+          journal: [],
+          equityHistory: []
+        });
+
+        const blindSelectedTheses = ref([]);
+        const blindCustomNote = ref('');
+
+        const selectQuickThesis = (tag) => {
+          const idx = blindSelectedTheses.value.indexOf(tag);
+          if (idx >= 0) {
+            blindSelectedTheses.value.splice(idx, 1);
+          } else {
+            blindSelectedTheses.value.push(tag);
+          }
+        };
+
+        const blindCurrentBar = computed(() => {
+          if (!blindSession.value.slicedKlines || blindSession.value.slicedKlines.length === 0) return null;
+          return blindSession.value.slicedKlines[blindSession.value.currentIndex] || null;
+        });
+
+        const blindCurrentEquity = computed(() => {
+          const bar = blindCurrentBar.value;
+          const curP = bar ? bar.close : 0;
+          return Math.round(blindSession.value.cash + (blindSession.value.shares * curP));
+        });
+
+        const blindTotalReturnPct = computed(() => {
+          const init = blindConfig.value.initialCapital || 100000;
+          const diff = blindCurrentEquity.value - init;
+          return parseFloat(((diff / init) * 100).toFixed(2));
+        });
+
+        const blindUnrealizedPnl = computed(() => {
+          if (blindSession.value.shares <= 0 || !blindCurrentBar.value) return 0;
+          return (blindCurrentBar.value.close - blindSession.value.avgCost) * blindSession.value.shares;
+        });
+
+        const blindUnrealizedPnlPct = computed(() => {
+          if (blindSession.value.shares <= 0 || !blindSession.value.avgCost) return 0;
+          const pnl = blindUnrealizedPnl.value;
+          const totalCost = blindSession.value.avgCost * blindSession.value.shares;
+          return parseFloat(((pnl / (totalCost || 1)) * 100).toFixed(2));
+        });
+
+        const blindBenchmarkReturnPct = computed(() => {
+          const sk = blindSession.value.slicedKlines;
+          if (!sk || sk.length === 0) return 0;
+          const startIdx = (blindConfig.value.observeBars || 30) - 1;
+          const startP = sk[startIdx] ? sk[startIdx].close : sk[0].close;
+          const endP = sk[blindSession.value.currentIndex] ? sk[blindSession.value.currentIndex].close : startP;
+          return parseFloat((((endP - startP) / startP) * 100).toFixed(2));
+        });
+
+        const blindAlphaPct = computed(() => {
+          return parseFloat((blindTotalReturnPct.value - blindBenchmarkReturnPct.value).toFixed(2));
+        });
+
+        const blindTradeCount = computed(() => {
+          return blindSession.value.journal.filter(j => j.action === 'BUY' || j.action === 'SELL').length;
+        });
+
+        const blindWinRatePct = computed(() => {
+          const sellTrades = blindSession.value.journal.filter(j => j.action === 'SELL');
+          if (sellTrades.length === 0) return 0;
+          const wins = sellTrades.filter(t => (t.realizedPnl || 0) > 0).length;
+          return parseFloat(((wins / sellTrades.length) * 100).toFixed(1));
+        });
+
+        const blindMaxDrawdownPct = computed(() => {
+          const eq = blindSession.value.equityHistory;
+          if (!eq || eq.length === 0) return 0;
+          let peak = eq[0];
+          let maxDD = 0;
+          eq.forEach(val => {
+            if (val > peak) peak = val;
+            const dd = ((peak - val) / peak) * 100;
+            if (dd > maxDD) maxDD = dd;
+          });
+          return parseFloat(maxDD.toFixed(2));
+        });
+
+        const blindDiagnosisText = computed(() => {
+          const ret = blindTotalReturnPct.value;
+          const alpha = blindAlphaPct.value;
+          const winRate = blindWinRatePct.value;
+          const trades = blindTradeCount.value;
+
+          if (trades === 0) {
+            return '本局全程觀望未進場。在混沌不明的行情中保留本金是穩健之舉，但在明確趨勢成型時，可嘗試輕倉（25%）試單以培養進場決斷力。';
+          }
+          if (ret > 0 && alpha > 0) {
+            return `表現優異：實戰創造 +${ret}% 收益，超越同期買進持有 +${alpha}% 超額報酬。交易紀律良好，有效捕捉了順勢波段並降低了無效震盪耗損。`;
+          }
+          if (ret > 0 && alpha <= 0) {
+            return `雖有獲利 +${ret}%，但落後同期買進持有（B&H 為 +${blindBenchmarkReturnPct.value}%）。主因在於趨勢向上時過早停利或空手時間過長。建議下次可保留部分基本持股（如賣出半倉），讓獲利奔馳。`;
+          }
+          if (ret <= 0) {
+            return `本局最終虧損 ${ret}%。覆盤時請特別檢視虧損回合的停損是否果決、是否在壓力區追高。建議強化「跌破支撐即砍單」與「縮小單筆部位」的防守紀律。`;
+          }
+          return `實戰勝率 ${winRate}%，整體損益平衡。建議檢視每筆賺賠比（期望值），確保每次大賺小賠。`;
+        });
+
+        let blindChartInstance = null;
+        let blindCandleSeries = null;
+        let blindMa20Series = null;
+        let blindMa60Series = null;
+        let blindVolSeries = null;
+
+        const updateBlindChartData = () => {
+          if (!blindChartInstance || !blindCandleSeries) return;
+          const visibleBars = blindSession.value.slicedKlines.slice(0, blindSession.value.currentIndex + 1);
+
+          blindCandleSeries.setData(visibleBars.map(b => ({
+            time: b.blindTime,
+            open: b.open,
+            high: b.high,
+            low: b.low,
+            close: b.close
+          })));
+
+          blindMa20Series.setData(visibleBars.filter(b => b.ma20 != null).map(b => ({
+            time: b.blindTime,
+            value: b.ma20
+          })));
+
+          blindMa60Series.setData(visibleBars.filter(b => b.ma60 != null).map(b => ({
+            time: b.blindTime,
+            value: b.ma60
+          })));
+
+          blindVolSeries.setData(visibleBars.map(b => ({
+            time: b.blindTime,
+            value: b.volume || 0,
+            color: b.close >= b.open ? '#f43f5e' : '#10b981'
+          })));
+
+          if (blindStatus.value === 'REVEALED') {
+            const markers = [];
+            blindSession.value.journal.forEach(j => {
+              if (j.action === 'BUY') {
+                markers.push({
+                  time: j.blindTime,
+                  position: 'belowBar',
+                  color: '#f43f5e',
+                  shape: 'arrowUp',
+                  text: '買'
+                });
+              } else if (j.action === 'SELL') {
+                markers.push({
+                  time: j.blindTime,
+                  position: 'aboveBar',
+                  color: '#10b981',
+                  shape: 'arrowDown',
+                  text: '賣'
+                });
+              }
+            });
+            try {
+              blindCandleSeries.setMarkers(markers);
+            } catch (e) {}
+          }
+
+          blindChartInstance.timeScale().fitContent();
+        };
+
+        const renderBlindChart = () => {
+          nextTick(() => {
+            setTimeout(() => {
+              const container = document.getElementById('blind-chart-container');
+              if (!container) return;
+              container.innerHTML = '';
+
+              const width = container.clientWidth || 360;
+              const height = container.clientHeight || 320;
+
+              if (blindChartInstance) {
+                try { blindChartInstance.remove(); } catch (e) {}
+                blindChartInstance = null;
+              }
+
+              blindChartInstance = LightweightCharts.createChart(container, {
+                width: width,
+                height: height,
+                layout: { background: { color: '#020617' }, textColor: '#94a3b8' },
+                grid: { vertLines: { color: '#1e293b' }, horzLines: { color: '#1e293b' } },
+                timeScale: {
+                  borderColor: '#334155',
+                  rightOffset: 6,
+                  barSpacing: 9
+                },
+                crosshair: { mode: LightweightCharts.CrosshairMode.Normal }
+              });
+
+              blindCandleSeries = blindChartInstance.addCandlestickSeries({
+                upColor: '#f43f5e',
+                downColor: '#10b981',
+                borderVisible: false,
+                wickUpColor: '#f43f5e',
+                wickDownColor: '#10b981'
+              });
+
+              blindMa20Series = blindChartInstance.addLineSeries({
+                color: '#eab308',
+                lineWidth: 1.5,
+                title: 'MA20'
+              });
+
+              blindMa60Series = blindChartInstance.addLineSeries({
+                color: '#38bdf8',
+                lineWidth: 1.5,
+                title: 'MA60'
+              });
+
+              blindVolSeries = blindChartInstance.addHistogramSeries({
+                priceFormat: { type: 'volume' },
+                priceScaleId: '',
+                scaleMargins: { top: 0.8, bottom: 0 }
+              });
+
+              updateBlindChartData();
+            }, 60);
+          });
+        };
+
+        const makeSyntheticDate = (index) => {
+          const d = new Date(2000, 0, 1);
+          d.setDate(d.getDate() + index);
+          return d.toISOString().slice(0, 10);
+        };
+
+        const startBlindTest = () => {
+          const all = [...(data.value.tw_stocks || []), ...(data.value.us_stocks || [])];
+          const requiredBars = (blindConfig.value.observeBars || 30) + (blindConfig.value.totalRounds || 10);
+          const eligible = all.filter(s => s.history_kline && s.history_kline.length >= 35);
+
+          if (eligible.length === 0) {
+            showToast('目前歷史 K 線資料不足，無法啟動盲測');
+            return;
+          }
+
+          const chosenStock = eligible[Math.floor(Math.random() * eligible.length)];
+          const klines = chosenStock.history_kline;
+          const sliceLen = Math.min(requiredBars, klines.length);
+          const maxStart = klines.length - sliceLen;
+          const startOffset = Math.floor(Math.random() * (maxStart + 1));
+          const rawSlice = klines.slice(startOffset, startOffset + sliceLen);
+
+          const slicedKlines = rawSlice.map((k, i) => ({
+            blindTime: makeSyntheticDate(i),
+            barLabel: 'Day ' + (i + 1),
+            realDate: k.time,
+            open: k.open,
+            high: k.high,
+            low: k.low,
+            close: k.close,
+            volume: k.volume,
+            ma20: k.ma20,
+            ma60: k.ma60,
+            macd_dif: k.macd_dif,
+            macd_signal: k.macd_signal,
+            macd_osc: k.macd_osc
+          }));
+
+          const initialObserve = Math.min(blindConfig.value.observeBars || 30, slicedKlines.length - 2);
+          const initialCap = blindConfig.value.initialCapital || 100000;
+
+          blindSession.value = {
+            anonymousCode: '標的 #' + String.fromCharCode(65 + Math.floor(Math.random() * 26)) + '-' + Math.floor(100 + Math.random() * 900),
+            realStock: {
+              ticker: chosenStock.ticker,
+              name: chosenStock.name,
+              market: chosenStock.market || (chosenStock.ticker.includes('.TW') ? 'TW' : 'US')
+            },
+            slicedKlines: slicedKlines,
+            currentIndex: initialObserve - 1,
+            currentRound: 1,
+            cash: initialCap,
+            shares: 0,
+            avgCost: 0,
+            totalTrades: 0,
+            journal: [],
+            equityHistory: [initialCap]
+          };
+
+          blindSelectedTheses.value = [];
+          blindCustomNote.value = '';
+          blindStatus.value = 'PLAYING';
+
+          renderBlindChart();
+          showToast('未知行情已載入，第 1 回合決策開始');
+        };
+
+        const attributeJournalItem = (item) => {
+          if (!item.nextPrice || !item.price) {
+            item.attributionLabel = '持平或無對照';
+            item.attributionClass = 'bg-slate-800 text-slate-400 border-slate-700';
+            return;
+          }
+          const isUp = item.nextPrice >= item.price;
+          if (item.action === 'BUY') {
+            if (isUp) {
+              item.attributionLabel = '🌟 判斷正確且獲利';
+              item.attributionClass = 'bg-rose-950 text-rose-300 border-rose-800';
+            } else {
+              item.attributionLabel = '❌ 追高/判斷失誤';
+              item.attributionClass = 'bg-emerald-950 text-emerald-300 border-emerald-800';
+            }
+          } else if (item.action === 'SELL') {
+            if (!isUp) {
+              item.attributionLabel = '🛡️ 精準避開回檔';
+              item.attributionClass = 'bg-emerald-950 text-emerald-300 border-emerald-800';
+            } else {
+              item.attributionLabel = '⚠️ 過早停利/賣飛';
+              item.attributionClass = 'bg-amber-950 text-amber-300 border-amber-800';
+            }
+          } else {
+            if (isUp) {
+              item.attributionLabel = '📈 錯過漲幅或續抱';
+              item.attributionClass = 'bg-slate-800 text-slate-300 border-slate-700';
+            } else {
+              item.attributionLabel = '🛡️ 耐心觀望防守';
+              item.attributionClass = 'bg-emerald-950 text-emerald-300 border-emerald-800';
+            }
+          }
+        };
+
+        const executeBlindAction = (action) => {
+          const curBar = blindCurrentBar.value;
+          if (!curBar) return;
+
+          const currentPrice = curBar.close;
+          const thesesStr = blindSelectedTheses.value.join('、');
+          const finalThesis = thesesStr || (blindCustomNote.value ? '' : '無特定依據');
+          const note = blindCustomNote.value.trim();
+
+          let sharesTraded = 0;
+          let realizedPnl = null;
+          const prevShares = blindSession.value.shares;
+          const prevAvgCost = blindSession.value.avgCost;
+
+          if (action === 'BUY') {
+            const allocPct = (blindConfig.value.positionSizePct || 50) / 100;
+            const budget = blindSession.value.cash * allocPct;
+            const affordable = Math.floor(budget / currentPrice);
+            if (affordable > 0) {
+              sharesTraded = affordable;
+              const cost = affordable * currentPrice;
+              blindSession.value.cash -= cost;
+              const totalCost = (prevShares * prevAvgCost) + cost;
+              blindSession.value.shares = prevShares + affordable;
+              blindSession.value.avgCost = totalCost / blindSession.value.shares;
+              blindSession.value.totalTrades++;
+              showToast(`已買進 ${affordable} 股 (成本 $${currentPrice})`);
+            } else {
+              showToast('現金不足以買進最少 1 股');
+              return;
+            }
+          } else if (action === 'SELL') {
+            if (prevShares > 0) {
+              sharesTraded = prevShares;
+              const proceeds = prevShares * currentPrice;
+              blindSession.value.cash += proceeds;
+              realizedPnl = proceeds - (prevShares * prevAvgCost);
+              blindSession.value.shares = 0;
+              blindSession.value.avgCost = 0;
+              blindSession.value.totalTrades++;
+              showToast(`已全數賣出，實現損益: ${realizedPnl >= 0 ? '+' : ''}$${Math.round(realizedPnl)}`);
+            } else {
+              showToast('目前無持股可賣出');
+              return;
+            }
+          } else {
+            showToast('選擇觀望，維持現有倉位');
+          }
+
+          const currentPortVal = Math.round(blindSession.value.cash + (blindSession.value.shares * currentPrice));
+          blindSession.value.equityHistory.push(currentPortVal);
+
+          const journalItem = {
+            round: blindSession.value.currentRound,
+            barIndex: blindSession.value.currentIndex,
+            blindTime: curBar.blindTime,
+            action: action,
+            price: currentPrice,
+            thesis: finalThesis,
+            note: note,
+            sharesTraded: sharesTraded,
+            realizedPnl: realizedPnl,
+            nextPrice: null,
+            attributionLabel: '評估中',
+            attributionClass: 'bg-slate-800 text-slate-400'
+          };
+
+          blindSession.value.journal.push(journalItem);
+
+          const nextIdx = blindSession.value.currentIndex + 1;
+          const isLastRound = blindSession.value.currentRound >= blindConfig.value.totalRounds;
+          const isOutOfBars = nextIdx >= blindSession.value.slicedKlines.length;
+
+          if (isLastRound || isOutOfBars) {
+            finishBlindTest();
+          } else {
+            const nextBar = blindSession.value.slicedKlines[nextIdx];
+            journalItem.nextPrice = nextBar ? nextBar.close : null;
+            attributeJournalItem(journalItem);
+
+            blindSession.value.currentIndex = nextIdx;
+            blindSession.value.currentRound++;
+            blindSelectedTheses.value = [];
+            blindCustomNote.value = '';
+
+            updateBlindChartData();
+          }
+        };
+
+        const finishBlindTest = () => {
+          const lastBar = blindCurrentBar.value;
+          if (blindSession.value.shares > 0 && lastBar) {
+            const proceeds = blindSession.value.shares * lastBar.close;
+            blindSession.value.cash += proceeds;
+            const pnl = proceeds - (blindSession.value.shares * blindSession.value.avgCost);
+            blindSession.value.shares = 0;
+            blindSession.value.avgCost = 0;
+
+            if (blindSession.value.journal.length > 0) {
+              const lastJ = blindSession.value.journal[blindSession.value.journal.length - 1];
+              if (!lastJ.nextPrice) lastJ.nextPrice = lastBar.close;
+              attributeJournalItem(lastJ);
+            }
+          }
+
+          blindSession.value.journal.forEach(j => {
+            if (j.attributionLabel === '評估中') {
+              attributeJournalItem(j);
+            }
+          });
+
+          blindStatus.value = 'REVEALED';
+
+          const record = {
+            id: Date.now().toString(),
+            createdAt: new Date().toLocaleDateString('zh-TW', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+            ticker: blindSession.value.realStock?.ticker,
+            stockName: blindSession.value.realStock?.name,
+            market: blindSession.value.realStock?.market,
+            rounds: blindSession.value.journal.length,
+            totalReturnPct: blindTotalReturnPct.value,
+            benchmarkReturnPct: blindBenchmarkReturnPct.value,
+            alphaPct: blindAlphaPct.value,
+            winRatePct: blindWinRatePct.value,
+            maxDrawdownPct: blindMaxDrawdownPct.value,
+            diagnosis: blindDiagnosisText.value
+          };
+
+          blindHistory.value.unshift(record);
+          if (blindHistory.value.length > 50) blindHistory.value.pop();
+          localStorage.setItem('sc_blindtest_history', JSON.stringify(blindHistory.value));
+
+          if (supabaseClient && currentUser.value) {
+            supabaseClient.from('blindtest_records').upsert({
+              user_id: currentUser.value.id,
+              ticker: record.ticker,
+              stock_name: record.stockName,
+              total_return_pct: record.totalReturnPct,
+              win_rate_pct: record.winRatePct,
+              alpha_pct: record.alphaPct,
+              created_at: new Date().toISOString()
+            }).then(() => {}).catch(e => console.warn('Supabase blind test sync skipped:', e));
+          }
+
+          updateBlindChartData();
+          showToast('挑戰結算完成！真實身分已解鎖');
+        };
+
+        const resetBlindTest = () => {
+          blindStatus.value = 'IDLE';
+          if (blindChartInstance) {
+            try { blindChartInstance.remove(); } catch (e) {}
+            blindChartInstance = null;
+          }
+        };
+
+        const deleteBlindHistoryRecord = (index) => {
+          blindHistory.value.splice(index, 1);
+          localStorage.setItem('sc_blindtest_history', JSON.stringify(blindHistory.value));
+          showToast('已刪除該筆盲測紀錄');
+        };
+
+        const clearAllBlindHistory = () => {
+          if (confirm('確定要清空所有歷史盲測紀錄嗎？')) {
+            blindHistory.value = [];
+            localStorage.removeItem('sc_blindtest_history');
+            showToast('已清空歷史盲測紀錄');
+          }
+        };
+
         // ================= AI Stock Deep Diagnosis & Rating =================
         const generateAiDiagnosis = (item) => {
           if (!item) return null;
@@ -4020,7 +5015,34 @@
           handleAuthSubmit,
           signOutUser,
           loadCloudData,
-          uploadLocalToCloud
+          uploadLocalToCloud,
+          // Blind Test Lab
+          quickThesisTags,
+          blindStatus,
+          showBlindHistoryModal,
+          blindHistory,
+          blindConfig,
+          blindSession,
+          blindSelectedTheses,
+          blindCustomNote,
+          selectQuickThesis,
+          blindCurrentBar,
+          blindCurrentEquity,
+          blindTotalReturnPct,
+          blindUnrealizedPnl,
+          blindUnrealizedPnlPct,
+          blindBenchmarkReturnPct,
+          blindAlphaPct,
+          blindTradeCount,
+          blindWinRatePct,
+          blindMaxDrawdownPct,
+          blindDiagnosisText,
+          startBlindTest,
+          executeBlindAction,
+          finishBlindTest,
+          resetBlindTest,
+          deleteBlindHistoryRecord,
+          clearAllBlindHistory
         };
 
 
