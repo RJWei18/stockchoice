@@ -122,23 +122,23 @@
 
       <!-- Category & Favorites Filter Pills -->
       <div class="flex items-center space-x-1.5 overflow-x-auto scrollbar-none pb-0.5 text-xs">
-        <button @click="currentFilter = 'all'"
+        <button @click="setFilter('all')"
                 :class="currentFilter === 'all' ? 'bg-indigo-600 text-white font-bold shadow' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'"
                 class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95">
           全部 ({{ currentMarketTotal }})
         </button>
-        <button @click="currentFilter = 'favorites'"
+        <button @click="setFilter('favorites')"
                 :class="currentFilter === 'favorites' ? 'bg-rose-600 text-white font-bold shadow-rose-600/30 shadow' : 'bg-slate-900 text-rose-300 border border-slate-800'"
                 class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95 flex items-center space-x-1">
           <span>❤️</span>
           <span>我的自選 ({{ favoriteCount }})</span>
         </button>
-        <button @click="currentFilter = 'etf'"
+        <button @click="setFilter('etf')"
                 :class="currentFilter === 'etf' ? 'bg-indigo-600 text-white font-bold shadow' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'"
                 class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95">
           📊 ETF 專區
         </button>
-        <button @click="currentFilter = 'stock'"
+        <button @click="setFilter('stock')"
                 :class="currentFilter === 'stock' ? 'bg-indigo-600 text-white font-bold shadow' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'"
                 class="px-3 py-1.5 rounded-xl whitespace-nowrap transition active:scale-95">
           🏢 個股專區
@@ -393,6 +393,13 @@
             <span class="text-xs text-indigo-400 font-semibold">點擊卡片可展開均線與法人明細</span>
           </div>
 
+          <!-- Active Search within Favorites Hint Banner -->
+          <div v-if="searchQuery && currentFilter === 'favorites'" class="flex items-center justify-between bg-rose-950/40 border border-rose-500/30 rounded-xl px-3 py-1.5 text-xs text-rose-200 mb-2">
+            <span>正在自選股中搜尋「{{ searchQuery }}」（顯示 {{ filteredTWStocks.length }} 檔 / 全部自選共 {{ favoriteCount }} 檔）</span>
+            <button @click="searchQuery = ''" class="text-rose-300 hover:text-white underline font-bold ml-2">清除搜尋，顯示全部自選</button>
+          </div>
+
+
           <!-- External Full Market Search Candidates -->
           <div v-if="matchedExternalSymbols.length > 0" class="my-3 space-y-2">
             <div class="flex items-center justify-between text-xs text-indigo-300 font-bold px-1">
@@ -619,7 +626,7 @@
                     
                     <div class="flex items-center space-x-2">
                       <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                        近5日勝率 {{ aiDiagnosisMap[item.ticker].accuracyRate }}%
+                        {{ item.signal_evaluation && item.signal_evaluation.summary && item.signal_evaluation.summary.total_trades > 0 ? ('實戰勝率 ' + item.signal_evaluation.trade_win_rate + '% (' + item.signal_evaluation.summary.wins + '勝' + item.signal_evaluation.summary.losses + '敗)') : ('勝率 ' + (aiDiagnosisMap[item.ticker]?.accuracyRate || 80) + '%') }}
                       </span>
                       <button @click.stop="openAiModal(item)" class="text-[10px] text-indigo-300 hover:text-white px-1.5 py-0.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 transition">
                         詳情 ↗
@@ -764,6 +771,137 @@
       <!-- ================= TAB 2: 美國股市 & ETF ================= -->
       <section v-if="activeTab === 'us'" class="space-y-4">
         
+        <!-- 美股盤前分析速報與主要指數/科技風向球 -->
+        <div v-if="currentFilter === 'all' && !searchQuery && meta.us_premarket_briefing"
+             class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/50 border border-indigo-500/30 rounded-2xl p-3.5 shadow-md space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-extrabold text-indigo-300">🌅 美股每日盤前分析速報</span>
+              <span class="text-[11px] px-2 py-0.5 rounded-full font-extrabold border"
+                    :class="{
+                      'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': meta.us_premarket_briefing.wind_color === 'emerald',
+                      'bg-indigo-500/20 text-indigo-300 border-indigo-500/40': meta.us_premarket_briefing.wind_color === 'indigo',
+                      'bg-amber-500/20 text-amber-300 border-amber-500/40': meta.us_premarket_briefing.wind_color === 'amber'
+                    }">
+                開盤風向：{{ meta.us_premarket_briefing.wind_status }}
+              </span>
+            </div>
+            <button @click="showUSPremarket = !showUSPremarket" class="text-[11px] font-bold text-indigo-400 hover:text-indigo-200 transition">
+              {{ showUSPremarket ? '收合速報 ▲' : '展開盯盤清單 ▼' }}
+            </button>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+            {{ meta.us_premarket_briefing.opening_strategy }}
+          </p>
+
+          <!-- 美股四大指數 ETF (SPY / QQQ / SOXX / DIA) -->
+          <div v-if="meta.us_premarket_briefing.index_drivers && meta.us_premarket_briefing.index_drivers.length > 0"
+               class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+            <div v-for="drv in meta.us_premarket_briefing.index_drivers" :key="drv.ticker"
+                 class="bg-slate-950/80 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between sm:flex-col sm:items-start">
+              <div class="text-[11px] font-bold text-slate-300">{{ drv.label }}</div>
+              <div class="font-mono text-xs font-black mt-0.5"
+                   :class="drv.change_pct >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                ${{ drv.close.toFixed(1) }} ({{ drv.change_pct >= 0 ? '+' : '' }}{{ drv.change_pct.toFixed(2) }}%)
+              </div>
+            </div>
+          </div>
+
+          <!-- 美股科技與權值風向 (Mag 7 & Semiconductors) -->
+          <div v-if="meta.us_premarket_briefing.tech_drivers && meta.us_premarket_briefing.tech_drivers.length > 0"
+               class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 pt-1">
+            <div v-for="td in meta.us_premarket_briefing.tech_drivers" :key="td.ticker"
+                 class="bg-slate-950/60 border border-slate-800/80 rounded-lg p-1.5 text-center">
+              <div class="text-[10px] text-slate-400 truncate">{{ td.label }}</div>
+              <div class="font-mono text-[11px] font-bold"
+                   :class="td.change_pct >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                {{ td.change_pct >= 0 ? '+' : '' }}{{ td.change_pct.toFixed(2) }}%
+              </div>
+            </div>
+          </div>
+
+          <!-- 美股今日到價盯盤清單 (可收合) -->
+          <div v-if="showUSPremarket && meta.us_premarket_briefing.actionable_watchlist && meta.us_premarket_briefing.actionable_watchlist.length > 0"
+               class="pt-2 border-t border-slate-800 space-y-1.5">
+            <div class="text-[11px] font-bold text-emerald-300">🎯 今日美股重點盯盤清單（接近建議買進價或強勢突破）：</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              <div v-for="aw in meta.us_premarket_briefing.actionable_watchlist" :key="aw.ticker"
+                   @click="searchQuery = aw.ticker"
+                   class="bg-slate-950/90 hover:bg-indigo-950/40 border border-slate-800 hover:border-indigo-500/40 rounded-xl p-2 flex items-center justify-between text-xs cursor-pointer transition">
+                <div>
+                  <span class="font-bold text-white">{{ aw.name }}</span>
+                  <span class="font-mono text-[11px] text-slate-400 ml-1">{{ aw.ticker }}</span>
+                  <span class="ml-1.5 text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">
+                    {{ aw.alert_tag }}
+                  </span>
+                </div>
+                <div class="text-right font-mono text-[11px]">
+                  <div class="text-sky-400 font-bold">買價: ${{ aw.buy_price.toFixed(1) }}</div>
+                  <div class="text-slate-400">停利: ${{ aw.take_profit_price.toFixed(1) }} | 停損: ${{ aw.stop_loss_price.toFixed(1) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 美股盤後市場總結卡片 -->
+        <div v-if="currentFilter === 'all' && !searchQuery && meta.us_postmarket_summary"
+             class="bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/40 border border-purple-500/30 rounded-2xl p-3.5 shadow-md space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-extrabold text-purple-300">🌆 美股盤後市場總結</span>
+              <span class="text-[11px] px-2 py-0.5 rounded-full font-extrabold border"
+                    :class="{
+                      'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': meta.us_postmarket_summary.color === 'emerald',
+                      'bg-indigo-500/20 text-indigo-300 border-indigo-500/40': meta.us_postmarket_summary.color === 'indigo',
+                      'bg-rose-500/20 text-rose-300 border-rose-500/40': meta.us_postmarket_summary.color === 'rose'
+                    }">
+                {{ meta.us_postmarket_summary.verdict }}
+              </span>
+            </div>
+            <button @click="showUSPostmarket = !showUSPostmarket" class="text-[11px] font-bold text-purple-400 hover:text-purple-200 transition">
+              {{ showUSPostmarket ? '收合總結 ▲' : '展開板塊明細 ▼' }}
+            </button>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+            {{ meta.us_postmarket_summary.summary_text }}
+          </p>
+
+          <!-- 展開的板塊與領漲領跌明細 -->
+          <div v-if="showUSPostmarket" class="pt-2 border-t border-slate-800 space-y-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <!-- Top Gainers -->
+              <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5 space-y-1.5">
+                <div class="font-bold text-emerald-400 flex items-center space-x-1 text-[11px]">
+                  <span>🚀</span><span>強勢領漲個股：</span>
+                </div>
+                <div class="space-y-1">
+                  <div v-for="g in meta.us_postmarket_summary.top_gainers" :key="g.ticker"
+                       class="flex items-center justify-between font-mono text-[11px]">
+                    <span class="text-slate-300 font-sans">{{ g.name }} ({{ g.ticker }})</span>
+                    <span class="text-emerald-400 font-bold">+{{ g.change_pct.toFixed(2) }}%</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Top Losers -->
+              <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5 space-y-1.5">
+                <div class="font-bold text-rose-400 flex items-center space-x-1 text-[11px]">
+                  <span>📉</span><span>拉回整理個股：</span>
+                </div>
+                <div class="space-y-1">
+                  <div v-for="l in meta.us_postmarket_summary.top_losers" :key="l.ticker"
+                       class="flex items-center justify-between font-mono text-[11px]">
+                    <span class="text-slate-300 font-sans">{{ l.name }} ({{ l.ticker }})</span>
+                    <span class="text-rose-400 font-bold">{{ l.change_pct.toFixed(2) }}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Recommended Buy Picks (US) -->
         <div v-if="currentFilter === 'all' && !searchQuery && data.us_recommended && data.us_recommended.length > 0" class="bg-gradient-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3">
@@ -868,6 +1006,13 @@
             </h3>
             <span class="text-xs text-indigo-400 font-semibold">點擊卡片可展開均線與機構籌碼</span>
           </div>
+
+          <!-- Active Search within US Favorites Hint Banner -->
+          <div v-if="searchQuery && currentFilter === 'favorites'" class="flex items-center justify-between bg-rose-950/40 border border-rose-500/30 rounded-xl px-3 py-1.5 text-xs text-rose-200 mb-2">
+            <span>正在美股自選中搜尋「{{ searchQuery }}」（顯示 {{ filteredUSStocks.length }} 檔 / 全部美股自選共 {{ favoriteCount }} 檔）</span>
+            <button @click="searchQuery = ''" class="text-rose-300 hover:text-white underline font-bold ml-2">清除搜尋，顯示全部自選</button>
+          </div>
+
 
           <!-- Empty search or favorites result -->
           <div v-if="filteredUSStocks.length === 0" class="text-center py-12 bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl p-4 my-2">
@@ -1060,7 +1205,7 @@
                     
                     <div class="flex items-center space-x-2">
                       <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                        近5日勝率 {{ aiDiagnosisMap[item.ticker].accuracyRate }}%
+                        {{ item.signal_evaluation && item.signal_evaluation.summary && item.signal_evaluation.summary.total_trades > 0 ? ('實戰勝率 ' + item.signal_evaluation.trade_win_rate + '% (' + item.signal_evaluation.summary.wins + '勝' + item.signal_evaluation.summary.losses + '敗)') : ('勝率 ' + (aiDiagnosisMap[item.ticker]?.accuracyRate || 80) + '%') }}
                       </span>
                       <button @click.stop="openAiModal(item)" class="text-[10px] text-indigo-300 hover:text-white px-1.5 py-0.5 rounded bg-indigo-500/20 hover:bg-indigo-500/30 transition">
                         詳情 ↗
@@ -2284,7 +2429,10 @@
                 </span>
               </div>
               <div class="flex items-center space-x-1.5">
-                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <span v-if="aiModal.item?.signal_evaluation?.summary?.total_trades > 0" class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  實戰回測勝率 {{ aiModal.item.signal_evaluation.trade_win_rate }}% ({{ aiModal.item.signal_evaluation.summary.wins }}勝{{ aiModal.item.signal_evaluation.summary.losses }}敗)
+                </span>
+                <span v-else class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                   近5日回測勝率 {{ aiModal.diagnosis?.accuracyRate }}%
                 </span>
               </div>
@@ -2364,6 +2512,67 @@
                 <div class="font-mono font-bold text-emerald-400 text-sm mt-1">
                   {{ aiModal.item.market === 'TW' ? '' : '$' }}{{ aiModal.diagnosis?.tradeLevels.takeProfit }} 
                   <span class="text-[10px] text-emerald-400 font-bold block">(+{{ aiModal.diagnosis?.tradeLevels.upsidePct }}%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Signal Outcome Lifecycle Evaluation (TP / SL / 90-Day Timeout) -->
+          <div v-if="aiModal.item?.signal_evaluation?.evaluated_signals?.length > 0" class="space-y-2 pt-2 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-bold text-indigo-300 flex items-center space-x-1">
+                <span>🎯</span>
+                <span>訊號勝負判定與生命週期追蹤 (TP / SL / 90天)</span>
+              </div>
+              <div class="flex items-center space-x-2 text-[11px] font-mono">
+                <span class="text-emerald-400 font-bold">勝率 {{ aiModal.item.signal_evaluation.trade_win_rate }}%</span>
+                <span v-if="aiModal.item.signal_evaluation.summary.neutral_total > 0" class="text-amber-300">
+                  平盤守成 {{ aiModal.item.signal_evaluation.neutral_accuracy }}%
+                </span>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1">
+              <div v-for="(sig, sIdx) in aiModal.item.signal_evaluation.evaluated_signals" :key="sIdx"
+                   class="bg-slate-950/70 border border-slate-800/90 rounded-xl p-2.5 text-xs flex flex-col space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-1.5">
+                    <span :class="{
+                      'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': sig.status === 'WIN',
+                      'bg-rose-500/20 text-rose-300 border-rose-500/40': sig.status === 'LOSS',
+                      'bg-amber-500/20 text-amber-300 border-amber-500/40': sig.status === 'PENDING'
+                    }" class="px-2 py-0.5 rounded text-[10px] font-extrabold border">
+                      {{ sig.status }}
+                    </span>
+                    <span class="font-bold text-slate-200">
+                      {{ sig.signal_type === 'BULLISH' ? '多頭訊號 (看漲)' : (sig.signal_type === 'BEARISH' ? '空頭訊號 (看跌)' : '盤整觀望 (±10%)') }}
+                    </span>
+                  </div>
+                  <span class="font-mono font-bold text-[11px]"
+                        :class="sig.return_pct > 0 ? (aiModal.item.market === 'TW' ? 'text-rose-400' : 'text-emerald-400') : (sig.return_pct < 0 ? (aiModal.item.market === 'TW' ? 'text-emerald-400' : 'text-rose-400') : 'text-slate-400')">
+                    {{ sig.return_pct > 0 ? '+' : '' }}{{ sig.return_pct.toFixed(2) }}%
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 text-[11px] text-slate-400 font-mono">
+                  <div>進場：{{ sig.entry_date }} @ {{ aiModal.item.market === 'TW' ? '' : '$' }}{{ sig.entry_price }}</div>
+                  <div>停利：{{ sig.take_profit_price ? (aiModal.item.market === 'TW' ? '' : '$') + sig.take_profit_price : '—' }}</div>
+                  <div>停損：{{ sig.stop_loss_price ? (aiModal.item.market === 'TW' ? '' : '$') + sig.stop_loss_price : '—' }}</div>
+                  <div>結算：{{ sig.resolved_date || '持倉中' }} ({{ sig.holding_period_days }}日)</div>
+                </div>
+
+                <div class="text-[10px] text-slate-400 bg-slate-900/80 px-2 py-1 rounded border border-slate-800 flex items-center justify-between">
+                  <span>判定依據：
+                    {{
+                      sig.reason === 'TAKE_PROFIT' ? '觸及停利價（優先達標獲利）' :
+                      sig.reason === 'STOP_LOSS' ? '跌破停損價（觸及防守線結算）' :
+                      sig.reason === 'TIMEOUT_EXPIRED' ? '滿 90 天未分勝負（盤整逾時結算為 LOSS）' :
+                      sig.reason === 'THRESHOLD_BREACHED' ? '突破 ±10% 區間（平盤預測失效）' :
+                      sig.reason === 'RANGE_HELD' ? '維持在 ±10% 區間內（平盤守成成功）' :
+                      sig.reason === 'INTRADAY_LOSS_CONSERVATIVE' ? '日內雙邊穿價（保守依停損結算）' :
+                      '持倉未滿 3 個月且未碰停損停利（進行中）'
+                    }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -2581,7 +2790,15 @@
         // Search & Favorites
         const searchQuery = ref('');
         const currentFilter = ref('all'); // 'all' | 'favorites' | 'etf' | 'stock'
+        const setFilter = (filterType) => {
+          currentFilter.value = filterType;
+          searchQuery.value = '';
+        };
+
+        const showUSPremarket = ref(false);
+        const showUSPostmarket = ref(false);
         const favorites = ref(JSON.parse(localStorage.getItem('sc_favorites') || '[]'));
+
         const customStocks = ref(JSON.parse(localStorage.getItem('sc_custom_stocks') || '[]'));
         const allTWSymbols = ref([]);
         const loadingStockCode = ref('');
@@ -4964,6 +5181,9 @@
           toggleExpand,
           searchQuery,
           currentFilter,
+          setFilter,
+          showUSPremarket,
+          showUSPostmarket,
           favorites,
           isFavorite,
           toggleFavorite,

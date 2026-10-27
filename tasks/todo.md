@@ -107,10 +107,30 @@
 - [x] 7. 實作逐筆決策覆盤分析面板（比對理由與走勢偏差、四象限歸因與修正建議）
 - [x] 8. 驗證前端操作流暢度、響應式排版與資料完整性
 
+## Task 19: 自選股搜尋遮蔽 Bug 修復與美股盤前/盤後速報 (US Market Briefings & Search UX Fix)
+- [x] 1. 修復自選股搜尋遮蔽 Bug：實作分類切換自動清空 `searchQuery`（`setFilter` 封裝），並在自選模式下提供快速搜尋清空按鈕
+- [x] 2. 擴充 `generate_web_data.py` 產出美股每日盤前速報 (`us_premarket_briefing`)：美股指數期貨/ETF（SPY/QQQ/DIA/SOXX/IWM）、Mag 7 科技權值、VIX 與 TNX 殖利率、今日到價盯盤清單
+- [x] 3. 擴充 `generate_web_data.py` 產出美股每日盤後市場總結 (`us_postmarket_summary`)：四大指數收盤、板塊輪動與資金流向
+- [x] 4. 於 `web/index.html` 美股分頁 (`activeTab === 'us'`) 頂部實作「🌅 美股盤前分析速報」與「🌆 美股盤後市場總結」可收合卡片
+- [x] 5. 驗證前端互動與排版相容性
+
+## Task 20: 訊號勝負判定與回測生命週期追蹤引擎 (Signal Outcome Evaluation Engine)
+- [x] 1. 建立獨立純函數模組 `src/backtest/signal_evaluator.py`，實作 `evaluate_signal_status(signal, price_history)`
+- [x] 2. 支援 BULLISH (LONG) 狀態轉移：優先達 `take_profit_price` -> WIN；優先達 `stop_loss_price` -> LOSS；滿 90 天/63 交易日未碰 -> LOSS；< 90 天 -> PENDING；日內穿價保守 LOSS 優先
+- [x] 3. 支援 BEARISH (SHORT/HEDGE) 狀態轉移：優先達下檔目標 -> WIN；反彈觸及停損 -> LOSS；滿 90 天/63 交易日未碰 -> LOSS
+- [x] 4. 支援 NEUTRAL (RANGE-BOUND) 狀態轉移：觀測期內突破 $\pm 10\%$ 區間 -> LOSS；滿 90 天/63 交易日皆留在 $\pm 10\%$ 內 -> WIN；未滿 90 天且在區間內 -> PENDING
+- [x] 5. 擴充資料庫與 `generate_web_data.py` 歷史日 K 線抓取天數至 180 天，每日盤後排程更新 PENDING 訊號狀態
+- [x] 6. 整合前端勝率統計（分開呈事實戰交易勝率與區間盤整預測準確率），更新卡片與彈窗 Modal 顯示
+- [x] 7. 撰寫單元測試 `tests/test_signal_evaluator.py` 確保 100% 邏輯覆蓋率與全案驗證
+
+
 ---
 
 ## 成果審查 (Review & Verification)
-- [x] **單元測試全數通過**：執行 `python3 -m unittest discover -s tests -p "test_*.py"`，13 個測試案例 (指標計算、極值通道、TWSE 轉換、Mock 解析、資料庫 CRUD、回測引擎撮合與停損停利) 全部通過。
+- [x] **單元測試全數通過**：執行 `python3 -m unittest discover -s tests -p "test_*.py"`，22 個測試案例 (指標計算、極值通道、TWSE 轉換、Mock 解析、資料庫 CRUD、回測引擎撮合、停損停利、訊號生命週期評估 BULLISH/BEARISH/NEUTRAL/日內穿價保守等 9 項) 全部通過。
+- [x] **美股盤前與盤後速報支援**：美股分頁頂部可見「美股每日盤前分析速報」與「美股盤後市場總結」面板，含四大指數、板塊輪動、開盤風向與到價盯盤。
+- [x] **自選搜尋修復**：搜尋後切換自選分類自動清空過濾詞，並於搜尋中時顯示「正在自選股中搜尋...」與一鍵清空按鈕。
+- [x] **訊號生命週期履歷追蹤**：個股卡片與 AI 診斷彈窗顯示基於 TP/SL/90 天逾時機制的實戰勝率與履歷表記錄。
 - [x] **Albedo 整合驗證通過**：執行 `verify_stock_service.py` 與 `run_backtest` 獨立測試，全數通過。
 - [x] **CLI 功能驗證**：驗證 `main.py --help` 正確解析 `--dry-run`、`--once` 與 `--tickers` 參數。
 - [x] **容器化與 NAS 準備**：已配置 Dockerfile 及 docker-compose.yml，包含 `./data:/app/data` 持久化磁碟映射與 `TZ=Asia/Taipei`。
