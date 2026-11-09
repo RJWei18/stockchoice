@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2026-11-09 14:19:49 (UTC+8)",
+    "generated_at": "2026-11-09 14:56:33 (UTC+8)",
     "version": "1.2.0",
     "market_status": {
       "latest_tw_date": "2026-11-09",
@@ -8,86 +8,86 @@
       "is_fully_synchronized": true
     },
     "market_concentration": {
-      "total_turnover_yi": 10079.6,
-      "top10_share_pct": 31.6,
-      "top20_share_pct": 44.3,
+      "total_turnover_yi": 10339.6,
+      "top10_share_pct": 32.4,
+      "top20_share_pct": 44.9,
       "status": "資金健康輪動",
-      "summary": "前 10 大個股占全市場成交額 31.6%，權值與中小型題材股資金分布均衡",
+      "summary": "前 10 大個股占全市場成交額 32.4%，權值與中小型題材股資金分布均衡",
       "top_stocks": [
         {
           "rank": 1,
           "code": "2330",
           "name": "台積電",
           "close": 2235.0,
-          "turnover_yi": 924.2,
-          "share_pct": 9.17
+          "turnover_yi": 999.94,
+          "share_pct": 9.67
         },
         {
           "rank": 2,
           "code": "2454",
           "name": "聯發科",
           "close": 3725.0,
-          "turnover_yi": 330.99,
-          "share_pct": 3.28
+          "turnover_yi": 356.87,
+          "share_pct": 3.45
         },
         {
           "rank": 3,
           "code": "3037",
           "name": "欣興",
           "close": 757.0,
-          "turnover_yi": 309.9,
-          "share_pct": 3.07
+          "turnover_yi": 319.8,
+          "share_pct": 3.09
         },
         {
           "rank": 4,
           "code": "3189",
           "name": "景碩",
           "close": 690.0,
-          "turnover_yi": 307.65,
-          "share_pct": 3.05
+          "turnover_yi": 311.62,
+          "share_pct": 3.01
         },
         {
           "rank": 5,
-          "code": "3443",
-          "name": "創意",
-          "close": 6705.0,
-          "turnover_yi": 269.65,
-          "share_pct": 2.68
-        },
-        {
-          "rank": 6,
           "code": "0050",
           "name": "元大台灣50",
           "close": 97.45,
-          "turnover_yi": 265.72,
-          "share_pct": 2.64
+          "turnover_yi": 284.62,
+          "share_pct": 2.75
+        },
+        {
+          "rank": 6,
+          "code": "3443",
+          "name": "創意",
+          "close": 6705.0,
+          "turnover_yi": 276.5,
+          "share_pct": 2.67
         },
         {
           "rank": 7,
           "code": "3653",
           "name": "健策",
           "close": 5635.0,
-          "turnover_yi": 202.89,
-          "share_pct": 2.01
+          "turnover_yi": 206.22,
+          "share_pct": 1.99
         },
         {
           "rank": 8,
           "code": "2303",
           "name": "聯電",
           "close": 96.7,
-          "turnover_yi": 200.14,
-          "share_pct": 1.99
+          "turnover_yi": 202.77,
+          "share_pct": 1.96
         }
       ]
     },
     "premarket_briefing": {
       "briefing_date": "2026-11-09",
-      "generated_at": "2026-11-09 14:19",
+      "generated_at": "2026-11-09 14:56",
       "wind_status": "偏多開高",
       "wind_color": "emerald",
       "avg_semi_change_pct": 4.46,
       "opening_strategy": "隔夜台積電 ADR (+6.33%) 與費半 (+3.51%) 同步走強，預估台股開盤偏多。開高逾 1.5% 之個股切勿追高，優先鎖定突破轉強或回測月線守穩之標的。",
-      "market_concentration_note": "前 10 大個股占全市場成交額 31.6%，權值與中小型題材股資金分布均衡",
+      "market_concentration_note": "前 10 大個股占全市場成交額 32.4%，權值與中小型題材股資金分布均衡",
       "us_drivers": [
         {
           "ticker": "TSM",
@@ -153,7 +153,7 @@
           "stop_loss_price": 26.94,
           "dist_to_buy_pct": 1.16,
           "score": 2.0,
-          "turnover_rank": 97
+          "turnover_rank": 98
         },
         {
           "ticker": "00679B.TW",
@@ -195,13 +195,13 @@
           "stop_loss_price": 67.3,
           "dist_to_buy_pct": 2.86,
           "score": 1.0,
-          "turnover_rank": 50
+          "turnover_rank": 49
         }
       ]
     },
     "us_premarket_briefing": {
       "briefing_date": "2026-11-09",
-      "generated_at": "2026-11-09 14:19",
+      "generated_at": "2026-11-09 14:56",
       "wind_status": "多頭強勁・順勢進取",
       "wind_color": "emerald",
       "avg_us_change_pct": 1.58,
@@ -334,7 +334,7 @@
     },
     "us_postmarket_summary": {
       "summary_date": "2026-11-09",
-      "generated_at": "2026-11-09 14:19",
+      "generated_at": "2026-11-09 14:56",
       "verdict": "多空勢均力敵・個股分化輪動",
       "color": "indigo",
       "summary_text": "指數終場狹幅震盪 (SPY +0.31% / QQQ +1.40%)，大盤量能平穩，盤面呈現個別財報與技術型態輪動表現。",
@@ -646,8 +646,8 @@
       "prev_close": 2135.0,
       "change": 100.0,
       "change_pct": 4.68,
-      "volume": 41343000.0,
-      "vol_ratio": 0.7,
+      "volume": 44725218.0,
+      "vol_ratio": 0.75,
       "pe_ratio": 24.75,
       "dividend_yield": 1.03,
       "pb_ratio": 8.61,
@@ -665,18 +665,18 @@
       "macd_osc": -23.93,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 4630,
-        "trust_net_lots": 3721,
-        "dealer_net_lots": 2067,
-        "total_net_lots": 10418,
+        "foreign_net_lots": 5367,
+        "trust_net_lots": 4025,
+        "dealer_net_lots": 2236,
+        "total_net_lots": 11628,
         "major_ratio_pct": 72.0,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 924.2,
+        "turnover_yi": 999.94,
         "rank": 1,
-        "share_pct": 9.17
+        "share_pct": 9.67
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -1478,7 +1478,7 @@
           "high": 2290.0,
           "low": 2190.0,
           "close": 2235.0,
-          "volume": 41343000.0,
+          "volume": 44725218.0,
           "ma20": 2375.0,
           "ma60": 2419.5,
           "macd_dif": -62.96,
@@ -1614,8 +1614,8 @@
       "prev_close": 3390.0,
       "change": 335.0,
       "change_pct": 9.88,
-      "volume": 9177000.0,
-      "vol_ratio": 0.58,
+      "volume": 9883306.0,
+      "vol_ratio": 0.62,
       "pe_ratio": 55.99,
       "dividend_yield": 1.58,
       "pb_ratio": 12.76,
@@ -1633,18 +1633,18 @@
       "macd_osc": -52.15,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 852,
-        "trust_net_lots": 826,
-        "dealer_net_lots": 459,
-        "total_net_lots": 2137,
+        "foreign_net_lots": 980,
+        "trust_net_lots": 889,
+        "dealer_net_lots": 494,
+        "total_net_lots": 2363,
         "major_ratio_pct": 79.8,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 330.99,
+        "turnover_yi": 356.87,
         "rank": 2,
-        "share_pct": 3.28
+        "share_pct": 3.45
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -2446,7 +2446,7 @@
           "high": 3725.0,
           "low": 3450.0,
           "close": 3725.0,
-          "volume": 9177000.0,
+          "volume": 9883306.0,
           "ma20": 4032.25,
           "ma60": 4318.17,
           "macd_dif": -254.1,
@@ -2582,8 +2582,8 @@
       "prev_close": 224.5,
       "change": 14.5,
       "change_pct": 6.46,
-      "volume": 47868000.0,
-      "vol_ratio": 0.81,
+      "volume": 48975596.0,
+      "vol_ratio": 0.83,
       "pe_ratio": 14.8,
       "dividend_yield": 3.19,
       "pb_ratio": 1.65,
@@ -2601,18 +2601,18 @@
       "macd_osc": -1.24,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 6204,
-        "trust_net_lots": 4308,
-        "dealer_net_lots": 2393,
-        "total_net_lots": 12905,
+        "foreign_net_lots": 6504,
+        "trust_net_lots": 4408,
+        "dealer_net_lots": 2449,
+        "total_net_lots": 13361,
         "major_ratio_pct": 74.7,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 114.6,
+        "turnover_yi": 117.25,
         "rank": 17,
-        "share_pct": 1.14
+        "share_pct": 1.13
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -3414,7 +3414,7 @@
           "high": 246.0,
           "low": 226.5,
           "close": 239.0,
-          "volume": 47868000.0,
+          "volume": 48975596.0,
           "ma20": 242.97,
           "ma60": 248.68,
           "macd_dif": -3.35,
@@ -3550,8 +3550,8 @@
       "prev_close": 290.5,
       "change": 6.0,
       "change_pct": 2.07,
-      "volume": 18932000.0,
-      "vol_ratio": 1.08,
+      "volume": 19200689.0,
+      "vol_ratio": 1.09,
       "pe_ratio": 12.66,
       "dividend_yield": 5.37,
       "pb_ratio": 4.6,
@@ -3569,18 +3569,18 @@
       "macd_osc": -2.81,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 3271,
-        "trust_net_lots": 1704,
-        "dealer_net_lots": 947,
-        "total_net_lots": 5922,
+        "foreign_net_lots": 3349,
+        "trust_net_lots": 1728,
+        "dealer_net_lots": 960,
+        "total_net_lots": 6037,
         "major_ratio_pct": 68.1,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 56.39,
-        "rank": 40,
-        "share_pct": 0.56
+        "turnover_yi": 57.2,
+        "rank": 41,
+        "share_pct": 0.55
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -4382,7 +4382,7 @@
           "high": 304.0,
           "low": 290.0,
           "close": 296.5,
-          "volume": 18932000.0,
+          "volume": 19200689.0,
           "ma20": 316.32,
           "ma60": 328.41,
           "macd_dif": -8.19,
@@ -4518,8 +4518,8 @@
       "prev_close": 1055.0,
       "change": 105.0,
       "change_pct": 9.95,
-      "volume": 16026000.0,
-      "vol_ratio": 0.68,
+      "volume": 16502378.0,
+      "vol_ratio": 0.7,
       "pe_ratio": 31.68,
       "dividend_yield": 1.1,
       "pb_ratio": 8.61,
@@ -4537,18 +4537,18 @@
       "macd_osc": -43.35,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 1744,
-        "trust_net_lots": 1442,
-        "dealer_net_lots": 801,
-        "total_net_lots": 3987,
+        "foreign_net_lots": 1848,
+        "trust_net_lots": 1485,
+        "dealer_net_lots": 825,
+        "total_net_lots": 4158,
         "major_ratio_pct": 79.9,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 184.87,
+        "turnover_yi": 190.38,
         "rank": 10,
-        "share_pct": 1.83
+        "share_pct": 1.84
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -5350,7 +5350,7 @@
           "high": 1160.0,
           "low": 1105.0,
           "close": 1160.0,
-          "volume": 16026000.0,
+          "volume": 16502378.0,
           "ma20": 1489.0,
           "ma60": 1706.58,
           "macd_dif": -171.8,
@@ -5486,8 +5486,8 @@
       "prev_close": 92.0,
       "change": 4.7,
       "change_pct": 5.11,
-      "volume": 206659000.0,
-      "vol_ratio": 1.24,
+      "volume": 209362151.0,
+      "vol_ratio": 1.26,
       "pe_ratio": 13.59,
       "dividend_yield": 2.84,
       "pb_ratio": 2.45,
@@ -5505,18 +5505,18 @@
       "macd_osc": -3.05,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 41001,
-        "trust_net_lots": 18599,
-        "dealer_net_lots": 10333,
-        "total_net_lots": 69933,
+        "foreign_net_lots": 42207,
+        "trust_net_lots": 18843,
+        "dealer_net_lots": 10468,
+        "total_net_lots": 71518,
         "major_ratio_pct": 72.7,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 200.14,
+        "turnover_yi": 202.77,
         "rank": 8,
-        "share_pct": 1.99
+        "share_pct": 1.96
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -6318,7 +6318,7 @@
           "high": 100.5,
           "low": 92.0,
           "close": 96.7,
-          "volume": 206659000.0,
+          "volume": 209362151.0,
           "ma20": 120.8,
           "ma60": 132.08,
           "macd_dif": -11.68,
@@ -6454,8 +6454,8 @@
       "prev_close": 160.0,
       "change": 8.5,
       "change_pct": 5.31,
-      "volume": 39413000.0,
-      "vol_ratio": 1.27,
+      "volume": 39866102.0,
+      "vol_ratio": 1.28,
       "pe_ratio": 12.71,
       "dividend_yield": 3.44,
       "pb_ratio": 2.62,
@@ -6473,18 +6473,18 @@
       "macd_osc": -2.65,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 8009,
-        "trust_net_lots": 3547,
-        "dealer_net_lots": 1971,
-        "total_net_lots": 13527,
+        "foreign_net_lots": 8165,
+        "trust_net_lots": 3588,
+        "dealer_net_lots": 1993,
+        "total_net_lots": 13746,
         "major_ratio_pct": 73.0,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 67.17,
+        "turnover_yi": 67.95,
         "rank": 30,
-        "share_pct": 0.67
+        "share_pct": 0.66
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -7286,7 +7286,7 @@
           "high": 174.5,
           "low": 164.0,
           "close": 168.5,
-          "volume": 39413000.0,
+          "volume": 39866102.0,
           "ma20": 182.7,
           "ma60": 184.38,
           "macd_dif": -4.52,
@@ -7422,8 +7422,8 @@
       "prev_close": 298.0,
       "change": 11.5,
       "change_pct": 3.86,
-      "volume": 4492000.0,
-      "vol_ratio": 0.91,
+      "volume": 4571479.0,
+      "vol_ratio": 0.93,
       "pe_ratio": 11.15,
       "dividend_yield": 4.03,
       "pb_ratio": 3.0,
@@ -7441,16 +7441,16 @@
       "macd_osc": -5.14,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 654,
-        "trust_net_lots": 404,
-        "dealer_net_lots": 225,
-        "total_net_lots": 1283,
+        "foreign_net_lots": 680,
+        "trust_net_lots": 411,
+        "dealer_net_lots": 229,
+        "total_net_lots": 1320,
         "major_ratio_pct": 70.8,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 14.02,
+        "turnover_yi": 14.26,
         "rank": 129,
         "share_pct": 0.14
       },
@@ -8254,7 +8254,7 @@
           "high": 319.0,
           "low": 304.0,
           "close": 309.5,
-          "volume": 4492000.0,
+          "volume": 4571479.0,
           "ma20": 342.3,
           "ma60": 353.57,
           "macd_dif": -12.4,
@@ -8390,8 +8390,8 @@
       "prev_close": 1555.0,
       "change": 90.0,
       "change_pct": 5.79,
-      "volume": 4108000.0,
-      "vol_ratio": 0.81,
+      "volume": 4316781.0,
+      "vol_ratio": 0.85,
       "pe_ratio": 4.99,
       "dividend_yield": 10.56,
       "pb_ratio": 2.12,
@@ -8409,18 +8409,18 @@
       "macd_osc": -22.95,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 532,
-        "trust_net_lots": 370,
-        "dealer_net_lots": 205,
-        "total_net_lots": 1107,
+        "foreign_net_lots": 587,
+        "trust_net_lots": 389,
+        "dealer_net_lots": 216,
+        "total_net_lots": 1192,
         "major_ratio_pct": 73.7,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 67.68,
-        "rank": 27,
-        "share_pct": 0.67
+        "turnover_yi": 71.14,
+        "rank": 26,
+        "share_pct": 0.69
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -9222,7 +9222,7 @@
           "high": 1700.0,
           "low": 1570.0,
           "close": 1645.0,
-          "volume": 4108000.0,
+          "volume": 4316781.0,
           "ma20": 1876.25,
           "ma60": 2116.17,
           "macd_dif": -125.18,
@@ -9358,8 +9358,8 @@
       "prev_close": 495.5,
       "change": -9.0,
       "change_pct": -1.82,
-      "volume": 4995000.0,
-      "vol_ratio": 1.23,
+      "volume": 5089602.0,
+      "vol_ratio": 1.26,
       "pe_ratio": 15.26,
       "dividend_yield": 4.64,
       "pb_ratio": 4.03,
@@ -9377,17 +9377,17 @@
       "macd_osc": -11.76,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": -860,
-        "trust_net_lots": -300,
-        "dealer_net_lots": -200,
-        "total_net_lots": -1360,
+        "foreign_net_lots": -898,
+        "trust_net_lots": -305,
+        "dealer_net_lots": -204,
+        "total_net_lots": -1407,
         "major_ratio_pct": 62.3,
         "trend": "偏空",
         "flow_summary": "三大法人短線小幅調節，籌碼回檔沉澱，留意均線防守。"
       },
       "turnover_info": {
-        "turnover_yi": 24.27,
-        "rank": 84,
+        "turnover_yi": 24.73,
+        "rank": 83,
         "share_pct": 0.24
       },
       "action_plan": {
@@ -10190,7 +10190,7 @@
           "high": 498.0,
           "low": 460.5,
           "close": 486.5,
-          "volume": 4995000.0,
+          "volume": 5089602.0,
           "ma20": 560.25,
           "ma60": 546.5,
           "macd_dif": -10.18,
@@ -10326,8 +10326,8 @@
       "prev_close": 727.0,
       "change": 30.0,
       "change_pct": 4.13,
-      "volume": 41098000.0,
-      "vol_ratio": 1.35,
+      "volume": 42401649.0,
+      "vol_ratio": 1.39,
       "pe_ratio": 37.63,
       "dividend_yield": 0.27,
       "pb_ratio": 6.72,
@@ -10345,18 +10345,18 @@
       "macd_osc": -40.16,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 8877,
-        "trust_net_lots": 3699,
-        "dealer_net_lots": 2055,
-        "total_net_lots": 14631,
+        "foreign_net_lots": 9430,
+        "trust_net_lots": 3816,
+        "dealer_net_lots": 2120,
+        "total_net_lots": 15366,
         "major_ratio_pct": 71.2,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 309.9,
+        "turnover_yi": 319.8,
         "rank": 3,
-        "share_pct": 3.07
+        "share_pct": 3.09
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -11158,7 +11158,7 @@
           "high": 782.0,
           "low": 722.0,
           "close": 757.0,
-          "volume": 41098000.0,
+          "volume": 42401649.0,
           "ma20": 1024.5,
           "ma60": 1062.38,
           "macd_dif": -86.25,
@@ -11294,8 +11294,8 @@
       "prev_close": 527.0,
       "change": 34.0,
       "change_pct": 6.45,
-      "volume": 28996000.0,
-      "vol_ratio": 0.9,
+      "volume": 29738215.0,
+      "vol_ratio": 0.93,
       "pe_ratio": 38.13,
       "dividend_yield": 1.25,
       "pb_ratio": 5.95,
@@ -11313,16 +11313,16 @@
       "macd_osc": -16.45,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 4175,
-        "trust_net_lots": 2610,
-        "dealer_net_lots": 1450,
-        "total_net_lots": 8235,
+        "foreign_net_lots": 4425,
+        "trust_net_lots": 2676,
+        "dealer_net_lots": 1487,
+        "total_net_lots": 8588,
         "major_ratio_pct": 74.7,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 162.33,
+        "turnover_yi": 166.51,
         "rank": 12,
         "share_pct": 1.61
       },
@@ -12126,7 +12126,7 @@
           "high": 579.0,
           "low": 529.0,
           "close": 561.0,
-          "volume": 28996000.0,
+          "volume": 29738215.0,
           "ma20": 659.45,
           "ma60": 645.38,
           "macd_dif": -26.98,
@@ -12262,8 +12262,8 @@
       "prev_close": 246.5,
       "change": -1.0,
       "change_pct": -0.41,
-      "volume": 10007000.0,
-      "vol_ratio": 0.81,
+      "volume": 10186147.0,
+      "vol_ratio": 0.83,
       "pe_ratio": 9.77,
       "dividend_yield": 6.49,
       "pb_ratio": 0.95,
@@ -12281,17 +12281,17 @@
       "macd_osc": -2.67,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": -1135,
-        "trust_net_lots": -600,
-        "dealer_net_lots": -400,
-        "total_net_lots": -2135,
+        "foreign_net_lots": -1184,
+        "trust_net_lots": -611,
+        "dealer_net_lots": -407,
+        "total_net_lots": -2202,
         "major_ratio_pct": 64.4,
         "trend": "偏空",
         "flow_summary": "三大法人短線小幅調節，籌碼回檔沉澱，留意均線防守。"
       },
       "turnover_info": {
-        "turnover_yi": 24.65,
-        "rank": 82,
+        "turnover_yi": 25.09,
+        "rank": 81,
         "share_pct": 0.24
       },
       "action_plan": {
@@ -13094,7 +13094,7 @@
           "high": 249.5,
           "low": 243.5,
           "close": 245.5,
-          "volume": 10007000.0,
+          "volume": 10186147.0,
           "ma20": 261.05,
           "ma60": 244.38,
           "macd_dif": 3.03,
@@ -13230,8 +13230,8 @@
       "prev_close": 57.1,
       "change": 0.4,
       "change_pct": 0.7,
-      "volume": 16454000.0,
-      "vol_ratio": 0.93,
+      "volume": 16596071.0,
+      "vol_ratio": 0.94,
       "pe_ratio": 12.86,
       "dividend_yield": 3.5,
       "pb_ratio": 0.61,
@@ -13249,16 +13249,16 @@
       "macd_osc": -0.77,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 2448,
-        "trust_net_lots": 1481,
-        "dealer_net_lots": 823,
-        "total_net_lots": 4752,
+        "foreign_net_lots": 2496,
+        "trust_net_lots": 1494,
+        "dealer_net_lots": 830,
+        "total_net_lots": 4820,
         "major_ratio_pct": 66.0,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 9.51,
+        "turnover_yi": 9.59,
         "rank": 170,
         "share_pct": 0.09
       },
@@ -14062,7 +14062,7 @@
           "high": 59.0,
           "low": 56.6,
           "close": 57.5,
-          "volume": 16454000.0,
+          "volume": 16596071.0,
           "ma20": 62.35,
           "ma60": 59.89,
           "macd_dif": -0.27,
@@ -14198,8 +14198,8 @@
       "prev_close": 107.5,
       "change": -0.5,
       "change_pct": -0.47,
-      "volume": 10335000.0,
-      "vol_ratio": 0.76,
+      "volume": 10443767.0,
+      "vol_ratio": 0.77,
       "pe_ratio": 7.38,
       "dividend_yield": 2.79,
       "pb_ratio": 1.05,
@@ -14217,17 +14217,17 @@
       "macd_osc": -1.51,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": -1100,
-        "trust_net_lots": -620,
-        "dealer_net_lots": -413,
-        "total_net_lots": -2133,
+        "foreign_net_lots": -1126,
+        "trust_net_lots": -627,
+        "dealer_net_lots": -418,
+        "total_net_lots": -2171,
         "major_ratio_pct": 64.3,
         "trend": "偏空",
         "flow_summary": "三大法人短線小幅調節，籌碼回檔沉澱，留意均線防守。"
       },
       "turnover_info": {
-        "turnover_yi": 11.19,
-        "rank": 151,
+        "turnover_yi": 11.3,
+        "rank": 152,
         "share_pct": 0.11
       },
       "action_plan": {
@@ -15030,7 +15030,7 @@
           "high": 110.5,
           "low": 106.5,
           "close": 107.0,
-          "volume": 10335000.0,
+          "volume": 10443767.0,
           "ma20": 117.4,
           "ma60": 113.8,
           "macd_dif": -0.98,
@@ -15166,8 +15166,8 @@
       "prev_close": 148.0,
       "change": 5.5,
       "change_pct": 3.72,
-      "volume": 23347000.0,
-      "vol_ratio": 0.88,
+      "volume": 23602367.0,
+      "vol_ratio": 0.89,
       "pe_ratio": 13.83,
       "dividend_yield": 2.87,
       "pb_ratio": 1.82,
@@ -15185,16 +15185,16 @@
       "macd_osc": -1.43,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 3287,
-        "trust_net_lots": 2101,
-        "dealer_net_lots": 1167,
-        "total_net_lots": 6555,
+        "foreign_net_lots": 3361,
+        "trust_net_lots": 2124,
+        "dealer_net_lots": 1180,
+        "total_net_lots": 6665,
         "major_ratio_pct": 70.6,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 35.77,
+        "turnover_yi": 36.16,
         "rank": 56,
         "share_pct": 0.35
       },
@@ -15998,7 +15998,7 @@
           "high": 156.5,
           "low": 148.5,
           "close": 153.5,
-          "volume": 23347000.0,
+          "volume": 23602367.0,
           "ma20": 157.95,
           "ma60": 149.17,
           "macd_dif": 0.35,
@@ -16134,7 +16134,7 @@
       "prev_close": 106.0,
       "change": 5.0,
       "change_pct": 4.72,
-      "volume": 29737000.0,
+      "volume": 29915199.0,
       "vol_ratio": 0.92,
       "pe_ratio": 12.5,
       "dividend_yield": 3.3,
@@ -16153,18 +16153,18 @@
       "macd_osc": -0.79,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 4377,
-        "trust_net_lots": 2676,
-        "dealer_net_lots": 1487,
-        "total_net_lots": 8540,
+        "foreign_net_lots": 4404,
+        "trust_net_lots": 2692,
+        "dealer_net_lots": 1496,
+        "total_net_lots": 8592,
         "major_ratio_pct": 72.1,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 33.03,
+        "turnover_yi": 33.23,
         "rank": 62,
-        "share_pct": 0.33
+        "share_pct": 0.32
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -16966,7 +16966,7 @@
           "high": 113.5,
           "low": 105.5,
           "close": 111.0,
-          "volume": 29737000.0,
+          "volume": 29915199.0,
           "ma20": 113.38,
           "ma60": 109.79,
           "macd_dif": -0.14,
@@ -17102,8 +17102,8 @@
       "prev_close": 73.4,
       "change": 2.5,
       "change_pct": 3.41,
-      "volume": 56520000.0,
-      "vol_ratio": 1.12,
+      "volume": 56872338.0,
+      "vol_ratio": 1.13,
       "pe_ratio": 17.56,
       "dividend_yield": 3.41,
       "pb_ratio": 2.1,
@@ -17121,18 +17121,18 @@
       "macd_osc": -0.13,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 10128,
-        "trust_net_lots": 5087,
-        "dealer_net_lots": 2826,
-        "total_net_lots": 18041,
+        "foreign_net_lots": 10283,
+        "trust_net_lots": 5119,
+        "dealer_net_lots": 2844,
+        "total_net_lots": 18246,
         "major_ratio_pct": 70.1,
         "trend": "偏多",
         "flow_summary": "外資與投信偏多買超，籌碼集中度提升，主力資金進駐護盤。"
       },
       "turnover_info": {
-        "turnover_yi": 42.44,
-        "rank": 50,
-        "share_pct": 0.42
+        "turnover_yi": 42.71,
+        "rank": 49,
+        "share_pct": 0.41
       },
       "action_plan": {
         "verdict": "拉回低接",
@@ -17934,7 +17934,7 @@
           "high": 76.2,
           "low": 72.8,
           "close": 75.9,
-          "volume": 56520000.0,
+          "volume": 56872338.0,
           "ma20": 73.79,
           "ma60": 69.37,
           "macd_dif": 1.39,
@@ -18070,8 +18070,8 @@
       "prev_close": 53.5,
       "change": -0.7,
       "change_pct": -1.31,
-      "volume": 39133000.0,
-      "vol_ratio": 1.36,
+      "volume": 39303309.0,
+      "vol_ratio": 1.37,
       "pe_ratio": 20.82,
       "dividend_yield": 3.27,
       "pb_ratio": 1.97,
@@ -18089,18 +18089,18 @@
       "macd_osc": -0.23,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": -7451,
-        "trust_net_lots": -2348,
-        "dealer_net_lots": -1565,
-        "total_net_lots": -11364,
+        "foreign_net_lots": -7538,
+        "trust_net_lots": -2358,
+        "dealer_net_lots": -1572,
+        "total_net_lots": -11468,
         "major_ratio_pct": 63.0,
         "trend": "偏空",
         "flow_summary": "三大法人短線小幅調節，籌碼回檔沉澱，留意均線防守。"
       },
       "turnover_info": {
-        "turnover_yi": 20.83,
+        "turnover_yi": 20.92,
         "rank": 92,
-        "share_pct": 0.21
+        "share_pct": 0.2
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -18902,7 +18902,7 @@
           "high": 54.0,
           "low": 52.1,
           "close": 52.8,
-          "volume": 39133000.0,
+          "volume": 39303309.0,
           "ma20": 53.45,
           "ma60": 50.51,
           "macd_dif": 0.75,
@@ -19038,8 +19038,8 @@
       "prev_close": 47.0,
       "change": 0.3,
       "change_pct": 0.64,
-      "volume": 30857000.0,
-      "vol_ratio": 0.85,
+      "volume": 31148249.0,
+      "vol_ratio": 0.86,
       "pe_ratio": 19.5,
       "dividend_yield": 2.98,
       "pb_ratio": 2.7,
@@ -19057,17 +19057,17 @@
       "macd_osc": -0.4,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 4197,
-        "trust_net_lots": 2777,
-        "dealer_net_lots": 1543,
-        "total_net_lots": 8517,
+        "foreign_net_lots": 4286,
+        "trust_net_lots": 2803,
+        "dealer_net_lots": 1557,
+        "total_net_lots": 8646,
         "major_ratio_pct": 66.0,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 14.6,
-        "rank": 123,
+        "turnover_yi": 14.74,
+        "rank": 126,
         "share_pct": 0.14
       },
       "action_plan": {
@@ -19870,7 +19870,7 @@
           "high": 48.1,
           "low": 45.95,
           "close": 47.3,
-          "volume": 30857000.0,
+          "volume": 31148249.0,
           "ma20": 48.3,
           "ma60": 44.47,
           "macd_dif": 0.54,
@@ -20006,7 +20006,7 @@
       "prev_close": 40.95,
       "change": 0.0,
       "change_pct": 0.0,
-      "volume": 27789000.0,
+      "volume": 27948311.0,
       "vol_ratio": 0.97,
       "pe_ratio": 19.14,
       "dividend_yield": 3.17,
@@ -20025,17 +20025,17 @@
       "macd_osc": -0.34,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": -3774,
-        "trust_net_lots": -1667,
-        "dealer_net_lots": -1112,
-        "total_net_lots": -6553,
+        "foreign_net_lots": -3795,
+        "trust_net_lots": -1677,
+        "dealer_net_lots": -1118,
+        "total_net_lots": -6590,
         "major_ratio_pct": 65.0,
         "trend": "偏空",
         "flow_summary": "三大法人短線小幅調節，籌碼回檔沉澱，留意均線防守。"
       },
       "turnover_info": {
-        "turnover_yi": 11.42,
-        "rank": 145,
+        "turnover_yi": 11.48,
+        "rank": 146,
         "share_pct": 0.11
       },
       "action_plan": {
@@ -20838,7 +20838,7 @@
           "high": 41.7,
           "low": 40.3,
           "close": 40.95,
-          "volume": 27789000.0,
+          "volume": 27948311.0,
           "ma20": 41.98,
           "ma60": 38.57,
           "macd_dif": 0.75,
@@ -20974,8 +20974,8 @@
       "prev_close": 18.55,
       "change": 0.0,
       "change_pct": 0.0,
-      "volume": 57371000.0,
-      "vol_ratio": 1.2,
+      "volume": 57702994.0,
+      "vol_ratio": 1.21,
       "pe_ratio": 463.75,
       "dividend_yield": 0.81,
       "pb_ratio": 0.94,
@@ -20993,18 +20993,18 @@
       "macd_osc": -0.12,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": -9638,
-        "trust_net_lots": -3442,
-        "dealer_net_lots": -2295,
-        "total_net_lots": -15375,
+        "foreign_net_lots": -9775,
+        "trust_net_lots": -3462,
+        "dealer_net_lots": -2308,
+        "total_net_lots": -15545,
         "major_ratio_pct": 65.0,
         "trend": "偏空",
         "flow_summary": "三大法人短線小幅調節，籌碼回檔沉澱，留意均線防守。"
       },
       "turnover_info": {
-        "turnover_yi": 10.74,
+        "turnover_yi": 10.8,
         "rank": 160,
-        "share_pct": 0.11
+        "share_pct": 0.1
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -21806,7 +21806,7 @@
           "high": 19.0,
           "low": 18.5,
           "close": 18.55,
-          "volume": 57371000.0,
+          "volume": 57702994.0,
           "ma20": 19.33,
           "ma60": 19.1,
           "macd_dif": -0.08,
@@ -21942,8 +21942,8 @@
       "prev_close": 26.75,
       "change": 0.05,
       "change_pct": 0.19,
-      "volume": 31946000.0,
-      "vol_ratio": 0.58,
+      "volume": 32152119.0,
+      "vol_ratio": 0.59,
       "pe_ratio": 22.5,
       "dividend_yield": 2.99,
       "pb_ratio": 0.87,
@@ -21961,18 +21961,18 @@
       "macd_osc": -0.2,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 2965,
-        "trust_net_lots": 2875,
-        "dealer_net_lots": 1597,
-        "total_net_lots": 7437,
+        "foreign_net_lots": 3035,
+        "trust_net_lots": 2894,
+        "dealer_net_lots": 1608,
+        "total_net_lots": 7537,
         "major_ratio_pct": 65.3,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 8.65,
+        "turnover_yi": 8.7,
         "rank": 178,
-        "share_pct": 0.09
+        "share_pct": 0.08
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -22774,7 +22774,7 @@
           "high": 27.6,
           "low": 26.7,
           "close": 26.8,
-          "volume": 31946000.0,
+          "volume": 32152119.0,
           "ma20": 27.38,
           "ma60": 25.58,
           "macd_dif": 0.41,
@@ -22910,7 +22910,7 @@
       "prev_close": 76.8,
       "change": -0.1,
       "change_pct": -0.13,
-      "volume": 17425000.0,
+      "volume": 17522945.0,
       "vol_ratio": 1.26,
       "pe_ratio": 18.2,
       "dividend_yield": 3.91,
@@ -22929,16 +22929,16 @@
       "macd_osc": -0.35,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": -3074,
-        "trust_net_lots": -1046,
-        "dealer_net_lots": -697,
-        "total_net_lots": -4817,
+        "foreign_net_lots": -3091,
+        "trust_net_lots": -1051,
+        "dealer_net_lots": -701,
+        "total_net_lots": -4843,
         "major_ratio_pct": 64.8,
         "trend": "偏空",
         "flow_summary": "三大法人短線小幅調節，籌碼回檔沉澱，留意均線防守。"
       },
       "turnover_info": {
-        "turnover_yi": 13.4,
+        "turnover_yi": 13.48,
         "rank": 134,
         "share_pct": 0.13
       },
@@ -23742,7 +23742,7 @@
           "high": 78.0,
           "low": 76.3,
           "close": 76.7,
-          "volume": 17425000.0,
+          "volume": 17522945.0,
           "ma20": 79.06,
           "ma60": 76.74,
           "macd_dif": 0.7,
@@ -23878,8 +23878,8 @@
       "prev_close": 163.5,
       "change": -4.5,
       "change_pct": -2.75,
-      "volume": 24042000.0,
-      "vol_ratio": 1.33,
+      "volume": 24222598.0,
+      "vol_ratio": 1.34,
       "pe_ratio": 32.12,
       "dividend_yield": 3.18,
       "pb_ratio": 3.46,
@@ -23897,18 +23897,18 @@
       "macd_osc": 0.0,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": -4477,
-        "trust_net_lots": -1443,
-        "dealer_net_lots": -962,
-        "total_net_lots": -6882,
+        "foreign_net_lots": -4544,
+        "trust_net_lots": -1453,
+        "dealer_net_lots": -969,
+        "total_net_lots": -6966,
         "major_ratio_pct": 60.9,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 38.4,
+        "turnover_yi": 38.69,
         "rank": 54,
-        "share_pct": 0.38
+        "share_pct": 0.37
       },
       "action_plan": {
         "verdict": "拉回低接",
@@ -24710,7 +24710,7 @@
           "high": 163.0,
           "low": 158.0,
           "close": 159.0,
-          "volume": 24042000.0,
+          "volume": 24222598.0,
           "ma20": 156.2,
           "ma60": 145.61,
           "macd_dif": 4.08,
@@ -25814,8 +25814,8 @@
       "prev_close": 92.5,
       "change": 4.95,
       "change_pct": 5.35,
-      "volume": 274548000.0,
-      "vol_ratio": 0.59,
+      "volume": 293980451.0,
+      "vol_ratio": 0.63,
       "pe_ratio": null,
       "dividend_yield": 3.85,
       "pb_ratio": null,
@@ -25833,18 +25833,18 @@
       "macd_osc": -1.4,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 25917,
-        "trust_net_lots": 24709,
-        "dealer_net_lots": 13727,
-        "total_net_lots": 64353,
+        "foreign_net_lots": 29633,
+        "trust_net_lots": 26458,
+        "dealer_net_lots": 14699,
+        "total_net_lots": 70790,
         "major_ratio_pct": 73.0,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 265.72,
-        "rank": 6,
-        "share_pct": 2.64
+        "turnover_yi": 284.62,
+        "rank": 5,
+        "share_pct": 2.75
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -26646,7 +26646,7 @@
           "high": 99.0,
           "low": 94.5,
           "close": 97.45,
-          "volume": 274548000.0,
+          "volume": 293980451.0,
           "ma20": 105.73,
           "ma60": 107.72,
           "macd_dif": -3.51,
@@ -26782,8 +26782,8 @@
       "prev_close": 210.1,
       "change": 13.5,
       "change_pct": 6.43,
-      "volume": 6117000.0,
-      "vol_ratio": 0.51,
+      "volume": 7164801.0,
+      "vol_ratio": 0.59,
       "pe_ratio": null,
       "dividend_yield": 3.75,
       "pb_ratio": null,
@@ -26801,18 +26801,18 @@
       "macd_osc": -3.27,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 499,
-        "trust_net_lots": 551,
-        "dealer_net_lots": 306,
-        "total_net_lots": 1356,
+        "foreign_net_lots": 676,
+        "trust_net_lots": 645,
+        "dealer_net_lots": 358,
+        "total_net_lots": 1679,
         "major_ratio_pct": 74.6,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 13.62,
-        "rank": 131,
-        "share_pct": 0.14
+        "turnover_yi": 15.96,
+        "rank": 113,
+        "share_pct": 0.15
       },
       "action_plan": {
         "verdict": "空手觀望",
@@ -27614,7 +27614,7 @@
           "high": 226.75,
           "low": 217.3,
           "close": 223.6,
-          "volume": 6117000.0,
+          "volume": 7164801.0,
           "ma20": 242.24,
           "ma60": 246.67,
           "macd_dif": -8.09,
@@ -27750,8 +27750,8 @@
       "prev_close": 49.91,
       "change": 1.84,
       "change_pct": 3.69,
-      "volume": 79274000.0,
-      "vol_ratio": 0.78,
+      "volume": 82100953.0,
+      "vol_ratio": 0.8,
       "pe_ratio": null,
       "dividend_yield": 7.45,
       "pb_ratio": null,
@@ -27769,16 +27769,16 @@
       "macd_osc": -0.79,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 9893,
-        "trust_net_lots": 7135,
-        "dealer_net_lots": 3964,
-        "total_net_lots": 20992,
+        "foreign_net_lots": 10509,
+        "trust_net_lots": 7389,
+        "dealer_net_lots": 4105,
+        "total_net_lots": 22003,
         "major_ratio_pct": 70.5,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 40.91,
+        "turnover_yi": 42.37,
         "rank": 51,
         "share_pct": 0.41
       },
@@ -28582,7 +28582,7 @@
           "high": 52.25,
           "low": 50.0,
           "close": 51.75,
-          "volume": 79274000.0,
+          "volume": 82100953.0,
           "ma20": 56.13,
           "ma60": 55.48,
           "macd_dif": -1.32,
@@ -28718,8 +28718,8 @@
       "prev_close": 31.99,
       "change": 0.78,
       "change_pct": 2.44,
-      "volume": 95410000.0,
-      "vol_ratio": 0.68,
+      "volume": 98148332.0,
+      "vol_ratio": 0.7,
       "pe_ratio": null,
       "dividend_yield": 8.8,
       "pb_ratio": null,
@@ -28737,16 +28737,16 @@
       "macd_osc": -0.36,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 10381,
-        "trust_net_lots": 8587,
-        "dealer_net_lots": 4770,
-        "total_net_lots": 23738,
+        "foreign_net_lots": 10993,
+        "trust_net_lots": 8833,
+        "dealer_net_lots": 4907,
+        "total_net_lots": 24733,
         "major_ratio_pct": 68.7,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 31.27,
+        "turnover_yi": 32.17,
         "rank": 65,
         "share_pct": 0.31
       },
@@ -29550,7 +29550,7 @@
           "high": 33.2,
           "low": 32.17,
           "close": 32.77,
-          "volume": 95410000.0,
+          "volume": 98148332.0,
           "ma20": 34.69,
           "ma60": 34.22,
           "macd_dif": -0.47,
@@ -29686,8 +29686,8 @@
       "prev_close": 30.14,
       "change": 0.84,
       "change_pct": 2.79,
-      "volume": 71158000.0,
-      "vol_ratio": 0.63,
+      "volume": 73442868.0,
+      "vol_ratio": 0.65,
       "pe_ratio": null,
       "dividend_yield": 10.95,
       "pb_ratio": null,
@@ -29705,17 +29705,17 @@
       "macd_osc": -0.24,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 7173,
-        "trust_net_lots": 6404,
-        "dealer_net_lots": 3558,
-        "total_net_lots": 17135,
+        "foreign_net_lots": 7638,
+        "trust_net_lots": 6610,
+        "dealer_net_lots": 3672,
+        "total_net_lots": 17920,
         "major_ratio_pct": 69.2,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 21.98,
-        "rank": 91,
+        "turnover_yi": 22.69,
+        "rank": 90,
         "share_pct": 0.22
       },
       "action_plan": {
@@ -30518,7 +30518,7 @@
           "high": 31.26,
           "low": 30.34,
           "close": 30.98,
-          "volume": 71158000.0,
+          "volume": 73442868.0,
           "ma20": 32.15,
           "ma60": 31.86,
           "macd_dif": -0.26,
@@ -30654,8 +30654,8 @@
       "prev_close": 24.28,
       "change": 0.88,
       "change_pct": 3.62,
-      "volume": 49721000.0,
-      "vol_ratio": 0.61,
+      "volume": 50704223.0,
+      "vol_ratio": 0.63,
       "pe_ratio": null,
       "dividend_yield": 9.2,
       "pb_ratio": null,
@@ -30673,17 +30673,17 @@
       "macd_osc": -0.47,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 4853,
-        "trust_net_lots": 4475,
-        "dealer_net_lots": 2486,
-        "total_net_lots": 11814,
+        "foreign_net_lots": 5111,
+        "trust_net_lots": 4563,
+        "dealer_net_lots": 2535,
+        "total_net_lots": 12209,
         "major_ratio_pct": 70.4,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 12.52,
-        "rank": 138,
+        "turnover_yi": 12.77,
+        "rank": 137,
         "share_pct": 0.12
       },
       "action_plan": {
@@ -31486,7 +31486,7 @@
           "high": 25.55,
           "low": 24.58,
           "close": 25.16,
-          "volume": 49721000.0,
+          "volume": 50704223.0,
           "ma20": 28.22,
           "ma60": 28.83,
           "macd_dif": -1.09,
@@ -31622,8 +31622,8 @@
       "prev_close": 62.35,
       "change": 0.35,
       "change_pct": 0.56,
-      "volume": 9087000.0,
-      "vol_ratio": 1.23,
+      "volume": 9313508.0,
+      "vol_ratio": 1.26,
       "pe_ratio": null,
       "dividend_yield": 6.8,
       "pb_ratio": null,
@@ -31641,17 +31641,17 @@
       "macd_osc": -0.43,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 1788,
-        "trust_net_lots": 818,
-        "dealer_net_lots": 454,
-        "total_net_lots": 3060,
+        "foreign_net_lots": 1878,
+        "trust_net_lots": 838,
+        "dealer_net_lots": 466,
+        "total_net_lots": 3182,
         "major_ratio_pct": 65.8,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 5.7,
-        "rank": 215,
+        "turnover_yi": 5.84,
+        "rank": 214,
         "share_pct": 0.06
       },
       "action_plan": {
@@ -32454,7 +32454,7 @@
           "high": 63.05,
           "low": 62.05,
           "close": 62.7,
-          "volume": 9087000.0,
+          "volume": 9313508.0,
           "ma20": 64.91,
           "ma60": 63.45,
           "macd_dif": -0.1,
@@ -32590,7 +32590,7 @@
       "prev_close": 11.8,
       "change": 0.29,
       "change_pct": 2.46,
-      "volume": 14962000.0,
+      "volume": 15068714.0,
       "vol_ratio": 0.85,
       "pe_ratio": null,
       "dividend_yield": 6.2,
@@ -32609,17 +32609,17 @@
       "macd_osc": -0.17,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 2035,
-        "trust_net_lots": 1347,
-        "dealer_net_lots": 748,
-        "total_net_lots": 4130,
+        "foreign_net_lots": 2049,
+        "trust_net_lots": 1356,
+        "dealer_net_lots": 753,
+        "total_net_lots": 4158,
         "major_ratio_pct": 68.7,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 1.81,
-        "rank": 404,
+        "turnover_yi": 1.82,
+        "rank": 406,
         "share_pct": 0.02
       },
       "action_plan": {
@@ -33422,7 +33422,7 @@
           "high": 12.23,
           "low": 11.86,
           "close": 12.09,
-          "volume": 14962000.0,
+          "volume": 15068714.0,
           "ma20": 13.05,
           "ma60": 12.92,
           "macd_dif": -0.24,
@@ -33558,8 +33558,8 @@
       "prev_close": 23.3,
       "change": 0.48,
       "change_pct": 2.06,
-      "volume": 3871000.0,
-      "vol_ratio": 0.62,
+      "volume": 4104560.0,
+      "vol_ratio": 0.65,
       "pe_ratio": null,
       "dividend_yield": 6.5,
       "pb_ratio": null,
@@ -33577,17 +33577,17 @@
       "macd_osc": -0.22,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 384,
-        "trust_net_lots": 348,
-        "dealer_net_lots": 194,
-        "total_net_lots": 926,
+        "foreign_net_lots": 427,
+        "trust_net_lots": 369,
+        "dealer_net_lots": 205,
+        "total_net_lots": 1001,
         "major_ratio_pct": 68.1,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 0.92,
-        "rank": 579,
+        "turnover_yi": 0.97,
+        "rank": 566,
         "share_pct": 0.01
       },
       "action_plan": {
@@ -34390,7 +34390,7 @@
           "high": 24.02,
           "low": 23.3,
           "close": 23.78,
-          "volume": 3871000.0,
+          "volume": 4104560.0,
           "ma20": 24.71,
           "ma60": 23.87,
           "macd_dif": -0.06,
@@ -34526,8 +34526,8 @@
       "prev_close": 30.55,
       "change": 0.65,
       "change_pct": 2.13,
-      "volume": 5094000.0,
-      "vol_ratio": 1.95,
+      "volume": 5125351.0,
+      "vol_ratio": 1.96,
       "pe_ratio": null,
       "dividend_yield": 9.4,
       "pb_ratio": null,
@@ -34545,17 +34545,17 @@
       "macd_osc": -0.32,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 1589,
-        "trust_net_lots": 458,
-        "dealer_net_lots": 255,
-        "total_net_lots": 2302,
+        "foreign_net_lots": 1607,
+        "trust_net_lots": 461,
+        "dealer_net_lots": 256,
+        "total_net_lots": 2324,
         "major_ratio_pct": 68.2,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
         "turnover_yi": 1.59,
-        "rank": 436,
+        "rank": 435,
         "share_pct": 0.02
       },
       "action_plan": {
@@ -34575,7 +34575,7 @@
       "score": 2.0,
       "conf_stars": "⭐⭐⭐",
       "conf_text": "中等信心",
-      "recommendation_reason": "量能放大達 1.95 倍",
+      "recommendation_reason": "量能放大達 1.96 倍",
       "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 32.97 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 34.06,
@@ -35358,7 +35358,7 @@
           "high": 31.53,
           "low": 30.5,
           "close": 31.2,
-          "volume": 5094000.0,
+          "volume": 5125351.0,
           "ma20": 32.97,
           "ma60": 32.61,
           "macd_dif": -0.4,
@@ -35494,8 +35494,8 @@
       "prev_close": 40.13,
       "change": 2.39,
       "change_pct": 5.96,
-      "volume": 28102000.0,
-      "vol_ratio": 0.81,
+      "volume": 28712662.0,
+      "vol_ratio": 0.83,
       "pe_ratio": null,
       "dividend_yield": 5.2,
       "pb_ratio": null,
@@ -35513,17 +35513,17 @@
       "macd_osc": -0.79,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 3642,
-        "trust_net_lots": 2529,
-        "dealer_net_lots": 1405,
-        "total_net_lots": 7576,
+        "foreign_net_lots": 3813,
+        "trust_net_lots": 2584,
+        "dealer_net_lots": 1436,
+        "total_net_lots": 7833,
         "major_ratio_pct": 73.9,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 11.91,
-        "rank": 141,
+        "turnover_yi": 12.17,
+        "rank": 140,
         "share_pct": 0.12
       },
       "action_plan": {
@@ -36326,7 +36326,7 @@
           "high": 43.2,
           "low": 41.23,
           "close": 42.52,
-          "volume": 28102000.0,
+          "volume": 28712662.0,
           "ma20": 47.82,
           "ma60": 50.09,
           "macd_dif": -2.38,
@@ -36462,8 +36462,8 @@
       "prev_close": 130.15,
       "change": 0.1,
       "change_pct": 0.08,
-      "volume": 1545000.0,
-      "vol_ratio": 1.11,
+      "volume": 1642099.0,
+      "vol_ratio": 1.18,
       "pe_ratio": null,
       "dividend_yield": 1.2,
       "pb_ratio": null,
@@ -36481,17 +36481,17 @@
       "macd_osc": -1.33,
       "institutional_flows": {
         "market": "TW",
-        "foreign_net_lots": 274,
-        "trust_net_lots": 139,
-        "dealer_net_lots": 77,
-        "total_net_lots": 490,
+        "foreign_net_lots": 310,
+        "trust_net_lots": 148,
+        "dealer_net_lots": 82,
+        "total_net_lots": 540,
         "major_ratio_pct": 65.1,
         "trend": "中性",
         "flow_summary": "三大法人多空互見，主力動向中性平衡，呈現震盪換手。"
       },
       "turnover_info": {
-        "turnover_yi": 2.01,
-        "rank": 384,
+        "turnover_yi": 2.14,
+        "rank": 371,
         "share_pct": 0.02
       },
       "action_plan": {
@@ -37294,7 +37294,7 @@
           "high": 130.8,
           "low": 129.05,
           "close": 130.25,
-          "volume": 1545000.0,
+          "volume": 1642099.0,
           "ma20": 140.33,
           "ma60": 140.31,
           "macd_dif": -2.91,
@@ -38427,7 +38427,7 @@
       },
       "turnover_info": {
         "turnover_yi": 19.16,
-        "rank": 97,
+        "rank": 98,
         "share_pct": 0.19
       },
       "action_plan": {
@@ -56979,7 +56979,7 @@
       "vol_ratio": 1.16,
       "pe_ratio": 23.35,
       "dividend_yield": 1.07,
-      "pb_ratio": 1.73,
+      "pb_ratio": 4.9,
       "ma5": 687.92,
       "ma10": 696.26,
       "ma20": 701.72,
