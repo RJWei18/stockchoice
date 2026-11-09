@@ -224,6 +224,65 @@
           </div>
         </div>
 
+        <!-- 全市場籌碼風向球：上櫃融資維持率 -->
+        <div v-if="currentFilter === 'all' && !searchQuery && meta.otc_margin_gauge"
+             class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/60 border border-indigo-500/30 rounded-2xl p-3.5 shadow-md space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-extrabold text-indigo-300">📊 全市場籌碼風向球：上櫃融資維持率</span>
+              <span class="text-[11px] px-2 py-0.5 rounded-full font-extrabold border"
+                    :class="{
+                      'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': meta.otc_margin_gauge.color === 'emerald',
+                      'bg-indigo-500/20 text-indigo-300 border-indigo-500/40': meta.otc_margin_gauge.color === 'indigo',
+                      'bg-rose-500/20 text-rose-300 border-rose-500/40': meta.otc_margin_gauge.color === 'rose'
+                    }">
+                {{ meta.otc_margin_gauge.status_label }}
+              </span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="font-mono text-xs font-black"
+                    :class="meta.otc_margin_gauge.ratio < 150 ? 'text-emerald-400' : (meta.otc_margin_gauge.ratio > 205 ? 'text-rose-400' : 'text-indigo-300')">
+                OTC 維持率: {{ meta.otc_margin_gauge.ratio }}%
+              </span>
+              <button @click="showMarginGaugeDetails = !showMarginGaugeDetails" class="text-[11px] font-bold text-indigo-400 hover:text-indigo-200 transition">
+                {{ showMarginGaugeDetails ? '收合詳情 ▲' : '操作策略指引 ▼' }}
+              </button>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+            {{ meta.otc_margin_gauge.description }}
+          </p>
+
+          <div v-if="showMarginGaugeDetails" class="pt-2 border-t border-slate-800 space-y-2 text-xs">
+            <div class="bg-indigo-950/40 border border-indigo-500/30 rounded-xl p-2.5 space-y-1">
+              <div class="font-bold text-indigo-200 flex items-center space-x-1 text-[11px]">
+                <span>💡</span><span>ETF 0050 / 00631L（正2）波段進出法則：</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed text-[11px]">
+                {{ meta.otc_margin_gauge.strategy_tip }}
+              </p>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center text-[10px] sm:text-[11px]">
+              <div class="bg-slate-950/70 border border-emerald-500/30 rounded-lg p-2">
+                <div class="text-emerald-400 font-bold">歷史低檔買點</div>
+                <div class="font-mono text-slate-300 mt-0.5">&lt; 150% (嚴格 145%)</div>
+                <div class="text-slate-400 mt-0.5">散戶斷頭浮額清洗</div>
+              </div>
+              <div class="bg-slate-950/70 border border-slate-800 rounded-lg p-2">
+                <div class="text-indigo-300 font-bold">常態健康區間</div>
+                <div class="font-mono text-slate-300 mt-0.5">150% ~ 205%</div>
+                <div class="text-slate-400 mt-0.5">依個股技術面進出</div>
+              </div>
+              <div class="bg-slate-950/70 border border-rose-500/30 rounded-lg p-2">
+                <div class="text-rose-400 font-bold">槓桿過熱警戒</div>
+                <div class="font-mono text-slate-300 mt-0.5">&gt; 205% (嚴格 210%)</div>
+                <div class="text-slate-400 mt-0.5">逢高減碼嚴防回檔</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- 台股大盤成交值集中度（資金流向雷達） -->
         <div v-if="currentFilter === 'all' && !searchQuery && meta.market_concentration && meta.market_concentration.top_stocks && meta.market_concentration.top_stocks.length > 0"
              class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 shadow-md space-y-2.5">
@@ -2477,6 +2536,23 @@
             </div>
           </div>
 
+          <!-- Macro Sentiment Calibration Badge (OTC Margin Maintenance Ratio) -->
+          <div v-if="aiModal.item?.market === 'TW' && aiModal.diagnosis?.macroGauge"
+               class="p-2.5 rounded-xl border text-xs flex items-center justify-between"
+               :class="{
+                 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200': aiModal.diagnosis.macroGauge.score_modifier > 0,
+                 'bg-rose-950/30 border-rose-500/40 text-rose-200': aiModal.diagnosis.macroGauge.score_modifier < 0,
+                 'bg-slate-950/50 border-slate-800 text-slate-400': aiModal.diagnosis.macroGauge.score_modifier === 0
+               }">
+            <div class="flex items-center space-x-1.5">
+              <span>{{ aiModal.diagnosis.macroGauge.score_modifier > 0 ? '🟢' : (aiModal.diagnosis.macroGauge.score_modifier < 0 ? '🔴' : '⚪') }}</span>
+              <span class="font-bold">全市場籌碼校準：{{ aiModal.diagnosis.macroGauge.status_label }} (OTC {{ aiModal.diagnosis.macroGauge.ratio }}%)</span>
+            </div>
+            <span class="font-mono font-black text-[11px]">
+              {{ aiModal.diagnosis.macroGauge.score_modifier > 0 ? '+' : '' }}{{ aiModal.diagnosis.macroGauge.score_modifier }} 分
+            </span>
+          </div>
+
           <!-- Full Commentary (Collapsible or secondary) -->
           <div class="space-y-1.5">
             <div class="text-xs font-bold text-slate-400 flex items-center space-x-1">
@@ -2797,6 +2873,7 @@
 
         const showUSPremarket = ref(false);
         const showUSPostmarket = ref(false);
+        const showMarginGaugeDetails = ref(false);
         const favorites = ref(JSON.parse(localStorage.getItem('sc_favorites') || '[]'));
 
         const customStocks = ref(JSON.parse(localStorage.getItem('sc_custom_stocks') || '[]'));
@@ -4410,26 +4487,36 @@
         const generateAiDiagnosis = (item) => {
           if (!item) return null;
 
-          // 1. Determine Stars and Level
-          let stars = item.conf_stars || '⭐⭐⭐';
-          let level = item.conf_text || '觀察評估';
+          const isTW = item.market === 'TW' || !item.market;
+          const macroGauge = isTW && meta.value?.otc_margin_gauge ? meta.value.otc_margin_gauge : null;
+          const macroModifier = macroGauge?.score_modifier || 0;
+
+          // 1. Determine Stars and Level with Macro Modifier
           let rawScore = item.score !== undefined ? item.score : 3.0;
           let scoreVal = rawScore <= 5.0 ? Math.round(rawScore * 20) : Math.round(rawScore);
+          
+          // Apply OTC Margin Maintenance macro modifier
+          if (macroModifier !== 0) {
+            scoreVal = scoreVal + macroModifier;
+          }
           if (scoreVal > 100) scoreVal = 100;
           if (scoreVal < 30) scoreVal = 30;
 
+          let stars = '';
+          let level = '';
+
           if (scoreVal >= 80) {
-            stars = stars || '⭐⭐⭐⭐⭐';
-            level = level || '極高信心 · 強勢多頭';
+            stars = '⭐⭐⭐⭐⭐';
+            level = '極高信心 · 強勢多頭';
           } else if (scoreVal >= 65) {
-            stars = stars || '⭐⭐⭐⭐';
-            level = level || '高信心 · 偏多震盪';
+            stars = '⭐⭐⭐⭐';
+            level = '高信心 · 偏多震盪';
           } else if (scoreVal >= 50) {
-            stars = stars || '⭐⭐⭐';
-            level = level || '中等信心 · 區間整理';
+            stars = '⭐⭐⭐';
+            level = '中等信心 · 區間整理';
           } else {
-            stars = stars || '⭐⭐';
-            level = level || '觀望整理 · 消化浮額';
+            stars = '⭐⭐';
+            level = '觀望整理 · 消化浮額';
           }
 
           // 2. Trend & Moving Averages analysis
@@ -4626,7 +4713,12 @@
           const accuracyRate = totalChecked > 0 ? Math.round((winCount / totalChecked) * 100) : 80;
 
           // Combine full commentary (preserved for modal)
-          const fullComment = `【趨勢結構】${trendDesc}。\n【指標動能】${oscDesc}；${kdDesc}。\n【法人籌碼】${chipDesc}。\n【量價與估值】${volDesc}${valDesc ? '；' + valDesc : ''}。\n【操作策略】短中線建議於拉回進場支撐點位 ${pullback} 附近分批承接佈局；跌破防守價 ${stopLoss} 應恪遵紀律嚴格停損以防範系統性修正；首波反彈/波段目標價看至 ${takeProfit}（預估潛在漲幅 +${upsidePct}%），具備良好之風險報酬比。`;
+          let macroComment = '';
+          if (macroGauge) {
+            macroComment = `\n【全市場籌碼校準】當前上櫃融資維持率為 ${macroGauge.ratio}%（${macroGauge.status_label}），AI 評分校準 ${macroModifier >= 0 ? '+' : ''}${macroModifier} 分。${macroGauge.description}`;
+          }
+
+          const fullComment = `【趨勢結構】${trendDesc}。\n【指標動能】${oscDesc}；${kdDesc}。\n【法人籌碼】${chipDesc}。\n【量價與估值】${volDesc}${valDesc ? '；' + valDesc : ''}。${macroComment}\n【操作策略】短中線建議於拉回進場支撐點位 ${pullback} 附近分批承接佈局；跌破防守價 ${stopLoss} 應恪遵紀律嚴格停損以防範系統性修正；首波反彈/波段目標價看至 ${takeProfit}（預估潛在漲幅 +${upsidePct}%），具備良好之風險報酬比。`;
 
           return {
             ticker: item.ticker,
@@ -4639,6 +4731,7 @@
             direction,
             directionText,
             shortReason,
+            macroGauge,
             history,
             winCount,
             lossCount,
@@ -5184,6 +5277,7 @@
           setFilter,
           showUSPremarket,
           showUSPostmarket,
+          showMarginGaugeDetails,
           favorites,
           isFavorite,
           toggleFavorite,

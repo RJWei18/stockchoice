@@ -24,6 +24,7 @@ from src.ta_engine.indicators import TechnicalIndicators
 from src.scanner.strategy import Scanner
 from src.database.db_manager import DatabaseManager
 from src.backtest.signal_evaluator import evaluate_signal_status
+from src.data_ingestion.macro_fetcher import fetch_latest_otc_margin_ratio, evaluate_margin_maintenance
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -1503,6 +1504,7 @@ def generate_all_data():
     us_premarket_briefing = compute_us_premarket_briefing(us_results)
     us_postmarket_summary = compute_us_postmarket_summary(us_results)
     paper_trading = compute_paper_trading_summary(tw_results, us_results, tw_picks, us_picks)
+    otc_margin_gauge = fetch_latest_otc_margin_ratio().to_dict()
 
     taipei_tz = timezone(timedelta(hours=8))
     now_str = datetime.now(taipei_tz).strftime("%Y-%m-%d %H:%M:%S (UTC+8)")
@@ -1535,6 +1537,7 @@ def generate_all_data():
             "us_premarket_briefing": us_premarket_briefing,
             "us_postmarket_summary": us_postmarket_summary,
             "paper_trading": paper_trading,
+            "otc_margin_gauge": otc_margin_gauge,
 
             "total_tw": len(tw_results),
             "total_us": len(us_results),
@@ -1733,6 +1736,7 @@ def enrich_existing_data_json():
     payload["metadata"]["us_premarket_briefing"] = compute_us_premarket_briefing(us_results)
     payload["metadata"]["us_postmarket_summary"] = compute_us_postmarket_summary(us_results)
     payload["metadata"]["paper_trading"] = compute_paper_trading_summary(tw_results, us_results, tw_picks, us_picks)
+    payload["metadata"]["otc_margin_gauge"] = fetch_latest_otc_margin_ratio().to_dict()
 
     payload["tw_recommended"] = tw_picks
     payload["us_recommended"] = us_picks
