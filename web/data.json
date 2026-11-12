@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2026-11-13 00:08:40 (UTC+8)",
+    "generated_at": "2026-11-13 00:49:15 (UTC+8)",
     "version": "1.2.0",
     "market_status": {
       "latest_tw_date": "2026-11-12",
@@ -82,30 +82,30 @@
     },
     "premarket_briefing": {
       "briefing_date": "2026-11-13",
-      "generated_at": "2026-11-13 00:08",
+      "generated_at": "2026-11-13 00:49",
       "wind_status": "保守觀望・留意支撐",
       "wind_color": "amber",
-      "avg_semi_change_pct": -0.57,
-      "opening_strategy": "隔夜美股半導體回檔修正 (TSM -0.52% / 費半 +0.85%)，台股早盤易受壓測試支撐。早盤前 30 分鐘先觀望不急接刀，靜待回測『建議買進價』不破再分批低接，破防守價嚴格停損。",
+      "avg_semi_change_pct": -1.28,
+      "opening_strategy": "隔夜美股半導體回檔修正 (TSM -1.19% / 費半 +0.07%)，台股早盤易受壓測試支撐。早盤前 30 分鐘先觀望不急接刀，靜待回測『建議買進價』不破再分批低接，破防守價嚴格停損。",
       "market_concentration_note": "前 10 大個股占全市場成交額 28.7%，權值與中小型題材股資金分布均衡",
       "us_drivers": [
         {
           "ticker": "TSM",
           "label": "台積電 ADR",
           "role": "連動台積電(2330)與加權指數開盤跳空幅度",
-          "close": 411.17999267578125,
-          "change": -2.17,
-          "change_pct": -0.52,
+          "close": 408.4549865722656,
+          "change": -4.9,
+          "change_pct": -1.19,
           "date": "2026-11-12",
-          "verdict": "拉回低接"
+          "verdict": "空手觀望"
         },
         {
           "ticker": "NVDA",
           "label": "輝達 NVDA",
           "role": "連動台股 AI 伺服器代工(鴻海/廣達/緯穎)",
-          "close": 166.49000549316406,
-          "change": -7.24,
-          "change_pct": -4.17,
+          "close": 164.76499938964844,
+          "change": -8.96,
+          "change_pct": -5.16,
           "date": "2026-11-12",
           "verdict": "建議停損/避開"
         },
@@ -113,9 +113,9 @@
           "ticker": "SOXX",
           "label": "費半 ETF",
           "role": "連動台灣半導體與 IC 設計族群多空",
-          "close": 156.72000122070312,
-          "change": 1.32,
-          "change_pct": 0.85,
+          "close": 155.5050048828125,
+          "change": 0.11,
+          "change_pct": 0.07,
           "date": "2026-11-12",
           "verdict": "空手觀望"
         },
@@ -123,9 +123,9 @@
           "ticker": "QQQ",
           "label": "那指 100",
           "role": "反映美股大型科技股風險偏好",
-          "close": 692.7100219726562,
-          "change": 2.33,
-          "change_pct": 0.34,
+          "close": 691.1655883789062,
+          "change": 0.79,
+          "change_pct": 0.11,
           "date": "2026-11-12",
           "verdict": "空手觀望"
         },
@@ -133,9 +133,9 @@
           "ticker": "SPY",
           "label": "標普 500",
           "role": "反映美股大盤整體資金情緒",
-          "close": 761.3900146484375,
-          "change": 1.58,
-          "change_pct": 0.21,
+          "close": 760.9099731445312,
+          "change": 1.1,
+          "change_pct": 0.14,
           "date": "2026-11-12",
           "verdict": "拉回低接"
         }
@@ -229,37 +229,37 @@
     },
     "us_premarket_briefing": {
       "briefing_date": "2026-11-13",
-      "generated_at": "2026-11-13 00:08",
-      "wind_status": "區間震盪・板塊輪動",
-      "wind_color": "indigo",
-      "avg_us_change_pct": -0.05,
-      "opening_strategy": "美股期貨平盤整理 (SPY +0.21% / QQQ +0.34%)，多空雙方處於均線拉鋸格局。短線採取防守型低接策略，鎖定防守價位明確、機構籌碼偏多之標的佈局。",
+      "generated_at": "2026-11-13 00:49",
+      "wind_status": "回檔保守・靜待支撐",
+      "wind_color": "amber",
+      "avg_us_change_pct": -0.41,
+      "opening_strategy": "主要指數承壓修正 (SPY +0.14% / SOXX +0.07%)，早盤宜保留現金觀察開盤半小時放量方向。切忌急躁盲目接刀，僅在回測月線或關鍵支撐確認有守時方可分批輕倉試單。",
       "index_drivers": [
         {
           "ticker": "SPY",
           "label": "標普500 ETF",
           "role": "反映美股整體大盤資金水位與風險偏好",
-          "close": 761.3900146484375,
-          "change": 1.58,
-          "change_pct": 0.21,
+          "close": 760.9099731445312,
+          "change": 1.1,
+          "change_pct": 0.14,
           "date": "2026-11-12"
         },
         {
           "ticker": "QQQ",
           "label": "那指 100 ETF",
           "role": "反映大型科技股與高成長板塊多空方向",
-          "close": 692.7100219726562,
-          "change": 2.33,
-          "change_pct": 0.34,
+          "close": 691.1655883789062,
+          "change": 0.79,
+          "change_pct": 0.11,
           "date": "2026-11-12"
         },
         {
           "ticker": "SOXX",
           "label": "費半半導體",
           "role": "反映全球晶片、AI 硬體與代工供應鏈風向",
-          "close": 156.72000122070312,
-          "change": 1.32,
-          "change_pct": 0.85,
+          "close": 155.5050048828125,
+          "change": 0.11,
+          "change_pct": 0.07,
           "date": "2026-11-12"
         }
       ],
@@ -267,94 +267,80 @@
         {
           "ticker": "NVDA",
           "label": "輝達 NVDA",
-          "close": 166.49000549316406,
-          "change_pct": -4.17
+          "close": 164.76499938964844,
+          "change_pct": -5.16
         },
         {
           "ticker": "AAPL",
           "label": "蘋果 AAPL",
-          "close": 358.239990234375,
-          "change_pct": 0.73
+          "close": 357.32501220703125,
+          "change_pct": 0.48
         },
         {
           "ticker": "MSFT",
           "label": "微軟 MSFT",
-          "close": 528.4550170898438,
-          "change_pct": 1.41
+          "close": 527.7999877929688,
+          "change_pct": 1.28
         },
         {
           "ticker": "TSM",
           "label": "台積電 ADR",
-          "close": 411.17999267578125,
-          "change_pct": -0.52
+          "close": 408.4549865722656,
+          "change_pct": -1.19
         },
         {
           "ticker": "GOOGL",
           "label": "Alphabet",
-          "close": 298.93499755859375,
-          "change_pct": 1.87
+          "close": 299.30499267578125,
+          "change_pct": 1.99
         },
         {
           "ticker": "AMZN",
           "label": "亞馬遜 AMZN",
-          "close": 270.4200134277344,
-          "change_pct": 1.6
+          "close": 269.2300109863281,
+          "change_pct": 1.15
         }
       ],
       "actionable_watchlist": [
         {
           "ticker": "AAPL",
           "name": "蘋果 Apple",
-          "close": 358.239990234375,
-          "change_pct": 0.73,
+          "close": 357.32501220703125,
+          "change_pct": 0.48,
           "verdict": "建議買進",
           "alert_tag": "強勢突破買點",
-          "buy_price": 345.68,
-          "take_profit_price": 424.06,
+          "buy_price": 345.63,
+          "take_profit_price": 421.32,
           "stop_loss_price": 325.33,
-          "dist_to_buy_pct": 3.63,
-          "score": 3.5,
-          "smart_money": ""
-        },
-        {
-          "ticker": "AMZN",
-          "name": "亞馬遜 Amazon",
-          "close": 270.4200134277344,
-          "change_pct": 1.6,
-          "verdict": "建議買進",
-          "alert_tag": "強勢突破買點",
-          "buy_price": 256.65,
-          "take_profit_price": 352.54,
-          "stop_loss_price": 229.36,
-          "dist_to_buy_pct": 5.37,
+          "dist_to_buy_pct": 3.38,
           "score": 3.5,
           "smart_money": ""
         },
         {
           "ticker": "SCHD",
           "name": "Schwab 美國高股息 ETF",
-          "close": 36.084999084472656,
-          "change_pct": 0.17,
+          "close": 36.12009811401367,
+          "change_pct": 0.28,
           "verdict": "建議買進",
           "alert_tag": "強勢突破買點",
           "buy_price": 35.37,
-          "take_profit_price": 40.13,
+          "take_profit_price": 40.24,
           "stop_loss_price": 34.06,
-          "dist_to_buy_pct": 2.02,
+          "dist_to_buy_pct": 2.12,
           "score": 3.0,
           "smart_money": ""
         },
         {
           "ticker": "COST",
           "name": "好市多 Costco",
-          "close": 1093.280029296875,
-          "change_pct": 0.52,
+          "close": 1096.06494140625,
+          "change_pct": 0.78,
           "verdict": "建議買進",
           "alert_tag": "強勢突破買點",
-          "buy_price": 1026.31,
-          "take_profit_price": 1325.36,
+          "buy_price": 1026.44,
+          "take_profit_price": 1333.71,
           "stop_loss_price": 977.24,
-          "dist_to_buy_pct": 6.53,
+          "dist_to_buy_pct": 6.78,
           "score": 3.0,
           "smart_money": ""
         },
@@ -373,100 +359,114 @@
           "smart_money": ""
         },
         {
-          "ticker": "TSM",
-          "name": "台積電 ADR",
-          "close": 411.17999267578125,
-          "change_pct": -0.52,
+          "ticker": "VOO",
+          "name": "Vanguard S&P 500 ETF",
+          "close": 699.3800048828125,
+          "change_pct": 0.15,
           "verdict": "拉回低接",
           "alert_tag": "已達建議買點",
-          "buy_price": 409.84,
-          "take_profit_price": 531.16,
-          "stop_loss_price": 351.19,
-          "dist_to_buy_pct": 0.33,
-          "score": 1.5,
+          "buy_price": 698.31,
+          "take_profit_price": 751.04,
+          "stop_loss_price": 673.55,
+          "dist_to_buy_pct": 0.15,
+          "score": 1.0,
+          "smart_money": ""
+        },
+        {
+          "ticker": "SPY",
+          "name": "SPDR S&P 500 ETF",
+          "close": 760.9099731445312,
+          "change_pct": 0.14,
+          "verdict": "拉回低接",
+          "alert_tag": "已達建議買點",
+          "buy_price": 759.65,
+          "take_profit_price": 817.31,
+          "stop_loss_price": 732.71,
+          "dist_to_buy_pct": 0.17,
+          "score": 1.0,
           "smart_money": ""
         }
       ]
     },
     "us_postmarket_summary": {
       "summary_date": "2026-11-13",
-      "generated_at": "2026-11-13 00:08",
+      "generated_at": "2026-11-13 00:49",
       "verdict": "多空勢均力敵・個股分化輪動",
       "color": "indigo",
-      "summary_text": "指數終場狹幅震盪 (SPY +0.21% / QQQ +0.34%)，大盤量能平穩，盤面呈現個別財報與技術型態輪動表現。",
+      "summary_text": "指數終場狹幅震盪 (SPY +0.14% / QQQ +0.11%)，大盤量能平穩，盤面呈現個別財報與技術型態輪動表現。",
       "indices": [
         {
           "ticker": "SPY",
           "name": "標普500 (SPY)",
-          "close": 761.3900146484375,
-          "change": 1.58,
-          "change_pct": 0.21
+          "close": 760.9099731445312,
+          "change": 1.1,
+          "change_pct": 0.14
         },
         {
           "ticker": "QQQ",
           "name": "那斯達克 (QQQ)",
-          "close": 692.7100219726562,
-          "change": 2.33,
-          "change_pct": 0.34
+          "close": 691.1655883789062,
+          "change": 0.79,
+          "change_pct": 0.11
         },
         {
           "ticker": "SOXX",
           "name": "費半半導體 (SOXX)",
-          "close": 156.72000122070312,
-          "change": 1.32,
-          "change_pct": 0.85
+          "close": 155.5050048828125,
+          "change": 0.11,
+          "change_pct": 0.07
         }
       ],
       "top_gainers": [
         {
           "ticker": "AMD",
           "name": "超微 AMD",
-          "close": 586.0850219726562,
-          "change_pct": 6.0
+          "close": 585.5,
+          "change_pct": 5.9
         },
         {
           "ticker": "AVGO",
           "name": "博通 Broadcom",
-          "close": 363.3800048828125,
-          "change_pct": 5.26
+          "close": 364.9599914550781,
+          "change_pct": 5.72
         },
         {
           "ticker": "GOOGL",
           "name": "谷歌 Google",
-          "close": 298.93499755859375,
-          "change_pct": 1.87
+          "close": 299.30499267578125,
+          "change_pct": 1.99
         },
         {
-          "ticker": "AMZN",
-          "name": "亞馬遜 Amazon",
-          "close": 270.4200134277344,
-          "change_pct": 1.6
+          "ticker": "MSFT",
+          "name": "微軟 Microsoft",
+          "close": 527.7999877929688,
+          "change_pct": 1.28
         }
       ],
       "top_losers": [
         {
           "ticker": "NVDA",
           "name": "輝達 NVIDIA",
-          "close": 166.49000549316406,
-          "change_pct": -4.17
+          "close": 164.76499938964844,
+          "change_pct": -5.16
         },
         {
           "ticker": "NFLX",
           "name": "網飛 Netflix",
-          "close": 63.53139877319336,
-          "change_pct": -1.56
+          "close": 63.58000183105469,
+          "change_pct": -1.49
         },
         {
           "ticker": "TSM",
           "name": "台積電 ADR",
-          "close": 411.17999267578125,
-          "change_pct": -0.52
+          "close": 408.4549865722656,
+          "change_pct": -1.19
         },
         {
-          "ticker": "META",
-          "name": "Meta 臉書",
-          "close": 626.3713989257812,
-          "change_pct": -0.38
+          "ticker": "ARM",
+          "name": "安謀 ARM",
+          "close": 201.19000244140625,
+          "change_pct": -1.07
         }
       ],
       "smart_money_picks": []
@@ -477,8 +477,8 @@
       "loss_count": 36,
       "tp_hit_count": 18,
       "win_rate_pct": 36.8,
-      "avg_return_pct": -0.86,
-      "headline": "近 40 日推薦訊號模擬追蹤 57 檔：21 勝 36 敗（勝率 36.8%，平均單筆報酬 -0.86%）",
+      "avg_return_pct": -0.88,
+      "headline": "近 40 日推薦訊號模擬追蹤 57 檔：21 勝 36 敗（勝率 36.8%，平均單筆報酬 -0.88%）",
       "positions": [
         {
           "ticker": "COST",
@@ -502,11 +502,11 @@
           "strategy": "均線多頭排列",
           "entry_date": "2026-09-18",
           "entry_price": 336.13,
-          "current_or_exit_price": 358.24,
+          "current_or_exit_price": 357.33,
           "take_profit_price": 361.34,
           "stop_loss_price": 315.96,
           "exit_date": "2026-11-12",
-          "return_pct": 6.58,
+          "return_pct": 6.31,
           "status": "持有獲利中",
           "is_win": true
         },
@@ -517,26 +517,11 @@
           "strategy": "突破20日高點",
           "entry_date": "2026-10-15",
           "entry_price": 34.1,
-          "current_or_exit_price": 36.08,
+          "current_or_exit_price": 36.12,
           "take_profit_price": 36.66,
           "stop_loss_price": 32.36,
           "exit_date": "2026-11-12",
-          "return_pct": 5.82,
-          "status": "持有獲利中",
-          "is_win": true
-        },
-        {
-          "ticker": "AMZN",
-          "name": "亞馬遜 Amazon",
-          "market": "US",
-          "strategy": "突破20日高點",
-          "entry_date": "2026-11-04",
-          "entry_price": 266.03,
-          "current_or_exit_price": 270.42,
-          "take_profit_price": 285.98,
-          "stop_loss_price": 250.07,
-          "exit_date": "2026-11-12",
-          "return_pct": 1.65,
+          "return_pct": 5.92,
           "status": "持有獲利中",
           "is_win": true
         },
@@ -659,18 +644,33 @@
           "return_pct": 7.5,
           "status": "達標停利",
           "is_win": true
+        },
+        {
+          "ticker": "2412.TW",
+          "name": "中華電",
+          "market": "TW",
+          "strategy": "突破20日高點",
+          "entry_date": "2026-09-14",
+          "entry_price": 142.5,
+          "current_or_exit_price": 153.19,
+          "take_profit_price": 153.19,
+          "stop_loss_price": 135.0,
+          "exit_date": "2026-10-15",
+          "return_pct": 7.5,
+          "status": "達標停利",
+          "is_win": true
         }
       ]
     },
     "otc_margin_gauge": {
-      "ratio": 156.5,
+      "ratio": 156.4,
       "status": "HEALTHY_NORMAL",
       "status_label": "常態健康波動區",
       "color": "indigo",
       "score_modifier": 0,
       "description": "上櫃融資維持率處於 150% ~ 205% 之健康常態運行區間，籌碼結構平穩，行情以個股基本面與技術面趨勢為主導。",
       "strategy_tip": "波段策略：維持定期定額與常態策略操作，依個別標的支撐與壓力位進出。",
-      "date": ""
+      "date": "2026-11-12"
     },
     "total_tw": 40,
     "total_us": 24,
@@ -39420,27 +39420,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 358.239990234375,
+      "close": 357.32501220703125,
       "prev_close": 355.6300048828125,
-      "change": 2.61,
-      "change_pct": 0.73,
-      "volume": 10442552.0,
-      "vol_ratio": 0.22,
-      "pe_ratio": 39.89,
+      "change": 1.7,
+      "change_pct": 0.48,
+      "volume": 12167968.0,
+      "vol_ratio": 0.26,
+      "pe_ratio": 39.79,
       "dividend_yield": 30.0,
-      "pb_ratio": 46.45,
-      "ma5": 351.09,
-      "ma10": 346.4,
-      "ma20": 345.68,
-      "ma60": 334.71,
+      "pb_ratio": 46.32,
+      "ma5": 350.91,
+      "ma10": 346.31,
+      "ma20": 345.63,
+      "ma60": 334.7,
       "support_20": 325.33,
       "resistance_20": 355.91,
-      "kd_k": 85.3,
-      "kd_d": 74.0,
-      "rsi": 56.8,
-      "macd_dif": 4.12,
-      "macd_signal": 3.23,
-      "macd_osc": 0.9,
+      "kd_k": 84.4,
+      "kd_d": 73.7,
+      "rsi": 56.3,
+      "macd_dif": 4.05,
+      "macd_signal": 3.21,
+      "macd_osc": 0.84,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 60.5,
@@ -39462,7 +39462,7 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 37.41,
+        "turnover_yi": 43.48,
         "rank": null,
         "share_pct": null
       },
@@ -39471,13 +39471,13 @@
         "verdict_color": "emerald",
         "can_buy": true,
         "buy_status": "建議分批買進",
-        "buy_price": 345.68,
+        "buy_price": 345.63,
         "breakout_buy_price": 355.91,
-        "buy_note": "345.68 ~ 358.24 元區間可佈局",
+        "buy_note": "345.63 ~ 357.33 元區間可佈局",
         "sell_status": "未達賣點（續抱）",
-        "take_profit_price": 424.06,
+        "take_profit_price": 421.32,
         "stop_loss_price": 325.33,
-        "sell_note": "漲至 424.06 元停利 / 跌破 325.33 元停損"
+        "sell_note": "漲至 421.32 元停利 / 跌破 325.33 元停損"
       },
       "signals": [
         "多頭排列強勢趨勢"
@@ -39486,13 +39486,13 @@
       "conf_stars": "⭐⭐⭐⭐",
       "conf_text": "高信心",
       "recommendation_reason": "均線發散向上多頭排列；巴菲特頭號重倉 + 議員布局",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (345.68元) 附近分批佈局，守穩防守價 (325.33元) 續抱。",
+      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (345.63元) 附近分批佈局，守穩防守價 (325.33元) 續抱。",
       "trade_levels": {
         "breakout_entry": 355.91,
-        "pullback_entry": 345.68,
+        "pullback_entry": 345.63,
         "stop_loss": 325.33,
-        "take_profit": 424.06,
-        "upside_pct": 18.4
+        "take_profit": 421.32,
+        "upside_pct": 17.9
       },
       "history_kline": [
         {
@@ -40267,13 +40267,13 @@
           "open": 357.71,
           "high": 359.37,
           "low": 355.92,
-          "close": 358.24,
-          "volume": 10442552.0,
-          "ma20": 345.68,
-          "ma60": 334.71,
-          "macd_dif": 4.12,
-          "macd_signal": 3.23,
-          "macd_osc": 0.9
+          "close": 357.33,
+          "volume": 12167968.0,
+          "ma20": 345.63,
+          "ma60": 334.7,
+          "macd_dif": 4.05,
+          "macd_signal": 3.21,
+          "macd_osc": 0.84
         }
       ],
       "signal_evaluation": {
@@ -40363,7 +40363,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 4,
-            "return_pct": -4.64
+            "return_pct": -4.37
           },
           {
             "entry_date": "2026-11-09",
@@ -40389,7 +40389,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 1,
-            "return_pct": 0.73
+            "return_pct": 0.48
           }
         ]
       }
@@ -40400,27 +40400,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 166.49000549316406,
+      "close": 164.76499938964844,
       "prev_close": 173.72999572753906,
-      "change": -7.24,
-      "change_pct": -4.17,
-      "volume": 444314357.0,
-      "vol_ratio": 1.31,
-      "pe_ratio": 21.05,
+      "change": -8.96,
+      "change_pct": -5.16,
+      "volume": 506663826.0,
+      "vol_ratio": 1.5,
+      "pe_ratio": 20.82,
       "dividend_yield": 58.0,
-      "pb_ratio": 17.55,
-      "ma5": 174.88,
-      "ma10": 186.95,
-      "ma20": 201.27,
-      "ma60": 216.15,
+      "pb_ratio": 17.37,
+      "ma5": 174.54,
+      "ma10": 186.78,
+      "ma20": 201.18,
+      "ma60": 216.12,
       "support_20": 165.89,
       "resistance_20": 222.19,
-      "kd_k": 18.5,
-      "kd_d": 15.5,
-      "rsi": 24.6,
-      "macd_dif": -13.31,
-      "macd_signal": -9.22,
-      "macd_osc": -4.1,
+      "kd_k": 17.6,
+      "kd_d": 15.2,
+      "rsi": 24.1,
+      "macd_dif": -13.45,
+      "macd_signal": -9.24,
+      "macd_osc": -4.21,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 67.2,
@@ -40443,7 +40443,7 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 739.74,
+        "turnover_yi": 834.8,
         "rank": null,
         "share_pct": null
       },
@@ -40452,26 +40452,26 @@
         "verdict_color": "rose",
         "can_buy": false,
         "buy_status": "不建議買進",
-        "buy_price": 163.16,
+        "buy_price": 161.47,
         "breakout_buy_price": 222.19,
-        "buy_note": "空頭弱勢，未站回 201.27 元前避開",
+        "buy_note": "空頭弱勢，未站回 201.18 元前避開",
         "sell_status": "破線建議停損或減碼",
-        "take_profit_price": 176.48,
-        "stop_loss_price": 165.89,
-        "sell_note": "漲至 176.48 元停利 / 跌破 165.89 元停損"
+        "take_profit_price": 181.23,
+        "stop_loss_price": 156.53,
+        "sell_note": "漲至 181.23 元停利 / 跌破 156.53 元停損"
       },
       "signals": [],
-      "score": 1.0,
-      "conf_stars": "⭐⭐",
-      "conf_text": "觀望整理",
-      "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 201.27 元或打出支撐再考慮進場。",
+      "score": 2.0,
+      "conf_stars": "⭐⭐⭐",
+      "conf_text": "中等信心",
+      "recommendation_reason": "量能放大達 1.5 倍",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 201.18 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 222.19,
-        "pullback_entry": 163.16,
-        "stop_loss": 165.89,
-        "take_profit": 176.48,
-        "upside_pct": 6.0
+        "pullback_entry": 161.47,
+        "stop_loss": 156.53,
+        "take_profit": 181.23,
+        "upside_pct": 10.0
       },
       "history_kline": [
         {
@@ -41244,15 +41244,15 @@
         {
           "time": "2026-11-12",
           "open": 150.99,
-          "high": 166.6,
+          "high": 167.14,
           "low": 148.8,
-          "close": 166.49,
-          "volume": 444314357.0,
-          "ma20": 201.27,
-          "ma60": 216.15,
-          "macd_dif": -13.31,
-          "macd_signal": -9.22,
-          "macd_osc": -4.1
+          "close": 164.76,
+          "volume": 506663826.0,
+          "ma20": 201.18,
+          "ma60": 216.12,
+          "macd_dif": -13.45,
+          "macd_signal": -9.24,
+          "macd_osc": -4.21
         }
       ],
       "signal_evaluation": {
@@ -41379,27 +41379,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 528.4550170898438,
+      "close": 527.7999877929688,
       "prev_close": 521.1300048828125,
-      "change": 7.33,
-      "change_pct": 1.41,
-      "volume": 5118270.0,
-      "vol_ratio": 0.17,
-      "pe_ratio": 27.58,
+      "change": 6.67,
+      "change_pct": 1.28,
+      "volume": 7524046.0,
+      "vol_ratio": 0.25,
+      "pe_ratio": 27.55,
       "dividend_yield": 75.0,
-      "pb_ratio": 8.34,
-      "ma5": 531.71,
-      "ma10": 530.03,
-      "ma20": 529.92,
-      "ma60": 515.08,
+      "pb_ratio": 8.33,
+      "ma5": 531.58,
+      "ma10": 529.96,
+      "ma20": 529.88,
+      "ma60": 515.07,
       "support_20": 504.96,
       "resistance_20": 559.15,
-      "kd_k": 46.5,
-      "kd_d": 50.4,
-      "rsi": 51.3,
-      "macd_dif": 2.8,
-      "macd_signal": 3.92,
-      "macd_osc": -1.12,
+      "kd_k": 46.1,
+      "kd_d": 50.2,
+      "rsi": 51.1,
+      "macd_dif": 2.75,
+      "macd_signal": 3.91,
+      "macd_osc": -1.16,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 72.4,
@@ -41422,7 +41422,7 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 27.05,
+        "turnover_yi": 39.71,
         "rank": null,
         "share_pct": null
       },
@@ -41431,26 +41431,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 517.89,
+        "buy_price": 517.24,
         "breakout_buy_price": 559.15,
-        "buy_note": "待重新站穩月線 529.92 元再進場",
+        "buy_note": "待重新站穩月線 529.88 元再進場",
         "sell_status": "跌破 504.96 元停損出場",
-        "take_profit_price": 575.45,
+        "take_profit_price": 573.48,
         "stop_loss_price": 504.96,
-        "sell_note": "漲至 575.45 元停利 / 跌破 504.96 元停損"
+        "sell_note": "漲至 573.48 元停利 / 跌破 504.96 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 529.92 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 529.88 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 559.15,
-        "pullback_entry": 517.89,
+        "pullback_entry": 517.24,
         "stop_loss": 504.96,
-        "take_profit": 575.45,
-        "upside_pct": 8.9
+        "take_profit": 573.48,
+        "upside_pct": 8.7
       },
       "history_kline": [
         {
@@ -42223,15 +42223,15 @@
         {
           "time": "2026-11-12",
           "open": 521.3,
-          "high": 528.46,
+          "high": 529.61,
           "low": 520.51,
-          "close": 528.46,
-          "volume": 5118270.0,
-          "ma20": 529.92,
-          "ma60": 515.08,
-          "macd_dif": 2.8,
-          "macd_signal": 3.92,
-          "macd_osc": -1.12
+          "close": 527.8,
+          "volume": 7524046.0,
+          "ma20": 529.88,
+          "ma60": 515.07,
+          "macd_dif": 2.75,
+          "macd_signal": 3.91,
+          "macd_osc": -1.16
         }
       ],
       "signal_evaluation": {
@@ -42321,7 +42321,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 4,
-            "return_pct": 0.41
+            "return_pct": 0.53
           },
           {
             "entry_date": "2026-11-09",
@@ -42334,7 +42334,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -3.07
+            "return_pct": -3.19
           },
           {
             "entry_date": "2026-11-11",
@@ -42347,7 +42347,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 1,
-            "return_pct": -1.41
+            "return_pct": -1.28
           }
         ]
       }
@@ -42358,27 +42358,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 270.4200134277344,
+      "close": 269.2300109863281,
       "prev_close": 266.1700134277344,
-      "change": 4.25,
-      "change_pct": 1.6,
-      "volume": 13460613.0,
-      "vol_ratio": 0.26,
-      "pe_ratio": 21.86,
+      "change": 3.06,
+      "change_pct": 1.15,
+      "volume": 15630605.0,
+      "vol_ratio": 0.3,
+      "pe_ratio": 21.77,
       "dividend_yield": null,
-      "pb_ratio": 4.76,
-      "ma5": 266.74,
-      "ma10": 259.66,
-      "ma20": 256.65,
-      "ma60": 255.51,
+      "pb_ratio": 4.74,
+      "ma5": 266.5,
+      "ma10": 259.54,
+      "ma20": 256.59,
+      "ma60": 255.49,
       "support_20": 229.36,
       "resistance_20": 275.34,
-      "kd_k": 80.5,
-      "kd_d": 73.7,
-      "rsi": 65.2,
-      "macd_dif": 3.47,
-      "macd_signal": 1.32,
-      "macd_osc": 2.14,
+      "kd_k": 79.3,
+      "kd_d": 73.3,
+      "rsi": 64.6,
+      "macd_dif": 3.37,
+      "macd_signal": 1.31,
+      "macd_osc": 2.07,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 61.8,
@@ -42401,37 +42401,35 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 36.4,
+        "turnover_yi": 42.08,
         "rank": null,
         "share_pct": null
       },
       "action_plan": {
-        "verdict": "建議買進",
-        "verdict_color": "emerald",
+        "verdict": "拉回低接",
+        "verdict_color": "indigo",
         "can_buy": true,
-        "buy_status": "建議分批買進",
-        "buy_price": 256.65,
+        "buy_status": "等拉回低接",
+        "buy_price": 256.59,
         "breakout_buy_price": 275.34,
-        "buy_note": "256.65 ~ 270.42 元區間可佈局",
-        "sell_status": "未達賣點（續抱）",
-        "take_profit_price": 352.54,
+        "buy_note": "回測 256.59 元附近買進",
+        "sell_status": "守穩防守價續抱",
+        "take_profit_price": 348.97,
         "stop_loss_price": 229.36,
-        "sell_note": "漲至 352.54 元停利 / 跌破 229.36 元停損"
+        "sell_note": "漲至 348.97 元停利 / 跌破 229.36 元停損"
       },
-      "signals": [
-        "多頭排列強勢趨勢"
-      ],
-      "score": 3.5,
-      "conf_stars": "⭐⭐⭐⭐",
-      "conf_text": "高信心",
-      "recommendation_reason": "均線發散向上多頭排列；22家大師重倉 + 議員淨買進",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (256.65元) 附近分批佈局，守穩防守價 (229.36元) 續抱。",
+      "signals": [],
+      "score": 1.5,
+      "conf_stars": "⭐⭐",
+      "conf_text": "觀望整理",
+      "recommendation_reason": "22家大師重倉 + 議員淨買進",
+      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (256.59元) 附近分批佈局，守穩防守價 (229.36元) 續抱。",
       "trade_levels": {
         "breakout_entry": 275.34,
-        "pullback_entry": 256.65,
+        "pullback_entry": 256.59,
         "stop_loss": 229.36,
-        "take_profit": 352.54,
-        "upside_pct": 30.4
+        "take_profit": 348.97,
+        "upside_pct": 29.6
       },
       "history_kline": [
         {
@@ -43206,13 +43204,13 @@
           "open": 267.92,
           "high": 273.6,
           "low": 267.83,
-          "close": 270.42,
-          "volume": 13460613.0,
-          "ma20": 256.65,
-          "ma60": 255.51,
-          "macd_dif": 3.47,
-          "macd_signal": 1.32,
-          "macd_osc": 2.14
+          "close": 269.23,
+          "volume": 15630605.0,
+          "ma20": 256.59,
+          "ma60": 255.49,
+          "macd_dif": 3.37,
+          "macd_signal": 1.31,
+          "macd_osc": 2.07
         }
       ],
       "signal_evaluation": {
@@ -43328,7 +43326,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": 1.31
+            "return_pct": 0.86
           }
         ]
       }
@@ -43339,27 +43337,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 626.3713989257812,
+      "close": 625.0350952148438,
       "prev_close": 628.77001953125,
-      "change": -2.4,
-      "change_pct": -0.38,
-      "volume": 3279316.0,
-      "vol_ratio": 0.18,
-      "pe_ratio": 21.37,
+      "change": -3.73,
+      "change_pct": -0.59,
+      "volume": 4066702.0,
+      "vol_ratio": 0.22,
+      "pe_ratio": 21.32,
       "dividend_yield": 33.0,
-      "pb_ratio": 5.88,
-      "ma5": 629.61,
-      "ma10": 622.59,
-      "ma20": 640.58,
-      "ma60": 660.93,
+      "pb_ratio": 5.87,
+      "ma5": 629.34,
+      "ma10": 622.45,
+      "ma20": 640.52,
+      "ma60": 660.91,
       "support_20": 583.8,
       "resistance_20": 743.97,
-      "kd_k": 66.4,
-      "kd_d": 56.6,
-      "rsi": 44.9,
-      "macd_dif": -16.97,
-      "macd_signal": -17.97,
-      "macd_osc": 0.99,
+      "kd_k": 65.8,
+      "kd_d": 56.3,
+      "rsi": 44.5,
+      "macd_dif": -17.08,
+      "macd_signal": -17.99,
+      "macd_osc": 0.91,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 68.3,
@@ -43382,7 +43380,7 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 20.54,
+        "turnover_yi": 25.42,
         "rank": null,
         "share_pct": null
       },
@@ -43391,26 +43389,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 613.84,
+        "buy_price": 612.53,
         "breakout_buy_price": 743.97,
-        "buy_note": "待重新站穩月線 640.58 元再進場",
+        "buy_note": "待重新站穩月線 640.52 元再進場",
         "sell_status": "跌破 583.80 元停損出場",
-        "take_profit_price": 711.51,
+        "take_profit_price": 707.51,
         "stop_loss_price": 583.8,
-        "sell_note": "漲至 711.51 元停利 / 跌破 583.80 元停損"
+        "sell_note": "漲至 707.51 元停利 / 跌破 583.80 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 640.58 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 640.52 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 743.97,
-        "pullback_entry": 613.84,
+        "pullback_entry": 612.53,
         "stop_loss": 583.8,
-        "take_profit": 711.51,
-        "upside_pct": 13.6
+        "take_profit": 707.51,
+        "upside_pct": 13.2
       },
       "history_kline": [
         {
@@ -44184,14 +44182,14 @@
           "time": "2026-11-12",
           "open": 625.35,
           "high": 630.28,
-          "low": 618.92,
-          "close": 626.37,
-          "volume": 3279316.0,
-          "ma20": 640.58,
-          "ma60": 660.93,
-          "macd_dif": -16.97,
-          "macd_signal": -17.97,
-          "macd_osc": 0.99
+          "low": 619.0,
+          "close": 625.04,
+          "volume": 4066702.0,
+          "ma20": 640.52,
+          "ma60": 660.91,
+          "macd_dif": -17.08,
+          "macd_signal": -17.99,
+          "macd_osc": 0.91
         }
       ],
       "signal_evaluation": {
@@ -44281,7 +44279,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 10,
-            "return_pct": -0.3
+            "return_pct": -0.08
           },
           {
             "entry_date": "2026-11-09",
@@ -44294,7 +44292,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": 2.34
+            "return_pct": 2.55
           },
           {
             "entry_date": "2026-11-11",
@@ -44318,27 +44316,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 392.2900085449219,
+      "close": 391.9150085449219,
       "prev_close": 390.8399963378906,
-      "change": 1.45,
-      "change_pct": 0.37,
-      "volume": 8615808.0,
-      "vol_ratio": 0.21,
-      "pe_ratio": 431.09,
+      "change": 1.08,
+      "change_pct": 0.28,
+      "volume": 10105380.0,
+      "vol_ratio": 0.25,
+      "pe_ratio": 430.68,
       "dividend_yield": null,
-      "pb_ratio": 17.37,
-      "ma5": 379.84,
-      "ma10": 383.02,
-      "ma20": 383.33,
-      "ma60": 370.93,
+      "pb_ratio": 17.35,
+      "ma5": 379.76,
+      "ma10": 382.98,
+      "ma20": 383.31,
+      "ma60": 370.92,
       "support_20": 338.15,
       "resistance_20": 414.23,
-      "kd_k": 60.1,
-      "kd_d": 54.5,
-      "rsi": 56.4,
-      "macd_dif": 2.77,
+      "kd_k": 60.0,
+      "kd_d": 54.4,
+      "rsi": 56.3,
+      "macd_dif": 2.74,
       "macd_signal": 3.6,
-      "macd_osc": -0.83,
+      "macd_osc": -0.86,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 44.5,
@@ -44360,7 +44358,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 33.8,
+        "turnover_yi": 39.6,
         "rank": null,
         "share_pct": null
       },
@@ -44369,26 +44367,26 @@
         "verdict_color": "indigo",
         "can_buy": true,
         "buy_status": "等拉回低接",
-        "buy_price": 383.33,
+        "buy_price": 383.31,
         "breakout_buy_price": 414.23,
-        "buy_note": "回測 383.33 元附近買進",
+        "buy_note": "回測 383.31 元附近買進",
         "sell_status": "守穩防守價續抱",
-        "take_profit_price": 500.57,
+        "take_profit_price": 499.45,
         "stop_loss_price": 338.15,
-        "sell_note": "漲至 500.57 元停利 / 跌破 338.15 元停損"
+        "sell_note": "漲至 499.45 元停利 / 跌破 338.15 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (383.33元) 附近分批佈局，守穩防守價 (338.15元) 續抱。",
+      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (383.31元) 附近分批佈局，守穩防守價 (338.15元) 續抱。",
       "trade_levels": {
         "breakout_entry": 414.23,
-        "pullback_entry": 383.33,
+        "pullback_entry": 383.31,
         "stop_loss": 338.15,
-        "take_profit": 500.57,
-        "upside_pct": 27.6
+        "take_profit": 499.45,
+        "upside_pct": 27.4
       },
       "history_kline": [
         {
@@ -45163,13 +45161,13 @@
           "open": 385.85,
           "high": 396.2,
           "low": 385.2,
-          "close": 392.29,
-          "volume": 8615808.0,
-          "ma20": 383.33,
-          "ma60": 370.93,
-          "macd_dif": 2.77,
+          "close": 391.92,
+          "volume": 10105380.0,
+          "ma20": 383.31,
+          "ma60": 370.92,
+          "macd_dif": 2.74,
           "macd_signal": 3.6,
-          "macd_osc": -0.83
+          "macd_osc": -0.86
         }
       ],
       "signal_evaluation": {
@@ -45272,7 +45270,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -3.77
+            "return_pct": -3.67
           },
           {
             "entry_date": "2026-11-11",
@@ -45296,27 +45294,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 298.93499755859375,
+      "close": 299.30499267578125,
       "prev_close": 293.45001220703125,
-      "change": 5.48,
-      "change_pct": 1.87,
-      "volume": 12604987.0,
-      "vol_ratio": 0.35,
-      "pe_ratio": 15.61,
+      "change": 5.85,
+      "change_pct": 1.99,
+      "volume": 15924047.0,
+      "vol_ratio": 0.44,
+      "pe_ratio": 15.63,
       "dividend_yield": 30.0,
-      "pb_ratio": 5.57,
-      "ma5": 290.54,
-      "ma10": 286.31,
-      "ma20": 305.67,
-      "ma60": 331.29,
+      "pb_ratio": 5.58,
+      "ma5": 290.61,
+      "ma10": 286.34,
+      "ma20": 305.69,
+      "ma60": 331.3,
       "support_20": 276.92,
       "resistance_20": 352.15,
-      "kd_k": 64.8,
-      "kd_d": 40.3,
-      "rsi": 38.4,
-      "macd_dif": -13.19,
+      "kd_k": 63.3,
+      "kd_d": 39.8,
+      "rsi": 38.6,
+      "macd_dif": -13.16,
       "macd_signal": -13.81,
-      "macd_osc": 0.62,
+      "macd_osc": 0.64,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 62.1,
@@ -45339,7 +45337,7 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 37.68,
+        "turnover_yi": 47.66,
         "rank": null,
         "share_pct": null
       },
@@ -45348,26 +45346,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 292.96,
+        "buy_price": 293.32,
         "breakout_buy_price": 352.15,
-        "buy_note": "待重新站穩月線 305.67 元再進場",
+        "buy_note": "待重新站穩月線 305.69 元再進場",
         "sell_status": "跌破 276.92 元停損出場",
-        "take_profit_price": 342.96,
+        "take_profit_price": 344.07,
         "stop_loss_price": 276.92,
-        "sell_note": "漲至 342.96 元停利 / 跌破 276.92 元停損"
+        "sell_note": "漲至 344.07 元停利 / 跌破 276.92 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 305.67 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 305.69 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 352.15,
-        "pullback_entry": 292.96,
+        "pullback_entry": 293.32,
         "stop_loss": 276.92,
-        "take_profit": 342.96,
-        "upside_pct": 14.7
+        "take_profit": 344.07,
+        "upside_pct": 15.0
       },
       "history_kline": [
         {
@@ -46140,15 +46138,15 @@
         {
           "time": "2026-11-12",
           "open": 293.9,
-          "high": 298.99,
+          "high": 300.4,
           "low": 293.8,
-          "close": 298.93,
-          "volume": 12604987.0,
-          "ma20": 305.67,
-          "ma60": 331.29,
-          "macd_dif": -13.19,
+          "close": 299.3,
+          "volume": 15924047.0,
+          "ma20": 305.69,
+          "ma60": 331.3,
+          "macd_dif": -13.16,
           "macd_signal": -13.81,
-          "macd_osc": 0.62
+          "macd_osc": 0.64
         }
       ],
       "signal_evaluation": {
@@ -46251,12 +46249,12 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -3.74
+            "return_pct": -3.87
           },
           {
             "entry_date": "2026-11-12",
             "signal_type": "NEUTRAL",
-            "entry_price": 298.93,
+            "entry_price": 299.3,
             "take_profit_price": null,
             "stop_loss_price": null,
             "status": "PENDING",
@@ -46275,27 +46273,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 586.0850219726562,
+      "close": 585.5,
       "prev_close": 552.9000244140625,
-      "change": 33.18,
-      "change_pct": 6.0,
-      "volume": 28104700.0,
-      "vol_ratio": 0.54,
-      "pe_ratio": 125.26,
+      "change": 32.6,
+      "change_pct": 5.9,
+      "volume": 35050952.0,
+      "vol_ratio": 0.67,
+      "pe_ratio": 125.11,
       "dividend_yield": null,
-      "pb_ratio": 14.06,
-      "ma5": 522.36,
-      "ma10": 496.05,
-      "ma20": 518.8,
-      "ma60": 539.0,
+      "pb_ratio": 14.04,
+      "ma5": 522.25,
+      "ma10": 496.0,
+      "ma20": 518.77,
+      "ma60": 538.99,
       "support_20": 402.1,
       "resistance_20": 579.18,
-      "kd_k": 73.1,
-      "kd_d": 52.6,
+      "kd_k": 71.7,
+      "kd_d": 52.2,
       "rsi": 57.5,
-      "macd_dif": -10.05,
+      "macd_dif": -10.1,
       "macd_signal": -17.65,
-      "macd_osc": 7.59,
+      "macd_osc": 7.56,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 69.8,
@@ -46317,7 +46315,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 164.72,
+        "turnover_yi": 205.22,
         "rank": null,
         "share_pct": null
       },
@@ -46326,26 +46324,26 @@
         "verdict_color": "indigo",
         "can_buy": true,
         "buy_status": "等拉回低接",
-        "buy_price": 518.8,
+        "buy_price": 518.77,
         "breakout_buy_price": 579.18,
-        "buy_note": "回測 518.80 元附近買進",
+        "buy_note": "回測 518.77 元附近買進",
         "sell_status": "守穩防守價續抱",
-        "take_profit_price": 954.06,
+        "take_profit_price": 952.3,
         "stop_loss_price": 402.1,
-        "sell_note": "漲至 954.06 元停利 / 跌破 402.10 元停損"
+        "sell_note": "漲至 952.30 元停利 / 跌破 402.10 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (518.80元) 附近分批佈局，守穩防守價 (402.10元) 續抱。",
+      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (518.77元) 附近分批佈局，守穩防守價 (402.10元) 續抱。",
       "trade_levels": {
         "breakout_entry": 579.18,
-        "pullback_entry": 518.8,
+        "pullback_entry": 518.77,
         "stop_loss": 402.1,
-        "take_profit": 954.06,
-        "upside_pct": 62.8
+        "take_profit": 952.3,
+        "upside_pct": 62.6
       },
       "history_kline": [
         {
@@ -47118,15 +47116,15 @@
         {
           "time": "2026-11-12",
           "open": 569.28,
-          "high": 586.7,
+          "high": 594.0,
           "low": 554.9,
-          "close": 586.09,
-          "volume": 28104700.0,
-          "ma20": 518.8,
-          "ma60": 539.0,
-          "macd_dif": -10.05,
+          "close": 585.5,
+          "volume": 35050952.0,
+          "ma20": 518.77,
+          "ma60": 538.99,
+          "macd_dif": -10.1,
           "macd_signal": -17.65,
-          "macd_osc": 7.59
+          "macd_osc": 7.56
         }
       ],
       "signal_evaluation": {
@@ -47242,7 +47240,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 1,
-            "return_pct": 6.0
+            "return_pct": 5.9
           }
         ]
       }
@@ -47253,31 +47251,31 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 411.17999267578125,
+      "close": 408.4549865722656,
       "prev_close": 413.3500061035156,
-      "change": -2.17,
-      "change_pct": -0.52,
-      "volume": 6419433.0,
-      "vol_ratio": 0.29,
-      "pe_ratio": 26.65,
+      "change": -4.9,
+      "change_pct": -1.19,
+      "volume": 7250744.0,
+      "vol_ratio": 0.33,
+      "pe_ratio": 26.48,
       "dividend_yield": 91.0,
-      "pb_ratio": 78.47,
-      "ma5": 397.01,
-      "ma10": 394.35,
-      "ma20": 409.84,
-      "ma60": 428.32,
+      "pb_ratio": 77.97,
+      "ma5": 396.47,
+      "ma10": 394.08,
+      "ma20": 409.7,
+      "ma60": 428.28,
       "support_20": 351.19,
       "resistance_20": 440.88,
-      "kd_k": 66.9,
-      "kd_d": 47.2,
-      "rsi": 48.0,
-      "macd_dif": -10.77,
-      "macd_signal": -11.45,
-      "macd_osc": 0.68,
+      "kd_k": 65.5,
+      "kd_d": 46.7,
+      "rsi": 47.3,
+      "macd_dif": -10.98,
+      "macd_signal": -11.49,
+      "macd_osc": 0.51,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 38.5,
-        "trend": "偏多",
+        "trend": "中性整理",
         "flow_summary": "【Dataroma 13F】11 家頂級機構持倉 (David Rolfe (Wedgewood), Howard Marks (Oaktree))，動向：13F 外資增持；【Quiver 國會籌碼】晶片法案議員關注（近一季國會議員申報 4 筆買進 / 1 筆賣出）。",
         "dataroma_13f": {
           "holders_count": 11,
@@ -47296,35 +47294,35 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 26.4,
+        "turnover_yi": 29.62,
         "rank": null,
         "share_pct": null
       },
       "action_plan": {
-        "verdict": "拉回低接",
-        "verdict_color": "indigo",
-        "can_buy": true,
-        "buy_status": "等拉回低接",
-        "buy_price": 409.84,
+        "verdict": "空手觀望",
+        "verdict_color": "slate",
+        "can_buy": false,
+        "buy_status": "暫時觀望",
+        "buy_price": 400.29,
         "breakout_buy_price": 440.88,
-        "buy_note": "回測 409.84 元附近買進",
-        "sell_status": "守穩防守價續抱",
-        "take_profit_price": 531.16,
+        "buy_note": "待重新站穩月線 409.70 元再進場",
+        "sell_status": "跌破 351.19 元停損出場",
+        "take_profit_price": 522.98,
         "stop_loss_price": 351.19,
-        "sell_note": "漲至 531.16 元停利 / 跌破 351.19 元停損"
+        "sell_note": "漲至 522.98 元停利 / 跌破 351.19 元停損"
       },
       "signals": [],
-      "score": 1.5,
+      "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
-      "recommendation_reason": "11家13F機構增持 + 議員買進",
-      "beginner_tip": "目前處於波段震盪盤整區間。高檔壓力位在 440.88元，低檔支撐在 351.19元。",
+      "recommendation_reason": "技術指標平穩，處於常態波動區間",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 409.70 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 440.88,
-        "pullback_entry": 409.84,
+        "pullback_entry": 400.29,
         "stop_loss": 351.19,
-        "take_profit": 531.16,
-        "upside_pct": 29.2
+        "take_profit": 522.98,
+        "upside_pct": 28.0
       },
       "history_kline": [
         {
@@ -48097,28 +48095,41 @@
         {
           "time": "2026-11-12",
           "open": 394.62,
-          "high": 411.4,
+          "high": 411.77,
           "low": 393.91,
-          "close": 411.18,
-          "volume": 6419433.0,
-          "ma20": 409.84,
-          "ma60": 428.32,
-          "macd_dif": -10.77,
-          "macd_signal": -11.45,
-          "macd_osc": 0.68
+          "close": 408.45,
+          "volume": 7250744.0,
+          "ma20": 409.7,
+          "ma60": 428.28,
+          "macd_dif": -10.98,
+          "macd_signal": -11.49,
+          "macd_osc": 0.51
         }
       ],
       "signal_evaluation": {
         "trade_win_rate": 53.8,
         "trade_wins": 7,
         "trade_losses": 6,
-        "trade_pending": 1,
+        "trade_pending": 0,
         "neutral_accuracy": 0.0,
         "neutral_wins": 0,
         "neutral_losses": 2,
         "neutral_pending": 1,
         "overall_accuracy": 46.7,
         "evaluated_signals": [
+          {
+            "entry_date": "2026-09-21",
+            "signal_type": "BULLISH",
+            "entry_price": 445.14,
+            "take_profit_price": 480.75,
+            "stop_loss_price": 422.88,
+            "status": "WIN",
+            "reason": "TAKE_PROFIT",
+            "resolved_date": "2026-10-05",
+            "resolved_price": 480.75,
+            "holding_bars": 10,
+            "return_pct": 8.0
+          },
           {
             "entry_date": "2026-09-30",
             "signal_type": "BULLISH",
@@ -48209,19 +48220,6 @@
             "resolved_price": null,
             "holding_bars": 1,
             "return_pct": 0.0
-          },
-          {
-            "entry_date": "2026-11-12",
-            "signal_type": "BULLISH",
-            "entry_price": 411.18,
-            "take_profit_price": 444.07,
-            "stop_loss_price": 390.62,
-            "status": "PENDING",
-            "reason": "PENDING_ACTIVE",
-            "resolved_date": null,
-            "resolved_price": null,
-            "holding_bars": 0,
-            "return_pct": 0.0
           }
         ]
       }
@@ -48232,27 +48230,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 363.3800048828125,
+      "close": 364.9599914550781,
       "prev_close": 345.2200012207031,
-      "change": 18.16,
-      "change_pct": 5.26,
-      "volume": 19613268.0,
-      "vol_ratio": 0.53,
-      "pe_ratio": 46.4,
+      "change": 19.74,
+      "change_pct": 5.72,
+      "volume": 24597949.0,
+      "vol_ratio": 0.67,
+      "pe_ratio": 46.59,
       "dividend_yield": 75.0,
-      "pb_ratio": 17.4,
-      "ma5": 330.75,
-      "ma10": 325.12,
-      "ma20": 330.0,
-      "ma60": 348.82,
+      "pb_ratio": 17.47,
+      "ma5": 331.07,
+      "ma10": 325.28,
+      "ma20": 330.08,
+      "ma60": 348.85,
       "support_20": 289.77,
       "resistance_20": 356.85,
-      "kd_k": 69.7,
-      "kd_d": 50.0,
-      "rsi": 61.5,
-      "macd_dif": -3.84,
-      "macd_signal": -7.85,
-      "macd_osc": 4.01,
+      "kd_k": 68.7,
+      "kd_d": 49.7,
+      "rsi": 61.8,
+      "macd_dif": -3.71,
+      "macd_signal": -7.82,
+      "macd_osc": 4.11,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 79.2,
@@ -48274,7 +48272,7 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 71.27,
+        "turnover_yi": 89.77,
         "rank": null,
         "share_pct": null
       },
@@ -48283,26 +48281,26 @@
         "verdict_color": "indigo",
         "can_buy": true,
         "buy_status": "等拉回低接",
-        "buy_price": 330.0,
+        "buy_price": 330.08,
         "breakout_buy_price": 356.85,
-        "buy_note": "回測 330.00 元附近買進",
+        "buy_note": "回測 330.08 元附近買進",
         "sell_status": "守穩防守價續抱",
-        "take_profit_price": 510.6,
+        "take_profit_price": 515.34,
         "stop_loss_price": 289.77,
-        "sell_note": "漲至 510.60 元停利 / 跌破 289.77 元停損"
+        "sell_note": "漲至 515.34 元停利 / 跌破 289.77 元停損"
       },
       "signals": [],
       "score": 1.5,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "議員零賣出買進 + 13F增持",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (330.00元) 附近分批佈局，守穩防守價 (289.77元) 續抱。",
+      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (330.08元) 附近分批佈局，守穩防守價 (289.77元) 續抱。",
       "trade_levels": {
         "breakout_entry": 356.85,
-        "pullback_entry": 330.0,
+        "pullback_entry": 330.08,
         "stop_loss": 289.77,
-        "take_profit": 510.6,
-        "upside_pct": 40.5
+        "take_profit": 515.34,
+        "upside_pct": 41.2
       },
       "history_kline": [
         {
@@ -49075,15 +49073,15 @@
         {
           "time": "2026-11-12",
           "open": 356.79,
-          "high": 365.71,
+          "high": 369.82,
           "low": 354.72,
-          "close": 363.38,
-          "volume": 19613268.0,
-          "ma20": 330.0,
-          "ma60": 348.82,
-          "macd_dif": -3.84,
-          "macd_signal": -7.85,
-          "macd_osc": 4.01
+          "close": 364.96,
+          "volume": 24597949.0,
+          "ma20": 330.08,
+          "ma60": 348.85,
+          "macd_dif": -3.71,
+          "macd_signal": -7.82,
+          "macd_osc": 4.11
         }
       ],
       "signal_evaluation": {
@@ -49184,9 +49182,9 @@
             "status": "LOSS",
             "reason": "THRESHOLD_BREACHED",
             "resolved_date": "2026-11-12",
-            "resolved_price": 365.71,
+            "resolved_price": 369.82,
             "holding_bars": 2,
-            "return_pct": 10.16
+            "return_pct": 11.4
           },
           {
             "entry_date": "2026-11-11",
@@ -49199,7 +49197,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 1,
-            "return_pct": 5.26
+            "return_pct": 5.72
           }
         ]
       }
@@ -49210,27 +49208,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 204.0850067138672,
+      "close": 201.19000244140625,
       "prev_close": 203.36000061035156,
-      "change": 0.73,
-      "change_pct": 0.36,
-      "volume": 1728114.0,
-      "vol_ratio": 0.22,
-      "pe_ratio": 234.58,
+      "change": -2.17,
+      "change_pct": -1.07,
+      "volume": 2006809.0,
+      "vol_ratio": 0.26,
+      "pe_ratio": 231.25,
       "dividend_yield": null,
-      "pb_ratio": 24.03,
-      "ma5": 189.97,
-      "ma10": 191.36,
-      "ma20": 207.61,
-      "ma60": 248.25,
+      "pb_ratio": 23.69,
+      "ma5": 189.39,
+      "ma10": 191.07,
+      "ma20": 207.46,
+      "ma60": 248.2,
       "support_20": 163.13,
       "resistance_20": 245.87,
-      "kd_k": 58.5,
-      "kd_d": 38.3,
-      "rsi": 48.0,
-      "macd_dif": -17.72,
-      "macd_signal": -18.88,
-      "macd_osc": 1.16,
+      "kd_k": 56.4,
+      "kd_d": 37.6,
+      "rsi": 47.0,
+      "macd_dif": -17.95,
+      "macd_signal": -18.93,
+      "macd_osc": 0.97,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 52.0,
@@ -49251,7 +49249,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 3.53,
+        "turnover_yi": 4.04,
         "rank": null,
         "share_pct": null
       },
@@ -49260,26 +49258,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 200.0,
+        "buy_price": 197.17,
         "breakout_buy_price": 245.87,
-        "buy_note": "待重新站穩月線 207.61 元再進場",
+        "buy_note": "待重新站穩月線 207.46 元再進場",
         "sell_status": "跌破 163.13 元停損出場",
-        "take_profit_price": 286.0,
+        "take_profit_price": 277.31,
         "stop_loss_price": 163.13,
-        "sell_note": "漲至 286.00 元停利 / 跌破 163.13 元停損"
+        "sell_note": "漲至 277.31 元停利 / 跌破 163.13 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 207.61 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 207.46 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 245.87,
-        "pullback_entry": 200.0,
+        "pullback_entry": 197.17,
         "stop_loss": 163.13,
-        "take_profit": 286.0,
-        "upside_pct": 40.1
+        "take_profit": 277.31,
+        "upside_pct": 37.8
       },
       "history_kline": [
         {
@@ -50052,15 +50050,15 @@
         {
           "time": "2026-11-12",
           "open": 190.37,
-          "high": 204.33,
+          "high": 204.77,
           "low": 190.0,
-          "close": 204.09,
-          "volume": 1728114.0,
-          "ma20": 207.61,
-          "ma60": 248.25,
-          "macd_dif": -17.72,
-          "macd_signal": -18.88,
-          "macd_osc": 1.16
+          "close": 201.19,
+          "volume": 2006809.0,
+          "ma20": 207.46,
+          "ma60": 248.2,
+          "macd_dif": -17.95,
+          "macd_signal": -18.93,
+          "macd_osc": 0.97
         }
       ],
       "signal_evaluation": {
@@ -50168,7 +50166,7 @@
           {
             "entry_date": "2026-11-12",
             "signal_type": "NEUTRAL",
-            "entry_price": 204.09,
+            "entry_price": 201.19,
             "take_profit_price": null,
             "stop_loss_price": null,
             "status": "PENDING",
@@ -50187,27 +50185,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 171.8000030517578,
+      "close": 172.0500030517578,
       "prev_close": 172.39999389648438,
-      "change": -0.6,
-      "change_pct": -0.35,
-      "volume": 4499594.0,
-      "vol_ratio": 0.17,
-      "pe_ratio": 120.99,
+      "change": -0.35,
+      "change_pct": -0.2,
+      "volume": 5627110.0,
+      "vol_ratio": 0.21,
+      "pe_ratio": 121.16,
       "dividend_yield": null,
-      "pb_ratio": 36.86,
-      "ma5": 168.52,
-      "ma10": 170.71,
-      "ma20": 183.27,
+      "pb_ratio": 36.91,
+      "ma5": 168.57,
+      "ma10": 170.74,
+      "ma20": 183.28,
       "ma60": 184.04,
       "support_20": 152.6,
       "resistance_20": 203.55,
-      "kd_k": 41.3,
-      "kd_d": 33.0,
-      "rsi": 30.7,
-      "macd_dif": -6.34,
-      "macd_signal": -4.4,
-      "macd_osc": -1.94,
+      "kd_k": 41.5,
+      "kd_d": 33.1,
+      "rsi": 30.8,
+      "macd_dif": -6.32,
+      "macd_signal": -4.39,
+      "macd_osc": -1.92,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 46.5,
@@ -50229,7 +50227,7 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 7.73,
+        "turnover_yi": 9.68,
         "rank": null,
         "share_pct": null
       },
@@ -50238,26 +50236,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 168.36,
+        "buy_price": 168.61,
         "breakout_buy_price": 203.55,
-        "buy_note": "待重新站穩月線 183.27 元再進場",
+        "buy_note": "待重新站穩月線 183.28 元再進場",
         "sell_status": "跌破 152.60 元停損出場",
-        "take_profit_price": 210.2,
+        "take_profit_price": 210.95,
         "stop_loss_price": 152.6,
-        "sell_note": "漲至 210.20 元停利 / 跌破 152.60 元停損"
+        "sell_note": "漲至 210.95 元停利 / 跌破 152.60 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 183.27 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 183.28 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 203.55,
-        "pullback_entry": 168.36,
+        "pullback_entry": 168.61,
         "stop_loss": 152.6,
-        "take_profit": 210.2,
-        "upside_pct": 22.4
+        "take_profit": 210.95,
+        "upside_pct": 22.6
       },
       "history_kline": [
         {
@@ -51030,15 +51028,15 @@
         {
           "time": "2026-11-12",
           "open": 169.94,
-          "high": 171.82,
+          "high": 172.68,
           "low": 168.25,
-          "close": 171.8,
-          "volume": 4499594.0,
-          "ma20": 183.27,
+          "close": 172.05,
+          "volume": 5627110.0,
+          "ma20": 183.28,
           "ma60": 184.04,
-          "macd_dif": -6.34,
-          "macd_signal": -4.4,
-          "macd_osc": -1.94
+          "macd_dif": -6.32,
+          "macd_signal": -4.39,
+          "macd_osc": -1.92
         }
       ],
       "signal_evaluation": {
@@ -51154,7 +51152,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -1.54
+            "return_pct": -1.68
           }
         ]
       }
@@ -51165,27 +51163,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 62.619998931884766,
+      "close": 61.93000030517578,
       "prev_close": 62.5,
-      "change": 0.12,
-      "change_pct": 0.19,
-      "volume": 35669061.0,
-      "vol_ratio": 0.22,
-      "pe_ratio": 34.97,
+      "change": -0.57,
+      "change_pct": -0.91,
+      "volume": 43621488.0,
+      "vol_ratio": 0.26,
+      "pe_ratio": 34.59,
       "dividend_yield": 2.1,
-      "pb_ratio": 2.89,
-      "ma5": 59.78,
-      "ma10": 59.57,
-      "ma20": 75.32,
-      "ma60": 94.62,
+      "pb_ratio": 2.86,
+      "ma5": 59.64,
+      "ma10": 59.5,
+      "ma20": 75.29,
+      "ma60": 94.61,
       "support_20": 51.51,
       "resistance_20": 96.87,
-      "kd_k": 46.4,
-      "kd_d": 29.1,
-      "rsi": 31.5,
-      "macd_dif": -11.51,
-      "macd_signal": -10.82,
-      "macd_osc": -0.69,
+      "kd_k": 44.8,
+      "kd_d": 28.6,
+      "rsi": 31.1,
+      "macd_dif": -11.56,
+      "macd_signal": -10.83,
+      "macd_osc": -0.74,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 64.0,
@@ -51206,7 +51204,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 22.34,
+        "turnover_yi": 27.01,
         "rank": null,
         "share_pct": null
       },
@@ -51215,26 +51213,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 61.37,
+        "buy_price": 60.69,
         "breakout_buy_price": 96.87,
-        "buy_note": "待重新站穩月線 75.32 元再進場",
+        "buy_note": "待重新站穩月線 75.29 元再進場",
         "sell_status": "跌破 51.51 元停損出場",
-        "take_profit_price": 84.84,
+        "take_profit_price": 82.77,
         "stop_loss_price": 51.51,
-        "sell_note": "漲至 84.84 元停利 / 跌破 51.51 元停損"
+        "sell_note": "漲至 82.77 元停利 / 跌破 51.51 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 75.32 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 75.29 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 96.87,
-        "pullback_entry": 61.37,
+        "pullback_entry": 60.69,
         "stop_loss": 51.51,
-        "take_profit": 84.84,
-        "upside_pct": 35.5
+        "take_profit": 82.77,
+        "upside_pct": 33.7
       },
       "history_kline": [
         {
@@ -52007,15 +52005,15 @@
         {
           "time": "2026-11-12",
           "open": 59.67,
-          "high": 62.67,
+          "high": 62.76,
           "low": 59.41,
-          "close": 62.62,
-          "volume": 35669061.0,
-          "ma20": 75.32,
-          "ma60": 94.62,
-          "macd_dif": -11.51,
-          "macd_signal": -10.82,
-          "macd_osc": -0.69
+          "close": 61.93,
+          "volume": 43621488.0,
+          "ma20": 75.29,
+          "ma60": 94.61,
+          "macd_dif": -11.56,
+          "macd_signal": -10.83,
+          "macd_osc": -0.74
         }
       ],
       "signal_evaluation": {
@@ -52142,24 +52140,24 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 63.53139877319336,
+      "close": 63.58000183105469,
       "prev_close": 64.54000091552734,
-      "change": -1.01,
-      "change_pct": -1.56,
-      "volume": 8834669.0,
-      "vol_ratio": 0.25,
-      "pe_ratio": 18.36,
+      "change": -0.96,
+      "change_pct": -1.49,
+      "volume": 10560340.0,
+      "vol_ratio": 0.3,
+      "pe_ratio": 18.38,
       "dividend_yield": null,
       "pb_ratio": 8.91,
-      "ma5": 63.74,
+      "ma5": 63.75,
       "ma10": 63.85,
       "ma20": 64.8,
       "ma60": 71.5,
       "support_20": 61.39,
       "resistance_20": 73.07,
-      "kd_k": 38.7,
-      "kd_d": 39.2,
-      "rsi": 42.1,
+      "kd_k": 39.0,
+      "kd_d": 39.3,
+      "rsi": 42.3,
       "macd_dif": -1.68,
       "macd_signal": -1.98,
       "macd_osc": 0.3,
@@ -52183,22 +52181,22 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 5.61,
+        "turnover_yi": 6.71,
         "rank": null,
         "share_pct": null
       },
       "action_plan": {
-        "verdict": "建議停損/避開",
-        "verdict_color": "rose",
+        "verdict": "空手觀望",
+        "verdict_color": "slate",
         "can_buy": false,
-        "buy_status": "不建議買進",
-        "buy_price": 62.26,
+        "buy_status": "暫時觀望",
+        "buy_price": 62.31,
         "breakout_buy_price": 73.07,
-        "buy_note": "空頭弱勢，未站回 64.80 元前避開",
-        "sell_status": "破線建議停損或減碼",
-        "take_profit_price": 67.81,
+        "buy_note": "待重新站穩月線 64.80 元再進場",
+        "sell_status": "跌破 61.39 元停損出場",
+        "take_profit_price": 67.96,
         "stop_loss_price": 61.39,
-        "sell_note": "漲至 67.81 元停利 / 跌破 61.39 元停損"
+        "sell_note": "漲至 67.96 元停利 / 跌破 61.39 元停損"
       },
       "signals": [],
       "score": 1.0,
@@ -52208,10 +52206,10 @@
       "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 64.80 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 73.07,
-        "pullback_entry": 62.26,
+        "pullback_entry": 62.31,
         "stop_loss": 61.39,
-        "take_profit": 67.81,
-        "upside_pct": 6.7
+        "take_profit": 67.96,
+        "upside_pct": 6.9
       },
       "history_kline": [
         {
@@ -52986,8 +52984,8 @@
           "open": 64.27,
           "high": 64.3,
           "low": 62.87,
-          "close": 63.53,
-          "volume": 8834669.0,
+          "close": 63.58,
+          "volume": 10560340.0,
           "ma20": 64.8,
           "ma60": 71.5,
           "macd_dif": -1.68,
@@ -53069,7 +53067,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 16,
-            "return_pct": 2.32
+            "return_pct": 2.24
           },
           {
             "entry_date": "2026-10-29",
@@ -53119,27 +53117,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 1093.280029296875,
+      "close": 1096.06494140625,
       "prev_close": 1087.6099853515625,
-      "change": 5.67,
-      "change_pct": 0.52,
-      "volume": 662961.0,
-      "vol_ratio": 0.25,
-      "pe_ratio": 52.66,
+      "change": 8.45,
+      "change_pct": 0.78,
+      "volume": 779439.0,
+      "vol_ratio": 0.29,
+      "pe_ratio": 52.8,
       "dividend_yield": 54.0,
-      "pb_ratio": 13.54,
-      "ma5": 1073.35,
-      "ma10": 1055.09,
-      "ma20": 1026.31,
-      "ma60": 960.62,
+      "pb_ratio": 13.57,
+      "ma5": 1073.91,
+      "ma10": 1055.37,
+      "ma20": 1026.44,
+      "ma60": 960.67,
       "support_20": 977.24,
       "resistance_20": 1091.92,
-      "kd_k": 86.7,
-      "kd_d": 81.9,
-      "rsi": 72.3,
-      "macd_dif": 33.07,
-      "macd_signal": 27.66,
-      "macd_osc": 5.41,
+      "kd_k": 87.7,
+      "kd_d": 82.2,
+      "rsi": 72.7,
+      "macd_dif": 33.3,
+      "macd_signal": 27.71,
+      "macd_osc": 5.59,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 71.0,
@@ -53160,7 +53158,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 7.25,
+        "turnover_yi": 8.54,
         "rank": null,
         "share_pct": null
       },
@@ -53169,13 +53167,13 @@
         "verdict_color": "emerald",
         "can_buy": true,
         "buy_status": "建議分批買進",
-        "buy_price": 1026.31,
+        "buy_price": 1026.44,
         "breakout_buy_price": 1091.92,
-        "buy_note": "1026.31 ~ 1093.28 元區間可佈局",
+        "buy_note": "1026.44 ~ 1096.06 元區間可佈局",
         "sell_status": "未達賣點（續抱）",
-        "take_profit_price": 1325.36,
+        "take_profit_price": 1333.71,
         "stop_loss_price": 977.24,
-        "sell_note": "漲至 1325.36 元停利 / 跌破 977.24 元停損"
+        "sell_note": "漲至 1333.71 元停利 / 跌破 977.24 元停損"
       },
       "signals": [
         "多頭排列強勢趨勢"
@@ -53184,13 +53182,13 @@
       "conf_stars": "⭐⭐⭐⭐",
       "conf_text": "高信心",
       "recommendation_reason": "均線發散向上多頭排列",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (1026.31元) 附近分批佈局，守穩防守價 (977.24元) 續抱。",
+      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (1026.44元) 附近分批佈局，守穩防守價 (977.24元) 續抱。",
       "trade_levels": {
         "breakout_entry": 1091.92,
-        "pullback_entry": 1026.31,
+        "pullback_entry": 1026.44,
         "stop_loss": 977.24,
-        "take_profit": 1325.36,
-        "upside_pct": 21.2
+        "take_profit": 1333.71,
+        "upside_pct": 21.7
       },
       "history_kline": [
         {
@@ -53964,14 +53962,14 @@
           "time": "2026-11-12",
           "open": 1096.27,
           "high": 1102.84,
-          "low": 1089.0,
-          "close": 1093.28,
-          "volume": 662961.0,
-          "ma20": 1026.31,
-          "ma60": 960.62,
-          "macd_dif": 33.07,
-          "macd_signal": 27.66,
-          "macd_osc": 5.41
+          "low": 1089.01,
+          "close": 1096.06,
+          "volume": 779439.0,
+          "ma20": 1026.44,
+          "ma60": 960.67,
+          "macd_dif": 33.3,
+          "macd_signal": 27.71,
+          "macd_osc": 5.59
         }
       ],
       "signal_evaluation": {
@@ -54087,7 +54085,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": 2.54
+            "return_pct": 2.8
           }
         ]
       }
@@ -55075,27 +55073,27 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 692.7100219726562,
+      "close": 691.1655883789062,
       "prev_close": 690.3800048828125,
-      "change": 2.33,
-      "change_pct": 0.34,
-      "volume": 15548795.0,
-      "vol_ratio": 0.23,
-      "pe_ratio": 28.53,
+      "change": 0.79,
+      "change_pct": 0.11,
+      "volume": 18625380.0,
+      "vol_ratio": 0.27,
+      "pe_ratio": 28.47,
       "dividend_yield": 45.0,
-      "pb_ratio": 1.94,
-      "ma5": 678.66,
-      "ma10": 678.92,
-      "ma20": 697.17,
-      "ma60": 717.66,
+      "pb_ratio": 1.93,
+      "ma5": 678.35,
+      "ma10": 678.76,
+      "ma20": 697.09,
+      "ma60": 717.63,
       "support_20": 647.05,
       "resistance_20": 729.43,
-      "kd_k": 58.3,
-      "kd_d": 40.2,
-      "rsi": 46.7,
-      "macd_dif": -13.09,
-      "macd_signal": -12.89,
-      "macd_osc": -0.2,
+      "kd_k": 57.4,
+      "kd_d": 39.9,
+      "rsi": 46.2,
+      "macd_dif": -13.21,
+      "macd_signal": -12.91,
+      "macd_osc": -0.3,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 68.0,
@@ -55118,7 +55116,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 107.71,
+        "turnover_yi": 128.73,
         "rank": null,
         "share_pct": null
       },
@@ -55127,26 +55125,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 678.86,
+        "buy_price": 677.34,
         "breakout_buy_price": 729.43,
-        "buy_note": "待重新站穩月線 697.17 元再進場",
+        "buy_note": "待重新站穩月線 697.09 元再進場",
         "sell_status": "跌破 647.05 元停損出場",
-        "take_profit_price": 784.03,
+        "take_profit_price": 779.4,
         "stop_loss_price": 647.05,
-        "sell_note": "漲至 784.03 元停利 / 跌破 647.05 元停損"
+        "sell_note": "漲至 779.40 元停利 / 跌破 647.05 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 697.17 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 697.09 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 729.43,
-        "pullback_entry": 678.86,
+        "pullback_entry": 677.34,
         "stop_loss": 647.05,
-        "take_profit": 784.03,
-        "upside_pct": 13.2
+        "take_profit": 779.4,
+        "upside_pct": 12.8
       },
       "history_kline": [
         {
@@ -55919,15 +55917,15 @@
         {
           "time": "2026-11-12",
           "open": 680.21,
-          "high": 692.92,
+          "high": 694.56,
           "low": 679.84,
-          "close": 692.71,
-          "volume": 15548795.0,
-          "ma20": 697.17,
-          "ma60": 717.66,
-          "macd_dif": -13.09,
-          "macd_signal": -12.89,
-          "macd_osc": -0.2
+          "close": 691.17,
+          "volume": 18625380.0,
+          "ma20": 697.09,
+          "ma60": 717.63,
+          "macd_dif": -13.21,
+          "macd_signal": -12.91,
+          "macd_osc": -0.3
         }
       ],
       "signal_evaluation": {
@@ -56043,7 +56041,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -1.97
+            "return_pct": -1.74
           }
         ]
       }
@@ -56054,27 +56052,27 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 761.3900146484375,
+      "close": 760.9099731445312,
       "prev_close": 759.8099975585938,
-      "change": 1.58,
-      "change_pct": 0.21,
-      "volume": 13192007.0,
-      "vol_ratio": 0.21,
-      "pe_ratio": 24.22,
+      "change": 1.1,
+      "change_pct": 0.14,
+      "volume": 17008000.0,
+      "vol_ratio": 0.27,
+      "pe_ratio": 24.21,
       "dividend_yield": 1.0,
       "pb_ratio": 1.77,
-      "ma5": 751.82,
-      "ma10": 752.11,
-      "ma20": 759.68,
+      "ma5": 751.72,
+      "ma10": 752.06,
+      "ma20": 759.65,
       "ma60": 765.04,
       "support_20": 732.71,
       "resistance_20": 775.64,
-      "kd_k": 50.9,
-      "kd_d": 40.3,
-      "rsi": 50.6,
-      "macd_dif": -4.15,
-      "macd_signal": -4.18,
-      "macd_osc": 0.04,
+      "kd_k": 50.5,
+      "kd_d": 40.1,
+      "rsi": 50.4,
+      "macd_dif": -4.18,
+      "macd_signal": -4.19,
+      "macd_osc": 0.01,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 75.0,
@@ -56097,7 +56095,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 100.44,
+        "turnover_yi": 129.42,
         "rank": null,
         "share_pct": null
       },
@@ -56106,13 +56104,13 @@
         "verdict_color": "indigo",
         "can_buy": true,
         "buy_status": "等拉回低接",
-        "buy_price": 759.68,
+        "buy_price": 759.65,
         "breakout_buy_price": 775.64,
-        "buy_note": "回測 759.68 元附近買進",
+        "buy_note": "回測 759.65 元附近買進",
         "sell_status": "守穩防守價續抱",
-        "take_profit_price": 818.75,
+        "take_profit_price": 817.31,
         "stop_loss_price": 732.71,
-        "sell_note": "漲至 818.75 元停利 / 跌破 732.71 元停損"
+        "sell_note": "漲至 817.31 元停利 / 跌破 732.71 元停損"
       },
       "signals": [],
       "score": 1.0,
@@ -56122,10 +56120,10 @@
       "beginner_tip": "目前處於波段震盪盤整區間。高檔壓力位在 775.64元，低檔支撐在 732.71元。",
       "trade_levels": {
         "breakout_entry": 775.64,
-        "pullback_entry": 759.68,
+        "pullback_entry": 759.65,
         "stop_loss": 732.71,
-        "take_profit": 818.75,
-        "upside_pct": 7.5
+        "take_profit": 817.31,
+        "upside_pct": 7.4
       },
       "history_kline": [
         {
@@ -56898,15 +56896,15 @@
         {
           "time": "2026-11-12",
           "open": 753.98,
-          "high": 761.72,
+          "high": 763.03,
           "low": 753.7,
-          "close": 761.39,
-          "volume": 13192007.0,
-          "ma20": 759.68,
+          "close": 760.91,
+          "volume": 17008000.0,
+          "ma20": 759.65,
           "ma60": 765.04,
-          "macd_dif": -4.15,
-          "macd_signal": -4.18,
-          "macd_osc": 0.04
+          "macd_dif": -4.18,
+          "macd_signal": -4.19,
+          "macd_osc": 0.01
         }
       ],
       "signal_evaluation": {
@@ -56931,7 +56929,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 19,
-            "return_pct": 0.24
+            "return_pct": 0.31
           },
           {
             "entry_date": "2026-10-20",
@@ -56944,7 +56942,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 17,
-            "return_pct": 1.0
+            "return_pct": 1.06
           },
           {
             "entry_date": "2026-10-21",
@@ -56970,7 +56968,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 15,
-            "return_pct": 0.34
+            "return_pct": 0.4
           },
           {
             "entry_date": "2026-10-28",
@@ -56996,7 +56994,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 10,
-            "return_pct": 1.04
+            "return_pct": 1.1
           },
           {
             "entry_date": "2026-11-09",
@@ -57009,14 +57007,14 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -1.16
+            "return_pct": -1.09
           },
           {
             "entry_date": "2026-11-12",
             "signal_type": "BULLISH",
-            "entry_price": 761.39,
-            "take_profit_price": 822.3,
-            "stop_loss_price": 723.32,
+            "entry_price": 760.91,
+            "take_profit_price": 821.78,
+            "stop_loss_price": 722.86,
             "status": "PENDING",
             "reason": "PENDING_ACTIVE",
             "resolved_date": null,
@@ -57033,27 +57031,27 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 699.9149780273438,
+      "close": 699.3800048828125,
       "prev_close": 698.3499755859375,
-      "change": 1.57,
-      "change_pct": 0.22,
-      "volume": 2499064.0,
-      "vol_ratio": 0.25,
-      "pe_ratio": 24.17,
+      "change": 1.03,
+      "change_pct": 0.15,
+      "volume": 3419243.0,
+      "vol_ratio": 0.35,
+      "pe_ratio": 24.16,
       "dividend_yield": 1.07,
-      "pb_ratio": 4.9,
-      "ma5": 691.12,
-      "ma10": 691.4,
-      "ma20": 698.34,
-      "ma60": 703.42,
+      "pb_ratio": 1.79,
+      "ma5": 691.02,
+      "ma10": 691.35,
+      "ma20": 698.31,
+      "ma60": 703.41,
       "support_20": 673.55,
       "resistance_20": 711.83,
-      "kd_k": 58.5,
-      "kd_d": 44.9,
-      "rsi": 50.6,
-      "macd_dif": -3.84,
-      "macd_signal": -3.89,
-      "macd_osc": 0.04,
+      "kd_k": 58.0,
+      "kd_d": 44.8,
+      "rsi": 50.4,
+      "macd_dif": -3.89,
+      "macd_signal": -3.9,
+      "macd_osc": 0.01,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 75.0,
@@ -57076,7 +57074,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 17.49,
+        "turnover_yi": 23.91,
         "rank": null,
         "share_pct": null
       },
@@ -57085,13 +57083,13 @@
         "verdict_color": "indigo",
         "can_buy": true,
         "buy_status": "等拉回低接",
-        "buy_price": 698.34,
+        "buy_price": 698.31,
         "breakout_buy_price": 711.83,
-        "buy_note": "回測 698.34 元附近買進",
+        "buy_note": "回測 698.31 元附近買進",
         "sell_status": "守穩防守價續抱",
-        "take_profit_price": 752.64,
+        "take_profit_price": 751.04,
         "stop_loss_price": 673.55,
-        "sell_note": "漲至 752.64 元停利 / 跌破 673.55 元停損"
+        "sell_note": "漲至 751.04 元停利 / 跌破 673.55 元停損"
       },
       "signals": [],
       "score": 1.0,
@@ -57101,10 +57099,10 @@
       "beginner_tip": "目前處於波段震盪盤整區間。高檔壓力位在 711.83元，低檔支撐在 673.55元。",
       "trade_levels": {
         "breakout_entry": 711.83,
-        "pullback_entry": 698.34,
+        "pullback_entry": 698.31,
         "stop_loss": 673.55,
-        "take_profit": 752.64,
-        "upside_pct": 7.5
+        "take_profit": 751.04,
+        "upside_pct": 7.4
       },
       "history_kline": [
         {
@@ -57877,15 +57875,15 @@
         {
           "time": "2026-11-12",
           "open": 693.06,
-          "high": 700.2,
+          "high": 701.42,
           "low": 692.84,
-          "close": 699.91,
-          "volume": 2499064.0,
-          "ma20": 698.34,
-          "ma60": 703.42,
-          "macd_dif": -3.84,
-          "macd_signal": -3.89,
-          "macd_osc": 0.04
+          "close": 699.38,
+          "volume": 3419243.0,
+          "ma20": 698.31,
+          "ma60": 703.41,
+          "macd_dif": -3.89,
+          "macd_signal": -3.9,
+          "macd_osc": 0.01
         }
       ],
       "signal_evaluation": {
@@ -57910,7 +57908,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 19,
-            "return_pct": 0.24
+            "return_pct": 0.32
           },
           {
             "entry_date": "2026-10-20",
@@ -57923,7 +57921,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 17,
-            "return_pct": 0.97
+            "return_pct": 1.05
           },
           {
             "entry_date": "2026-10-21",
@@ -57949,7 +57947,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 15,
-            "return_pct": 0.34
+            "return_pct": 0.42
           },
           {
             "entry_date": "2026-10-28",
@@ -57975,7 +57973,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 10,
-            "return_pct": 1.05
+            "return_pct": 1.12
           },
           {
             "entry_date": "2026-11-09",
@@ -57988,14 +57986,14 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -1.16
+            "return_pct": -1.09
           },
           {
             "entry_date": "2026-11-12",
             "signal_type": "BULLISH",
-            "entry_price": 699.91,
-            "take_profit_price": 755.9,
-            "stop_loss_price": 664.91,
+            "entry_price": 699.38,
+            "take_profit_price": 755.33,
+            "stop_loss_price": 664.41,
             "status": "PENDING",
             "reason": "PENDING_ACTIVE",
             "resolved_date": null,
@@ -58012,27 +58010,27 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 156.72000122070312,
+      "close": 155.5050048828125,
       "prev_close": 155.39999389648438,
-      "change": 1.32,
-      "change_pct": 0.85,
-      "volume": 24558055.0,
-      "vol_ratio": 0.48,
-      "pe_ratio": 33.17,
+      "change": 0.11,
+      "change_pct": 0.07,
+      "volume": 33071780.0,
+      "vol_ratio": 0.65,
+      "pe_ratio": 32.91,
       "dividend_yield": 27.0,
       "pb_ratio": 0.37,
-      "ma5": 148.4,
-      "ma10": 148.74,
-      "ma20": 157.68,
-      "ma60": 172.05,
+      "ma5": 148.16,
+      "ma10": 148.62,
+      "ma20": 157.61,
+      "ma60": 172.03,
       "support_20": 130.75,
       "resistance_20": 174.64,
-      "kd_k": 59.8,
-      "kd_d": 40.8,
-      "rsi": 48.5,
-      "macd_dif": -7.51,
-      "macd_signal": -7.75,
-      "macd_osc": 0.24,
+      "kd_k": 58.4,
+      "kd_d": 40.4,
+      "rsi": 47.8,
+      "macd_dif": -7.6,
+      "macd_signal": -7.77,
+      "macd_osc": 0.16,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 71.5,
@@ -58055,7 +58053,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 38.49,
+        "turnover_yi": 51.43,
         "rank": null,
         "share_pct": null
       },
@@ -58064,26 +58062,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 153.59,
+        "buy_price": 152.39,
         "breakout_buy_price": 174.64,
-        "buy_note": "待重新站穩月線 157.68 元再進場",
+        "buy_note": "待重新站穩月線 157.61 元再進場",
         "sell_status": "跌破 130.75 元停損出場",
-        "take_profit_price": 208.66,
+        "take_profit_price": 205.02,
         "stop_loss_price": 130.75,
-        "sell_note": "漲至 208.66 元停利 / 跌破 130.75 元停損"
+        "sell_note": "漲至 205.02 元停利 / 跌破 130.75 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 157.68 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 157.61 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 174.64,
-        "pullback_entry": 153.59,
+        "pullback_entry": 152.39,
         "stop_loss": 130.75,
-        "take_profit": 208.66,
-        "upside_pct": 33.1
+        "take_profit": 205.02,
+        "upside_pct": 31.8
       },
       "history_kline": [
         {
@@ -58856,15 +58854,15 @@
         {
           "time": "2026-11-12",
           "open": 150.26,
-          "high": 156.78,
+          "high": 157.63,
           "low": 150.04,
-          "close": 156.72,
-          "volume": 24558055.0,
-          "ma20": 157.68,
-          "ma60": 172.05,
-          "macd_dif": -7.51,
-          "macd_signal": -7.75,
-          "macd_osc": 0.24
+          "close": 155.51,
+          "volume": 33071780.0,
+          "ma20": 157.61,
+          "ma60": 172.03,
+          "macd_dif": -7.6,
+          "macd_signal": -7.77,
+          "macd_osc": 0.16
         }
       ],
       "signal_evaluation": {
@@ -58972,7 +58970,7 @@
           {
             "entry_date": "2026-11-12",
             "signal_type": "NEUTRAL",
-            "entry_price": 156.72,
+            "entry_price": 155.51,
             "take_profit_price": null,
             "stop_loss_price": null,
             "status": "PENDING",
@@ -58991,27 +58989,27 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 507.6099853515625,
+      "close": 503.56500244140625,
       "prev_close": 506.9599914550781,
-      "change": 0.65,
-      "change_pct": 0.13,
-      "volume": 3878761.0,
-      "vol_ratio": 0.23,
-      "pe_ratio": 27.41,
+      "change": -3.39,
+      "change_pct": -0.67,
+      "volume": 5019027.0,
+      "vol_ratio": 0.29,
+      "pe_ratio": 27.19,
       "dividend_yield": 21.0,
       "pb_ratio": 6.5,
-      "ma5": 489.91,
-      "ma10": 495.09,
-      "ma20": 521.08,
-      "ma60": 560.36,
+      "ma5": 489.1,
+      "ma10": 494.68,
+      "ma20": 520.88,
+      "ma60": 560.3,
       "support_20": 445.59,
       "resistance_20": 571.0,
-      "kd_k": 49.9,
-      "kd_d": 35.9,
-      "rsi": 46.1,
-      "macd_dif": -22.59,
-      "macd_signal": -21.72,
-      "macd_osc": -0.87,
+      "kd_k": 48.4,
+      "kd_d": 35.3,
+      "rsi": 45.3,
+      "macd_dif": -22.91,
+      "macd_signal": -21.78,
+      "macd_osc": -1.13,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 73.0,
@@ -59034,7 +59032,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 19.69,
+        "turnover_yi": 25.27,
         "rank": null,
         "share_pct": null
       },
@@ -59043,26 +59041,26 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 497.46,
+        "buy_price": 493.49,
         "breakout_buy_price": 571.0,
-        "buy_note": "待重新站穩月線 521.08 元再進場",
+        "buy_note": "待重新站穩月線 520.88 元再進場",
         "sell_status": "跌破 445.59 元停損出場",
-        "take_profit_price": 631.65,
+        "take_profit_price": 619.52,
         "stop_loss_price": 445.59,
-        "sell_note": "漲至 631.65 元停利 / 跌破 445.59 元停損"
+        "sell_note": "漲至 619.52 元停利 / 跌破 445.59 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 521.08 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 520.88 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 571.0,
-        "pullback_entry": 497.46,
+        "pullback_entry": 493.49,
         "stop_loss": 445.59,
-        "take_profit": 631.65,
-        "upside_pct": 24.4
+        "take_profit": 619.52,
+        "upside_pct": 23.0
       },
       "history_kline": [
         {
@@ -59835,15 +59833,15 @@
         {
           "time": "2026-11-12",
           "open": 484.9,
-          "high": 507.91,
+          "high": 509.79,
           "low": 484.5,
-          "close": 507.61,
-          "volume": 3878761.0,
-          "ma20": 521.08,
-          "ma60": 560.36,
-          "macd_dif": -22.59,
-          "macd_signal": -21.72,
-          "macd_osc": -0.87
+          "close": 503.57,
+          "volume": 5019027.0,
+          "ma20": 520.88,
+          "ma60": 560.3,
+          "macd_dif": -22.91,
+          "macd_signal": -21.78,
+          "macd_osc": -1.13
         }
       ],
       "signal_evaluation": {
@@ -59970,24 +59968,24 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 36.084999084472656,
+      "close": 36.12009811401367,
       "prev_close": 36.02000045776367,
-      "change": 0.06,
-      "change_pct": 0.17,
-      "volume": 5837378.0,
-      "vol_ratio": 0.19,
-      "pe_ratio": 19.41,
+      "change": 0.1,
+      "change_pct": 0.28,
+      "volume": 8688460.0,
+      "vol_ratio": 0.28,
+      "pe_ratio": 19.43,
       "dividend_yield": 2.95,
       "pb_ratio": 3.2,
-      "ma5": 35.75,
-      "ma10": 35.76,
+      "ma5": 35.76,
+      "ma10": 35.77,
       "ma20": 35.37,
       "ma60": 34.39,
       "support_20": 34.06,
       "resistance_20": 36.38,
-      "kd_k": 69.7,
-      "kd_d": 65.0,
-      "rsi": 60.1,
+      "kd_k": 70.4,
+      "kd_d": 65.3,
+      "rsi": 60.5,
       "macd_dif": 0.51,
       "macd_signal": 0.49,
       "macd_osc": 0.02,
@@ -60013,7 +60011,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 2.11,
+        "turnover_yi": 3.14,
         "rank": null,
         "share_pct": null
       },
@@ -60024,11 +60022,11 @@
         "buy_status": "建議分批買進",
         "buy_price": 35.37,
         "breakout_buy_price": 36.38,
-        "buy_note": "35.37 ~ 36.08 元區間可佈局",
+        "buy_note": "35.37 ~ 36.12 元區間可佈局",
         "sell_status": "未達賣點（續抱）",
-        "take_profit_price": 40.13,
+        "take_profit_price": 40.24,
         "stop_loss_price": 34.06,
-        "sell_note": "漲至 40.13 元停利 / 跌破 34.06 元停損"
+        "sell_note": "漲至 40.24 元停利 / 跌破 34.06 元停損"
       },
       "signals": [
         "多頭排列強勢趨勢"
@@ -60042,8 +60040,8 @@
         "breakout_entry": 36.38,
         "pullback_entry": 35.37,
         "stop_loss": 34.06,
-        "take_profit": 40.13,
-        "upside_pct": 11.2
+        "take_profit": 40.24,
+        "upside_pct": 11.4
       },
       "history_kline": [
         {
@@ -60818,8 +60816,8 @@
           "open": 36.2,
           "high": 36.27,
           "low": 35.97,
-          "close": 36.08,
-          "volume": 5837378.0,
+          "close": 36.12,
+          "volume": 8688460.0,
           "ma20": 35.37,
           "ma60": 34.39,
           "macd_dif": 0.51,
@@ -60914,7 +60912,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 17,
-            "return_pct": 4.01
+            "return_pct": 4.12
           },
           {
             "entry_date": "2026-10-29",
@@ -60927,7 +60925,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 10,
-            "return_pct": 1.32
+            "return_pct": 1.43
           },
           {
             "entry_date": "2026-11-09",
@@ -60940,7 +60938,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": 1.21
+            "return_pct": 1.32
           }
         ]
       }
@@ -60951,27 +60949,27 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 80.25,
+      "close": 80.0562973022461,
       "prev_close": 80.91999816894531,
-      "change": -0.67,
-      "change_pct": -0.83,
-      "volume": 10607767.0,
-      "vol_ratio": 0.29,
-      "pe_ratio": -4012.5,
+      "change": -0.86,
+      "change_pct": -1.06,
+      "volume": 13814450.0,
+      "vol_ratio": 0.37,
+      "pe_ratio": -4002.82,
       "dividend_yield": 4.76,
       "pb_ratio": 0.54,
-      "ma5": 81.19,
-      "ma10": 81.43,
-      "ma20": 81.15,
+      "ma5": 81.15,
+      "ma10": 81.41,
+      "ma20": 81.14,
       "ma60": 80.66,
       "support_20": 79.34,
       "resistance_20": 82.42,
-      "kd_k": 29.6,
-      "kd_d": 49.0,
-      "rsi": 39.7,
-      "macd_dif": 0.32,
-      "macd_signal": 0.44,
-      "macd_osc": -0.12,
+      "kd_k": 29.4,
+      "kd_d": 48.9,
+      "rsi": 38.3,
+      "macd_dif": 0.3,
+      "macd_signal": 0.43,
+      "macd_osc": -0.13,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 72.0,
@@ -60994,7 +60992,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 8.51,
+        "turnover_yi": 11.06,
         "rank": null,
         "share_pct": null
       },
@@ -61003,25 +61001,25 @@
         "verdict_color": "slate",
         "can_buy": false,
         "buy_status": "暫時觀望",
-        "buy_price": 78.64,
+        "buy_price": 78.46,
         "breakout_buy_price": 82.42,
-        "buy_note": "待重新站穩月線 81.15 元再進場",
+        "buy_note": "待重新站穩月線 81.14 元再進場",
         "sell_status": "跌破 79.34 元停損出場",
-        "take_profit_price": 85.06,
+        "take_profit_price": 84.86,
         "stop_loss_price": 79.34,
-        "sell_note": "漲至 85.06 元停利 / 跌破 79.34 元停損"
+        "sell_note": "漲至 84.86 元停利 / 跌破 79.34 元停損"
       },
       "signals": [],
       "score": 1.0,
       "conf_stars": "⭐⭐",
       "conf_text": "觀望整理",
       "recommendation_reason": "技術指標平穩，處於常態波動區間",
-      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 81.15 元或打出支撐再考慮進場。",
+      "beginner_tip": "短線跌破月線整理中。建議先以觀望為主，靜待股價重新站上 81.14 元或打出支撐再考慮進場。",
       "trade_levels": {
         "breakout_entry": 82.42,
-        "pullback_entry": 78.64,
+        "pullback_entry": 78.46,
         "stop_loss": 79.34,
-        "take_profit": 85.06,
+        "take_profit": 84.86,
         "upside_pct": 6.0
       },
       "history_kline": [
@@ -61796,14 +61794,14 @@
           "time": "2026-11-12",
           "open": 80.76,
           "high": 80.81,
-          "low": 80.21,
-          "close": 80.25,
-          "volume": 10607767.0,
-          "ma20": 81.15,
+          "low": 80.04,
+          "close": 80.06,
+          "volume": 13814450.0,
+          "ma20": 81.14,
           "ma60": 80.66,
-          "macd_dif": 0.32,
-          "macd_signal": 0.44,
-          "macd_osc": -0.12
+          "macd_dif": 0.3,
+          "macd_signal": 0.43,
+          "macd_osc": -0.13
         }
       ],
       "signal_evaluation": {
@@ -61854,7 +61852,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 20,
-            "return_pct": 0.35
+            "return_pct": 0.11
           },
           {
             "entry_date": "2026-10-20",
@@ -61867,7 +61865,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 17,
-            "return_pct": 0.15
+            "return_pct": -0.09
           },
           {
             "entry_date": "2026-10-29",
@@ -61880,7 +61878,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 10,
-            "return_pct": -1.52
+            "return_pct": -1.75
           },
           {
             "entry_date": "2026-11-09",
@@ -61893,7 +61891,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -2.09
+            "return_pct": -2.32
           },
           {
             "entry_date": "2026-11-10",
@@ -61919,7 +61917,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 1,
-            "return_pct": 0.83
+            "return_pct": 1.06
           }
         ]
       }
@@ -61930,25 +61928,25 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 156.57000732421875,
+      "close": 156.44000244140625,
       "prev_close": 156.7100067138672,
-      "change": -0.14,
-      "change_pct": -0.09,
-      "volume": 1484236.0,
-      "vol_ratio": 0.41,
-      "pe_ratio": 19.95,
+      "change": -0.27,
+      "change_pct": -0.17,
+      "volume": 1667974.0,
+      "vol_ratio": 0.46,
+      "pe_ratio": 19.93,
       "dividend_yield": 1.56,
       "pb_ratio": 2.8,
-      "ma5": 155.13,
-      "ma10": 155.04,
-      "ma20": 156.19,
+      "ma5": 155.1,
+      "ma10": 155.03,
+      "ma20": 156.18,
       "ma60": 158.51,
       "support_20": 151.25,
       "resistance_20": 158.86,
-      "kd_k": 62.1,
-      "kd_d": 49.8,
-      "rsi": 51.5,
-      "macd_dif": -0.87,
+      "kd_k": 61.5,
+      "kd_d": 49.6,
+      "rsi": 51.2,
+      "macd_dif": -0.88,
       "macd_signal": -1.01,
       "macd_osc": 0.13,
       "institutional_flows": {
@@ -61973,7 +61971,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 2.32,
+        "turnover_yi": 2.61,
         "rank": null,
         "share_pct": null
       },
@@ -61982,13 +61980,13 @@
         "verdict_color": "indigo",
         "can_buy": true,
         "buy_status": "等拉回低接",
-        "buy_price": 156.19,
+        "buy_price": 156.18,
         "breakout_buy_price": 158.86,
-        "buy_note": "回測 156.19 元附近買進",
+        "buy_note": "回測 156.18 元附近買進",
         "sell_status": "守穩防守價續抱",
-        "take_profit_price": 167.21,
+        "take_profit_price": 166.82,
         "stop_loss_price": 151.25,
-        "sell_note": "漲至 167.21 元停利 / 跌破 151.25 元停損"
+        "sell_note": "漲至 166.82 元停利 / 跌破 151.25 元停損"
       },
       "signals": [],
       "score": 1.0,
@@ -61998,10 +61996,10 @@
       "beginner_tip": "目前處於波段震盪盤整區間。高檔壓力位在 158.86元，低檔支撐在 151.25元。",
       "trade_levels": {
         "breakout_entry": 158.86,
-        "pullback_entry": 156.19,
+        "pullback_entry": 156.18,
         "stop_loss": 151.25,
-        "take_profit": 167.21,
-        "upside_pct": 6.8
+        "take_profit": 166.82,
+        "upside_pct": 6.6
       },
       "history_kline": [
         {
@@ -62774,13 +62772,13 @@
         {
           "time": "2026-11-12",
           "open": 155.49,
-          "high": 156.63,
+          "high": 156.8,
           "low": 155.41,
-          "close": 156.57,
-          "volume": 1484236.0,
-          "ma20": 156.19,
+          "close": 156.44,
+          "volume": 1667974.0,
+          "ma20": 156.18,
           "ma60": 158.51,
-          "macd_dif": -0.87,
+          "macd_dif": -0.88,
           "macd_signal": -1.01,
           "macd_osc": 0.13
         }
@@ -62807,7 +62805,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 20,
-            "return_pct": 1.1
+            "return_pct": 1.18
           },
           {
             "entry_date": "2026-10-20",
@@ -62820,7 +62818,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 17,
-            "return_pct": 0.78
+            "return_pct": 0.86
           },
           {
             "entry_date": "2026-10-29",
@@ -62846,7 +62844,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 9,
-            "return_pct": -0.8
+            "return_pct": -0.71
           },
           {
             "entry_date": "2026-11-04",
@@ -62872,7 +62870,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 5,
-            "return_pct": -3.43
+            "return_pct": -3.34
           },
           {
             "entry_date": "2026-11-09",
@@ -62885,7 +62883,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": -0.57
+            "return_pct": -0.49
           },
           {
             "entry_date": "2026-11-11",
@@ -62898,7 +62896,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 1,
-            "return_pct": -0.09
+            "return_pct": -0.17
           }
         ]
       }
@@ -62912,27 +62910,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 358.239990234375,
+      "close": 357.32501220703125,
       "prev_close": 355.6300048828125,
-      "change": 2.61,
-      "change_pct": 0.73,
-      "volume": 10442552.0,
-      "vol_ratio": 0.22,
-      "pe_ratio": 39.89,
+      "change": 1.7,
+      "change_pct": 0.48,
+      "volume": 12167968.0,
+      "vol_ratio": 0.26,
+      "pe_ratio": 39.79,
       "dividend_yield": 30.0,
-      "pb_ratio": 46.45,
-      "ma5": 351.09,
-      "ma10": 346.4,
-      "ma20": 345.68,
-      "ma60": 334.71,
+      "pb_ratio": 46.32,
+      "ma5": 350.91,
+      "ma10": 346.31,
+      "ma20": 345.63,
+      "ma60": 334.7,
       "support_20": 325.33,
       "resistance_20": 355.91,
-      "kd_k": 85.3,
-      "kd_d": 74.0,
-      "rsi": 56.8,
-      "macd_dif": 4.12,
-      "macd_signal": 3.23,
-      "macd_osc": 0.9,
+      "kd_k": 84.4,
+      "kd_d": 73.7,
+      "rsi": 56.3,
+      "macd_dif": 4.05,
+      "macd_signal": 3.21,
+      "macd_osc": 0.84,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 60.5,
@@ -62954,7 +62952,7 @@
         "score_boost": 0.5
       },
       "turnover_info": {
-        "turnover_yi": 37.41,
+        "turnover_yi": 43.48,
         "rank": null,
         "share_pct": null
       },
@@ -62963,13 +62961,13 @@
         "verdict_color": "emerald",
         "can_buy": true,
         "buy_status": "建議分批買進",
-        "buy_price": 345.68,
+        "buy_price": 345.63,
         "breakout_buy_price": 355.91,
-        "buy_note": "345.68 ~ 358.24 元區間可佈局",
+        "buy_note": "345.63 ~ 357.33 元區間可佈局",
         "sell_status": "未達賣點（續抱）",
-        "take_profit_price": 424.06,
+        "take_profit_price": 421.32,
         "stop_loss_price": 325.33,
-        "sell_note": "漲至 424.06 元停利 / 跌破 325.33 元停損"
+        "sell_note": "漲至 421.32 元停利 / 跌破 325.33 元停損"
       },
       "signals": [
         "多頭排列強勢趨勢"
@@ -62978,13 +62976,13 @@
       "conf_stars": "⭐⭐⭐⭐",
       "conf_text": "高信心",
       "recommendation_reason": "均線發散向上多頭排列；巴菲特頭號重倉 + 議員布局",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (345.68元) 附近分批佈局，守穩防守價 (325.33元) 續抱。",
+      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (345.63元) 附近分批佈局，守穩防守價 (325.33元) 續抱。",
       "trade_levels": {
         "breakout_entry": 355.91,
-        "pullback_entry": 345.68,
+        "pullback_entry": 345.63,
         "stop_loss": 325.33,
-        "take_profit": 424.06,
-        "upside_pct": 18.4
+        "take_profit": 421.32,
+        "upside_pct": 17.9
       },
       "history_kline": [
         {
@@ -63759,13 +63757,13 @@
           "open": 357.71,
           "high": 359.37,
           "low": 355.92,
-          "close": 358.24,
-          "volume": 10442552.0,
-          "ma20": 345.68,
-          "ma60": 334.71,
-          "macd_dif": 4.12,
-          "macd_signal": 3.23,
-          "macd_osc": 0.9
+          "close": 357.33,
+          "volume": 12167968.0,
+          "ma20": 345.63,
+          "ma60": 334.7,
+          "macd_dif": 4.05,
+          "macd_signal": 3.21,
+          "macd_osc": 0.84
         }
       ],
       "signal_evaluation": {
@@ -63855,7 +63853,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 4,
-            "return_pct": -4.64
+            "return_pct": -4.37
           },
           {
             "entry_date": "2026-11-09",
@@ -63881,988 +63879,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 1,
-            "return_pct": 0.73
-          }
-        ]
-      }
-    },
-    {
-      "ticker": "AMZN",
-      "name": "亞馬遜 Amazon",
-      "type": "stock",
-      "market": "US",
-      "date": "2026-11-12",
-      "close": 270.4200134277344,
-      "prev_close": 266.1700134277344,
-      "change": 4.25,
-      "change_pct": 1.6,
-      "volume": 13460613.0,
-      "vol_ratio": 0.26,
-      "pe_ratio": 21.86,
-      "dividend_yield": null,
-      "pb_ratio": 4.76,
-      "ma5": 266.74,
-      "ma10": 259.66,
-      "ma20": 256.65,
-      "ma60": 255.51,
-      "support_20": 229.36,
-      "resistance_20": 275.34,
-      "kd_k": 80.5,
-      "kd_d": 73.7,
-      "rsi": 65.2,
-      "macd_dif": 3.47,
-      "macd_signal": 1.32,
-      "macd_osc": 2.14,
-      "institutional_flows": {
-        "market": "US",
-        "inst_ownership_pct": 61.8,
-        "trend": "偏多",
-        "flow_summary": "【Dataroma 13F】22 家頂級機構持倉 (Daniel Loeb (Third Point), Chase Coleman (Tiger Global))，動向：13F 機構增持；【Quiver 國會籌碼】議員淨買進（近一季國會議員申報 8 筆買進 / 1 筆賣出）。",
-        "dataroma_13f": {
-          "holders_count": 22,
-          "notable_gurus": [
-            "Daniel Loeb (Third Point)",
-            "Chase Coleman (Tiger Global)",
-            "Bill Miller"
-          ],
-          "action": "13F 機構增持"
-        },
-        "quiver_congress": {
-          "sentiment": "議員淨買進",
-          "recent_trades": "近一季國會議員申報 8 筆買進 / 1 筆賣出"
-        },
-        "smart_money_badge": "22家大師重倉 + 議員淨買進",
-        "score_boost": 0.5
-      },
-      "turnover_info": {
-        "turnover_yi": 36.4,
-        "rank": null,
-        "share_pct": null
-      },
-      "action_plan": {
-        "verdict": "建議買進",
-        "verdict_color": "emerald",
-        "can_buy": true,
-        "buy_status": "建議分批買進",
-        "buy_price": 256.65,
-        "breakout_buy_price": 275.34,
-        "buy_note": "256.65 ~ 270.42 元區間可佈局",
-        "sell_status": "未達賣點（續抱）",
-        "take_profit_price": 352.54,
-        "stop_loss_price": 229.36,
-        "sell_note": "漲至 352.54 元停利 / 跌破 229.36 元停損"
-      },
-      "signals": [
-        "多頭排列強勢趨勢"
-      ],
-      "score": 3.5,
-      "conf_stars": "⭐⭐⭐⭐",
-      "conf_text": "高信心",
-      "recommendation_reason": "均線發散向上多頭排列；22家大師重倉 + 議員淨買進",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (256.65元) 附近分批佈局，守穩防守價 (229.36元) 續抱。",
-      "trade_levels": {
-        "breakout_entry": 275.34,
-        "pullback_entry": 256.65,
-        "stop_loss": 229.36,
-        "take_profit": 352.54,
-        "upside_pct": 30.4
-      },
-      "history_kline": [
-        {
-          "time": "2026-08-20",
-          "open": 263.16,
-          "high": 263.84,
-          "low": 259.52,
-          "close": 260.11,
-          "volume": 28374100.0,
-          "ma20": 263.11,
-          "ma60": 263.11,
-          "macd_dif": -1.38,
-          "macd_signal": -0.75,
-          "macd_osc": -0.62
-        },
-        {
-          "time": "2026-08-21",
-          "open": 260.74,
-          "high": 261.09,
-          "low": 257.04,
-          "close": 258.63,
-          "volume": 35723000.0,
-          "ma20": 262.55,
-          "ma60": 262.55,
-          "macd_dif": -1.71,
-          "macd_signal": -0.95,
-          "macd_osc": -0.76
-        },
-        {
-          "time": "2026-08-24",
-          "open": 259.6,
-          "high": 263.32,
-          "low": 259.05,
-          "close": 262.07,
-          "volume": 28070500.0,
-          "ma20": 262.5,
-          "ma60": 262.5,
-          "macd_dif": -1.68,
-          "macd_signal": -1.09,
-          "macd_osc": -0.58
-        },
-        {
-          "time": "2026-08-25",
-          "open": 262.51,
-          "high": 263.89,
-          "low": 259.83,
-          "close": 261.06,
-          "volume": 25550200.0,
-          "ma20": 262.35,
-          "ma60": 262.35,
-          "macd_dif": -1.71,
-          "macd_signal": -1.22,
-          "macd_osc": -0.49
-        },
-        {
-          "time": "2026-08-26",
-          "open": 261.28,
-          "high": 262.05,
-          "low": 258.24,
-          "close": 260.28,
-          "volume": 21528400.0,
-          "ma20": 262.16,
-          "ma60": 262.16,
-          "macd_dif": -1.78,
-          "macd_signal": -1.33,
-          "macd_osc": -0.45
-        },
-        {
-          "time": "2026-08-27",
-          "open": 259.23,
-          "high": 259.66,
-          "low": 255.02,
-          "close": 256.26,
-          "volume": 35927800.0,
-          "ma20": 261.67,
-          "ma60": 261.67,
-          "macd_dif": -2.14,
-          "macd_signal": -1.49,
-          "macd_osc": -0.65
-        },
-        {
-          "time": "2026-08-28",
-          "open": 258.32,
-          "high": 267.56,
-          "low": 257.78,
-          "close": 266.43,
-          "volume": 49547400.0,
-          "ma20": 262.04,
-          "ma60": 262.04,
-          "macd_dif": -1.58,
-          "macd_signal": -1.51,
-          "macd_osc": -0.07
-        },
-        {
-          "time": "2026-08-31",
-          "open": 263.83,
-          "high": 264.36,
-          "low": 257.12,
-          "close": 259.77,
-          "volume": 46089400.0,
-          "ma20": 261.88,
-          "ma60": 261.88,
-          "macd_dif": -1.65,
-          "macd_signal": -1.54,
-          "macd_osc": -0.12
-        },
-        {
-          "time": "2026-09-01",
-          "open": 254.83,
-          "high": 255.82,
-          "low": 251.93,
-          "close": 254.92,
-          "volume": 31700100.0,
-          "ma20": 261.41,
-          "ma60": 261.41,
-          "macd_dif": -2.08,
-          "macd_signal": -1.65,
-          "macd_osc": -0.44
-        },
-        {
-          "time": "2026-09-02",
-          "open": 254.26,
-          "high": 256.24,
-          "low": 253.4,
-          "close": 254.98,
-          "volume": 24013300.0,
-          "ma20": 261.01,
-          "ma60": 261.01,
-          "macd_dif": -2.39,
-          "macd_signal": -1.79,
-          "macd_osc": -0.59
-        },
-        {
-          "time": "2026-09-03",
-          "open": 256.2,
-          "high": 259.5,
-          "low": 256.0,
-          "close": 258.9,
-          "volume": 26891500.0,
-          "ma20": 260.89,
-          "ma60": 260.89,
-          "macd_dif": -2.29,
-          "macd_signal": -1.89,
-          "macd_osc": -0.4
-        },
-        {
-          "time": "2026-09-04",
-          "open": 259.07,
-          "high": 261.12,
-          "low": 255.29,
-          "close": 258.51,
-          "volume": 30749900.0,
-          "ma20": 260.75,
-          "ma60": 260.75,
-          "macd_dif": -2.22,
-          "macd_signal": -1.96,
-          "macd_osc": -0.26
-        },
-        {
-          "time": "2026-09-08",
-          "open": 256.68,
-          "high": 257.99,
-          "low": 254.75,
-          "close": 256.97,
-          "volume": 29398000.0,
-          "ma20": 260.56,
-          "ma60": 260.56,
-          "macd_dif": -2.26,
-          "macd_signal": -2.02,
-          "macd_osc": -0.24
-        },
-        {
-          "time": "2026-09-09",
-          "open": 253.12,
-          "high": 254.69,
-          "low": 250.65,
-          "close": 252.4,
-          "volume": 33055500.0,
-          "ma20": 260.15,
-          "ma60": 260.15,
-          "macd_dif": -2.63,
-          "macd_signal": -2.14,
-          "macd_osc": -0.49
-        },
-        {
-          "time": "2026-09-10",
-          "open": 250.11,
-          "high": 253.15,
-          "low": 249.58,
-          "close": 251.89,
-          "volume": 25484800.0,
-          "ma20": 259.38,
-          "ma60": 259.75,
-          "macd_dif": -2.93,
-          "macd_signal": -2.3,
-          "macd_osc": -0.63
-        },
-        {
-          "time": "2026-09-11",
-          "open": 254.09,
-          "high": 257.59,
-          "low": 253.14,
-          "close": 256.78,
-          "volume": 26724100.0,
-          "ma20": 258.96,
-          "ma60": 259.62,
-          "macd_dif": -2.74,
-          "macd_signal": -2.39,
-          "macd_osc": -0.35
-        },
-        {
-          "time": "2026-09-14",
-          "open": 253.15,
-          "high": 255.95,
-          "low": 250.74,
-          "close": 253.54,
-          "volume": 34352800.0,
-          "ma20": 258.5,
-          "ma60": 259.35,
-          "macd_dif": -2.82,
-          "macd_signal": -2.47,
-          "macd_osc": -0.35
-        },
-        {
-          "time": "2026-09-15",
-          "open": 252.24,
-          "high": 253.27,
-          "low": 247.22,
-          "close": 248.42,
-          "volume": 36275400.0,
-          "ma20": 257.86,
-          "ma60": 258.9,
-          "macd_dif": -3.26,
-          "macd_signal": -2.63,
-          "macd_osc": -0.63
-        },
-        {
-          "time": "2026-09-16",
-          "open": 248.1,
-          "high": 249.26,
-          "low": 244.3,
-          "close": 245.96,
-          "volume": 33488500.0,
-          "ma20": 257.19,
-          "ma60": 258.38,
-          "macd_dif": -3.76,
-          "macd_signal": -2.86,
-          "macd_osc": -0.91
-        },
-        {
-          "time": "2026-09-17",
-          "open": 251.07,
-          "high": 252.73,
-          "low": 249.24,
-          "close": 251.19,
-          "volume": 30438800.0,
-          "ma20": 256.45,
-          "ma60": 258.1,
-          "macd_dif": -3.7,
-          "macd_signal": -3.03,
-          "macd_osc": -0.67
-        },
-        {
-          "time": "2026-09-18",
-          "open": 252.92,
-          "high": 255.43,
-          "low": 251.88,
-          "close": 253.71,
-          "volume": 52274700.0,
-          "ma20": 256.13,
-          "ma60": 257.94,
-          "macd_dif": -3.4,
-          "macd_signal": -3.1,
-          "macd_osc": -0.3
-        },
-        {
-          "time": "2026-09-21",
-          "open": 256.4,
-          "high": 259.49,
-          "low": 253.6,
-          "close": 258.45,
-          "volume": 42979400.0,
-          "ma20": 256.12,
-          "ma60": 257.96,
-          "macd_dif": -2.75,
-          "macd_signal": -3.03,
-          "macd_osc": 0.28
-        },
-        {
-          "time": "2026-09-22",
-          "open": 255.11,
-          "high": 259.0,
-          "low": 253.78,
-          "close": 254.98,
-          "volume": 41982600.0,
-          "ma20": 255.77,
-          "ma60": 257.86,
-          "macd_dif": -2.49,
-          "macd_signal": -2.92,
-          "macd_osc": 0.43
-        },
-        {
-          "time": "2026-09-23",
-          "open": 253.0,
-          "high": 253.99,
-          "low": 247.76,
-          "close": 249.27,
-          "volume": 44209200.0,
-          "ma20": 255.18,
-          "ma60": 257.57,
-          "macd_dif": -2.71,
-          "macd_signal": -2.88,
-          "macd_osc": 0.17
-        },
-        {
-          "time": "2026-09-24",
-          "open": 246.02,
-          "high": 250.43,
-          "low": 245.6,
-          "close": 249.38,
-          "volume": 33040100.0,
-          "ma20": 254.64,
-          "ma60": 257.31,
-          "macd_dif": -2.85,
-          "macd_signal": -2.88,
-          "macd_osc": 0.03
-        },
-        {
-          "time": "2026-09-25",
-          "open": 248.56,
-          "high": 250.88,
-          "low": 247.18,
-          "close": 249.67,
-          "volume": 34263900.0,
-          "ma20": 254.31,
-          "ma60": 257.07,
-          "macd_dif": -2.9,
-          "macd_signal": -2.88,
-          "macd_osc": -0.02
-        },
-        {
-          "time": "2026-09-28",
-          "open": 246.63,
-          "high": 247.77,
-          "low": 244.73,
-          "close": 246.15,
-          "volume": 32596700.0,
-          "ma20": 253.29,
-          "ma60": 256.74,
-          "macd_dif": -3.18,
-          "macd_signal": -2.94,
-          "macd_osc": -0.24
-        },
-        {
-          "time": "2026-09-29",
-          "open": 246.71,
-          "high": 248.84,
-          "low": 245.14,
-          "close": 246.67,
-          "volume": 33730400.0,
-          "ma20": 252.64,
-          "ma60": 256.44,
-          "macd_dif": -3.33,
-          "macd_signal": -3.02,
-          "macd_osc": -0.31
-        },
-        {
-          "time": "2026-09-30",
-          "open": 246.79,
-          "high": 252.44,
-          "low": 246.08,
-          "close": 249.15,
-          "volume": 41913100.0,
-          "ma20": 252.35,
-          "ma60": 256.23,
-          "macd_dif": -3.21,
-          "macd_signal": -3.06,
-          "macd_osc": -0.15
-        },
-        {
-          "time": "2026-10-01",
-          "open": 251.61,
-          "high": 251.83,
-          "low": 246.12,
-          "close": 248.23,
-          "volume": 33243900.0,
-          "ma20": 252.01,
-          "ma60": 256.01,
-          "macd_dif": -3.15,
-          "macd_signal": -3.08,
-          "macd_osc": -0.08
-        },
-        {
-          "time": "2026-10-02",
-          "open": 251.51,
-          "high": 253.56,
-          "low": 250.02,
-          "close": 251.52,
-          "volume": 33433400.0,
-          "ma20": 251.64,
-          "ma60": 255.89,
-          "macd_dif": -2.81,
-          "macd_signal": -3.02,
-          "macd_osc": 0.21
-        },
-        {
-          "time": "2026-10-05",
-          "open": 250.19,
-          "high": 254.53,
-          "low": 250.18,
-          "close": 251.4,
-          "volume": 39273900.0,
-          "ma20": 251.29,
-          "ma60": 255.77,
-          "macd_dif": -2.52,
-          "macd_signal": -2.92,
-          "macd_osc": 0.4
-        },
-        {
-          "time": "2026-10-06",
-          "open": 253.4,
-          "high": 256.68,
-          "low": 251.08,
-          "close": 256.29,
-          "volume": 34120800.0,
-          "ma20": 251.25,
-          "ma60": 255.78,
-          "macd_dif": -1.87,
-          "macd_signal": -2.71,
-          "macd_osc": 0.84
-        },
-        {
-          "time": "2026-10-07",
-          "open": 254.23,
-          "high": 260.14,
-          "low": 253.17,
-          "close": 259.92,
-          "volume": 36225800.0,
-          "ma20": 251.63,
-          "ma60": 255.89,
-          "macd_dif": -1.05,
-          "macd_signal": -2.38,
-          "macd_osc": 1.33
-        },
-        {
-          "time": "2026-10-08",
-          "open": 259.74,
-          "high": 259.86,
-          "low": 253.78,
-          "close": 254.06,
-          "volume": 38649900.0,
-          "ma20": 251.74,
-          "ma60": 255.84,
-          "macd_dif": -0.87,
-          "macd_signal": -2.08,
-          "macd_osc": 1.21
-        },
-        {
-          "time": "2026-10-09",
-          "open": 256.5,
-          "high": 262.8,
-          "low": 256.0,
-          "close": 262.43,
-          "volume": 34770000.0,
-          "ma20": 252.02,
-          "ma60": 256.0,
-          "macd_dif": -0.04,
-          "macd_signal": -1.67,
-          "macd_osc": 1.63
-        },
-        {
-          "time": "2026-10-12",
-          "open": 262.5,
-          "high": 263.7,
-          "low": 259.27,
-          "close": 259.53,
-          "volume": 26577900.0,
-          "ma20": 252.32,
-          "ma60": 256.08,
-          "macd_dif": 0.37,
-          "macd_signal": -1.26,
-          "macd_osc": 1.63
-        },
-        {
-          "time": "2026-10-13",
-          "open": 259.44,
-          "high": 262.84,
-          "low": 258.42,
-          "close": 258.58,
-          "volume": 25299500.0,
-          "ma20": 252.83,
-          "ma60": 256.14,
-          "macd_dif": 0.62,
-          "macd_signal": -0.89,
-          "macd_osc": 1.5
-        },
-        {
-          "time": "2026-10-14",
-          "open": 258.01,
-          "high": 259.65,
-          "low": 252.66,
-          "close": 254.08,
-          "volume": 34821000.0,
-          "ma20": 253.23,
-          "ma60": 256.09,
-          "macd_dif": 0.44,
-          "macd_signal": -0.62,
-          "macd_osc": 1.06
-        },
-        {
-          "time": "2026-10-15",
-          "open": 250.89,
-          "high": 255.6,
-          "low": 248.65,
-          "close": 254.76,
-          "volume": 34564200.0,
-          "ma20": 253.41,
-          "ma60": 256.06,
-          "macd_dif": 0.35,
-          "macd_signal": -0.43,
-          "macd_osc": 0.78
-        },
-        {
-          "time": "2026-10-16",
-          "open": 255.1,
-          "high": 255.54,
-          "low": 248.6,
-          "close": 250.0,
-          "volume": 40427300.0,
-          "ma20": 253.23,
-          "ma60": 255.94,
-          "macd_dif": -0.1,
-          "macd_signal": -0.36,
-          "macd_osc": 0.26
-        },
-        {
-          "time": "2026-10-19",
-          "open": 255.25,
-          "high": 263.72,
-          "low": 255.22,
-          "close": 262.45,
-          "volume": 56188800.0,
-          "ma20": 253.43,
-          "ma60": 256.07,
-          "macd_dif": 0.54,
-          "macd_signal": -0.18,
-          "macd_osc": 0.72
-        },
-        {
-          "time": "2026-10-20",
-          "open": 264.08,
-          "high": 265.34,
-          "low": 260.42,
-          "close": 262.63,
-          "volume": 34927200.0,
-          "ma20": 253.81,
-          "ma60": 256.2,
-          "macd_dif": 1.05,
-          "macd_signal": 0.07,
-          "macd_osc": 0.98
-        },
-        {
-          "time": "2026-10-21",
-          "open": 262.71,
-          "high": 264.36,
-          "low": 259.29,
-          "close": 262.37,
-          "volume": 31214700.0,
-          "ma20": 254.46,
-          "ma60": 256.33,
-          "macd_dif": 1.42,
-          "macd_signal": 0.34,
-          "macd_osc": 1.08
-        },
-        {
-          "time": "2026-10-22",
-          "open": 258.18,
-          "high": 258.41,
-          "low": 248.0,
-          "close": 250.38,
-          "volume": 48814000.0,
-          "ma20": 254.51,
-          "ma60": 256.21,
-          "macd_dif": 0.73,
-          "macd_signal": 0.41,
-          "macd_osc": 0.32
-        },
-        {
-          "time": "2026-10-23",
-          "open": 248.85,
-          "high": 250.01,
-          "low": 246.45,
-          "close": 248.0,
-          "volume": 25569000.0,
-          "ma20": 254.43,
-          "ma60": 256.05,
-          "macd_dif": -0.0,
-          "macd_signal": 0.33,
-          "macd_osc": -0.34
-        },
-        {
-          "time": "2026-10-26",
-          "open": 249.47,
-          "high": 250.79,
-          "low": 247.23,
-          "close": 249.09,
-          "volume": 32696400.0,
-          "ma20": 254.58,
-          "ma60": 255.92,
-          "macd_dif": -0.49,
-          "macd_signal": 0.17,
-          "macd_osc": -0.66
-        },
-        {
-          "time": "2026-10-27",
-          "open": 250.43,
-          "high": 254.68,
-          "low": 248.71,
-          "close": 253.1,
-          "volume": 34477800.0,
-          "ma20": 254.9,
-          "ma60": 255.87,
-          "macd_dif": -0.55,
-          "macd_signal": 0.02,
-          "macd_osc": -0.57
-        },
-        {
-          "time": "2026-10-28",
-          "open": 253.0,
-          "high": 255.36,
-          "low": 251.98,
-          "close": 254.6,
-          "volume": 34915900.0,
-          "ma20": 255.17,
-          "ma60": 255.85,
-          "macd_dif": -0.47,
-          "macd_signal": -0.08,
-          "macd_osc": -0.39
-        },
-        {
-          "time": "2026-10-29",
-          "open": 246.95,
-          "high": 249.14,
-          "low": 241.24,
-          "close": 243.79,
-          "volume": 85234400.0,
-          "ma20": 254.95,
-          "ma60": 255.63,
-          "macd_dif": -1.26,
-          "macd_signal": -0.31,
-          "macd_osc": -0.95
-        },
-        {
-          "time": "2026-10-30",
-          "open": 232.54,
-          "high": 241.55,
-          "low": 229.36,
-          "close": 240.35,
-          "volume": 104894700.0,
-          "ma20": 254.39,
-          "ma60": 255.36,
-          "macd_dif": -2.15,
-          "macd_signal": -0.68,
-          "macd_osc": -1.47
-        },
-        {
-          "time": "2026-11-02",
-          "open": 243.01,
-          "high": 253.81,
-          "low": 242.28,
-          "close": 245.63,
-          "volume": 58348000.0,
-          "ma20": 254.1,
-          "ma60": 255.2,
-          "macd_dif": -2.39,
-          "macd_signal": -1.02,
-          "macd_osc": -1.37
-        },
-        {
-          "time": "2026-11-03",
-          "open": 248.59,
-          "high": 252.45,
-          "low": 245.88,
-          "close": 250.69,
-          "volume": 37853500.0,
-          "ma20": 253.82,
-          "ma60": 255.12,
-          "macd_dif": -2.15,
-          "macd_signal": -1.25,
-          "macd_osc": -0.9
-        },
-        {
-          "time": "2026-11-04",
-          "open": 264.82,
-          "high": 271.49,
-          "low": 263.85,
-          "close": 266.03,
-          "volume": 93162200.0,
-          "ma20": 254.13,
-          "ma60": 255.3,
-          "macd_dif": -0.72,
-          "macd_signal": -1.14,
-          "macd_osc": 0.42
-        },
-        {
-          "time": "2026-11-05",
-          "open": 271.43,
-          "high": 273.23,
-          "low": 252.27,
-          "close": 260.21,
-          "volume": 85796800.0,
-          "ma20": 254.43,
-          "ma60": 255.18,
-          "macd_dif": -0.05,
-          "macd_signal": -0.92,
-          "macd_osc": 0.87
-        },
-        {
-          "time": "2026-11-06",
-          "open": 259.81,
-          "high": 264.18,
-          "low": 258.53,
-          "close": 259.3,
-          "volume": 42571500.0,
-          "ma20": 254.28,
-          "ma60": 255.09,
-          "macd_dif": 0.4,
-          "macd_signal": -0.66,
-          "macd_osc": 1.06
-        },
-        {
-          "time": "2026-11-09",
-          "open": 269.32,
-          "high": 275.34,
-          "low": 266.91,
-          "close": 266.93,
-          "volume": 51523200.0,
-          "ma20": 254.65,
-          "ma60": 255.16,
-          "macd_dif": 1.36,
-          "macd_signal": -0.25,
-          "macd_osc": 1.62
-        },
-        {
-          "time": "2026-11-10",
-          "open": 266.21,
-          "high": 272.88,
-          "low": 266.14,
-          "close": 270.87,
-          "volume": 38968300.0,
-          "ma20": 255.26,
-          "ma60": 255.32,
-          "macd_dif": 2.41,
-          "macd_signal": 0.28,
-          "macd_osc": 2.13
-        },
-        {
-          "time": "2026-11-11",
-          "open": 273.52,
-          "high": 274.87,
-          "low": 265.62,
-          "close": 266.17,
-          "volume": 37649400.0,
-          "ma20": 255.87,
-          "ma60": 255.43,
-          "macd_dif": 2.83,
-          "macd_signal": 0.79,
-          "macd_osc": 2.04
-        },
-        {
-          "time": "2026-11-12",
-          "open": 267.92,
-          "high": 273.6,
-          "low": 267.83,
-          "close": 270.42,
-          "volume": 13460613.0,
-          "ma20": 256.65,
-          "ma60": 255.51,
-          "macd_dif": 3.47,
-          "macd_signal": 1.32,
-          "macd_osc": 2.14
-        }
-      ],
-      "signal_evaluation": {
-        "trade_win_rate": 15.4,
-        "trade_wins": 2,
-        "trade_losses": 11,
-        "trade_pending": 1,
-        "neutral_accuracy": 0.0,
-        "neutral_wins": 0,
-        "neutral_losses": 3,
-        "neutral_pending": 2,
-        "overall_accuracy": 12.5,
-        "evaluated_signals": [
-          {
-            "entry_date": "2026-10-16",
-            "signal_type": "NEUTRAL",
-            "entry_price": 250.0,
-            "take_profit_price": null,
-            "stop_loss_price": null,
-            "status": "LOSS",
-            "reason": "THRESHOLD_BREACHED",
-            "resolved_date": "2026-11-09",
-            "resolved_price": 275.34,
-            "holding_bars": 16,
-            "return_pct": 10.14
-          },
-          {
-            "entry_date": "2026-10-19",
-            "signal_type": "BULLISH",
-            "entry_price": 262.45,
-            "take_profit_price": 283.45,
-            "stop_loss_price": 249.33,
-            "status": "LOSS",
-            "reason": "STOP_LOSS",
-            "resolved_date": "2026-10-22",
-            "resolved_price": 249.33,
-            "holding_bars": 3,
-            "return_pct": -5.0
-          },
-          {
-            "entry_date": "2026-10-20",
-            "signal_type": "BULLISH",
-            "entry_price": 262.63,
-            "take_profit_price": 283.64,
-            "stop_loss_price": 249.5,
-            "status": "LOSS",
-            "reason": "STOP_LOSS",
-            "resolved_date": "2026-10-22",
-            "resolved_price": 249.5,
-            "holding_bars": 2,
-            "return_pct": -5.0
-          },
-          {
-            "entry_date": "2026-10-22",
-            "signal_type": "NEUTRAL",
-            "entry_price": 250.38,
-            "take_profit_price": null,
-            "stop_loss_price": null,
-            "status": "PENDING",
-            "reason": "PENDING_ACTIVE",
-            "resolved_date": null,
-            "resolved_price": null,
-            "holding_bars": 15,
-            "return_pct": 0.0
-          },
-          {
-            "entry_date": "2026-10-23",
-            "signal_type": "BEARISH",
-            "entry_price": 248.0,
-            "take_profit_price": 228.16,
-            "stop_loss_price": 260.4,
-            "status": "LOSS",
-            "reason": "STOP_LOSS",
-            "resolved_date": "2026-11-04",
-            "resolved_price": 260.4,
-            "holding_bars": 8,
-            "return_pct": -5.0
-          },
-          {
-            "entry_date": "2026-10-29",
-            "signal_type": "BEARISH",
-            "entry_price": 243.79,
-            "take_profit_price": 224.29,
-            "stop_loss_price": 255.98,
-            "status": "LOSS",
-            "reason": "STOP_LOSS",
-            "resolved_date": "2026-11-04",
-            "resolved_price": 255.98,
-            "holding_bars": 4,
-            "return_pct": -5.0
-          },
-          {
-            "entry_date": "2026-11-04",
-            "signal_type": "BULLISH",
-            "entry_price": 266.03,
-            "take_profit_price": 287.31,
-            "stop_loss_price": 252.73,
-            "status": "LOSS",
-            "reason": "STOP_LOSS",
-            "resolved_date": "2026-11-05",
-            "resolved_price": 252.73,
-            "holding_bars": 1,
-            "return_pct": -5.0
-          },
-          {
-            "entry_date": "2026-11-09",
-            "signal_type": "BULLISH",
-            "entry_price": 266.93,
-            "take_profit_price": 288.28,
-            "stop_loss_price": 253.58,
-            "status": "PENDING",
-            "reason": "PENDING_ACTIVE",
-            "resolved_date": null,
-            "resolved_price": null,
-            "holding_bars": 3,
-            "return_pct": 1.31
+            "return_pct": 0.48
           }
         ]
       }
@@ -64873,27 +63890,27 @@
       "type": "stock",
       "market": "US",
       "date": "2026-11-12",
-      "close": 1093.280029296875,
+      "close": 1096.06494140625,
       "prev_close": 1087.6099853515625,
-      "change": 5.67,
-      "change_pct": 0.52,
-      "volume": 662961.0,
-      "vol_ratio": 0.25,
-      "pe_ratio": 52.66,
+      "change": 8.45,
+      "change_pct": 0.78,
+      "volume": 779439.0,
+      "vol_ratio": 0.29,
+      "pe_ratio": 52.8,
       "dividend_yield": 54.0,
-      "pb_ratio": 13.54,
-      "ma5": 1073.35,
-      "ma10": 1055.09,
-      "ma20": 1026.31,
-      "ma60": 960.62,
+      "pb_ratio": 13.57,
+      "ma5": 1073.91,
+      "ma10": 1055.37,
+      "ma20": 1026.44,
+      "ma60": 960.67,
       "support_20": 977.24,
       "resistance_20": 1091.92,
-      "kd_k": 86.7,
-      "kd_d": 81.9,
-      "rsi": 72.3,
-      "macd_dif": 33.07,
-      "macd_signal": 27.66,
-      "macd_osc": 5.41,
+      "kd_k": 87.7,
+      "kd_d": 82.2,
+      "rsi": 72.7,
+      "macd_dif": 33.3,
+      "macd_signal": 27.71,
+      "macd_osc": 5.59,
       "institutional_flows": {
         "market": "US",
         "inst_ownership_pct": 71.0,
@@ -64914,7 +63931,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 7.25,
+        "turnover_yi": 8.54,
         "rank": null,
         "share_pct": null
       },
@@ -64923,13 +63940,13 @@
         "verdict_color": "emerald",
         "can_buy": true,
         "buy_status": "建議分批買進",
-        "buy_price": 1026.31,
+        "buy_price": 1026.44,
         "breakout_buy_price": 1091.92,
-        "buy_note": "1026.31 ~ 1093.28 元區間可佈局",
+        "buy_note": "1026.44 ~ 1096.06 元區間可佈局",
         "sell_status": "未達賣點（續抱）",
-        "take_profit_price": 1325.36,
+        "take_profit_price": 1333.71,
         "stop_loss_price": 977.24,
-        "sell_note": "漲至 1325.36 元停利 / 跌破 977.24 元停損"
+        "sell_note": "漲至 1333.71 元停利 / 跌破 977.24 元停損"
       },
       "signals": [
         "多頭排列強勢趨勢"
@@ -64938,13 +63955,13 @@
       "conf_stars": "⭐⭐⭐⭐",
       "conf_text": "高信心",
       "recommendation_reason": "均線發散向上多頭排列",
-      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (1026.31元) 附近分批佈局，守穩防守價 (977.24元) 續抱。",
+      "beginner_tip": "處於強勢多頭格局。近期可在回測月線 (1026.44元) 附近分批佈局，守穩防守價 (977.24元) 續抱。",
       "trade_levels": {
         "breakout_entry": 1091.92,
-        "pullback_entry": 1026.31,
+        "pullback_entry": 1026.44,
         "stop_loss": 977.24,
-        "take_profit": 1325.36,
-        "upside_pct": 21.2
+        "take_profit": 1333.71,
+        "upside_pct": 21.7
       },
       "history_kline": [
         {
@@ -65718,14 +64735,14 @@
           "time": "2026-11-12",
           "open": 1096.27,
           "high": 1102.84,
-          "low": 1089.0,
-          "close": 1093.28,
-          "volume": 662961.0,
-          "ma20": 1026.31,
-          "ma60": 960.62,
-          "macd_dif": 33.07,
-          "macd_signal": 27.66,
-          "macd_osc": 5.41
+          "low": 1089.01,
+          "close": 1096.06,
+          "volume": 779439.0,
+          "ma20": 1026.44,
+          "ma60": 960.67,
+          "macd_dif": 33.3,
+          "macd_signal": 27.71,
+          "macd_osc": 5.59
         }
       ],
       "signal_evaluation": {
@@ -65841,7 +64858,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": 2.54
+            "return_pct": 2.8
           }
         ]
       }
@@ -65852,24 +64869,24 @@
       "type": "etf",
       "market": "US",
       "date": "2026-11-12",
-      "close": 36.084999084472656,
+      "close": 36.12009811401367,
       "prev_close": 36.02000045776367,
-      "change": 0.06,
-      "change_pct": 0.17,
-      "volume": 5837378.0,
-      "vol_ratio": 0.19,
-      "pe_ratio": 19.41,
+      "change": 0.1,
+      "change_pct": 0.28,
+      "volume": 8688460.0,
+      "vol_ratio": 0.28,
+      "pe_ratio": 19.43,
       "dividend_yield": 2.95,
       "pb_ratio": 3.2,
-      "ma5": 35.75,
-      "ma10": 35.76,
+      "ma5": 35.76,
+      "ma10": 35.77,
       "ma20": 35.37,
       "ma60": 34.39,
       "support_20": 34.06,
       "resistance_20": 36.38,
-      "kd_k": 69.7,
-      "kd_d": 65.0,
-      "rsi": 60.1,
+      "kd_k": 70.4,
+      "kd_d": 65.3,
+      "rsi": 60.5,
       "macd_dif": 0.51,
       "macd_signal": 0.49,
       "macd_osc": 0.02,
@@ -65895,7 +64912,7 @@
         "score_boost": 0.0
       },
       "turnover_info": {
-        "turnover_yi": 2.11,
+        "turnover_yi": 3.14,
         "rank": null,
         "share_pct": null
       },
@@ -65906,11 +64923,11 @@
         "buy_status": "建議分批買進",
         "buy_price": 35.37,
         "breakout_buy_price": 36.38,
-        "buy_note": "35.37 ~ 36.08 元區間可佈局",
+        "buy_note": "35.37 ~ 36.12 元區間可佈局",
         "sell_status": "未達賣點（續抱）",
-        "take_profit_price": 40.13,
+        "take_profit_price": 40.24,
         "stop_loss_price": 34.06,
-        "sell_note": "漲至 40.13 元停利 / 跌破 34.06 元停損"
+        "sell_note": "漲至 40.24 元停利 / 跌破 34.06 元停損"
       },
       "signals": [
         "多頭排列強勢趨勢"
@@ -65924,8 +64941,8 @@
         "breakout_entry": 36.38,
         "pullback_entry": 35.37,
         "stop_loss": 34.06,
-        "take_profit": 40.13,
-        "upside_pct": 11.2
+        "take_profit": 40.24,
+        "upside_pct": 11.4
       },
       "history_kline": [
         {
@@ -66700,8 +65717,8 @@
           "open": 36.2,
           "high": 36.27,
           "low": 35.97,
-          "close": 36.08,
-          "volume": 5837378.0,
+          "close": 36.12,
+          "volume": 8688460.0,
           "ma20": 35.37,
           "ma60": 34.39,
           "macd_dif": 0.51,
@@ -66796,7 +65813,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 17,
-            "return_pct": 4.01
+            "return_pct": 4.12
           },
           {
             "entry_date": "2026-10-29",
@@ -66809,7 +65826,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 10,
-            "return_pct": 1.32
+            "return_pct": 1.43
           },
           {
             "entry_date": "2026-11-09",
@@ -66822,7 +65839,7 @@
             "resolved_date": null,
             "resolved_price": null,
             "holding_bars": 3,
-            "return_pct": 1.21
+            "return_pct": 1.32
           }
         ]
       }
