@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2026-11-27 01:51:32 (UTC+8)",
+    "generated_at": "2026-11-27 02:25:36 (UTC+8)",
     "version": "1.2.0",
     "market_status": {
       "latest_tw_date": "2026-11-26",
@@ -82,7 +82,7 @@
     },
     "premarket_briefing": {
       "briefing_date": "2026-11-27",
-      "generated_at": "2026-11-27 01:51",
+      "generated_at": "2026-11-27 02:25",
       "wind_status": "保守觀望・留意支撐",
       "wind_color": "amber",
       "avg_semi_change_pct": -1.68,
@@ -215,7 +215,7 @@
     },
     "us_premarket_briefing": {
       "briefing_date": "2026-11-27",
-      "generated_at": "2026-11-27 01:51",
+      "generated_at": "2026-11-27 02:25",
       "wind_status": "回檔保守・靜待支撐",
       "wind_color": "amber",
       "avg_us_change_pct": -0.82,
@@ -348,7 +348,7 @@
     },
     "us_postmarket_summary": {
       "summary_date": "2026-11-27",
-      "generated_at": "2026-11-27 01:51",
+      "generated_at": "2026-11-27 02:25",
       "verdict": "高檔避險釋放・科技承壓回檔",
       "color": "rose",
       "summary_text": "主要指數終場拉回整理 (SPY -0.29% / QQQ -0.65%)，高估值權值出現獲利了結賣壓，短線資金轉向防禦型板塊。",
@@ -621,14 +621,14 @@
       ]
     },
     "otc_margin_gauge": {
-      "ratio": 156.4,
+      "ratio": 156.5,
       "status": "HEALTHY_NORMAL",
       "status_label": "常態健康波動區",
       "color": "indigo",
       "score_modifier": 0,
       "description": "上櫃融資維持率處於 150% ~ 205% 之健康常態運行區間，籌碼結構平穩，行情以個股基本面與技術面趨勢為主導。",
       "strategy_tip": "波段策略：維持定期定額與常態策略操作，依個別標的支撐與壓力位進出。",
-      "date": "2026-11-26"
+      "date": ""
     },
     "total_tw": 40,
     "total_us": 24,
@@ -43302,7 +43302,7 @@
       "change_pct": 3.4,
       "volume": 18599400.0,
       "vol_ratio": 1.12,
-      "pe_ratio": 20.81,
+      "pe_ratio": 20.12,
       "dividend_yield": 34.0,
       "pb_ratio": 5.72,
       "ma5": 590.87,
@@ -56996,7 +56996,7 @@
       "vol_ratio": 0.84,
       "pe_ratio": 22.26,
       "dividend_yield": 1.07,
-      "pb_ratio": 1.69,
+      "pb_ratio": 4.9,
       "ma5": 655.41,
       "ma10": 669.12,
       "ma20": 680.63,
